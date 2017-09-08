@@ -1,0 +1,8 @@
+# Ignore build artifacts and other files.
+.DS_Store
+yarn.lock
+extension/dist
+node_modules
+
+# Ignore my junk drawer of ideas
+scratch

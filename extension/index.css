@@ -1,0 +1,22 @@
+body {
+  padding: 0.5em;
+}
+
+h1, h2 {
+  border-bottom: 1px solid #cccccc;
+}
+
+.Panel {
+  padding: 0.5em;
+}
+
+/* Normalize margins on block elements */
+h1, h2, h3, h4, h5, h6,
+p, ul, ol, table {
+  margin: 0 0 1em 0;
+}
+
+ul, ol {
+  padding: 0;
+  padding-left: 1em;
+}
