@@ -13,9 +13,16 @@ const store = new Store({
 const mountNode = document.createElement('div')
 document.body.appendChild(mountNode)
 
-ReactDOM.render(
-  <Provider store={store}>
-      <App/>
-  </Provider>,
-  mountNode
-)
+const unsubscribe = store.subscribe(() => {
+  // Wait until the first update, then unsubscribe,
+  // and handle the rest of the message lifecyle normally.
+  // https://github.com/tshaddix/react-chrome-redux/wiki/Advanced-Usage#initializing-ui-components
+  unsubscribe()
+
+  ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    mountNode
+  )
+})
