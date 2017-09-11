@@ -1,15 +1,17 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-//import {createBackgroundStore} from 'redux-webext'
+import { alias } from 'react-chrome-redux'
 import thunk from 'redux-thunk'
 
 import feeds from './modules/feeds'
+import feedCollection from './modules/feedCollection'
 
+import backgroundActions from './middleware/backgroundActions'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
 
 const initialState = {}
 const reducers = {}
-const middleware = [thunk, promise]
+const middleware = [backgroundActions, thunk, promise]
 const enhancers = []
 
 // Register Modules:
@@ -22,6 +24,7 @@ function addModule(module) {
 }
 
 addModule(feeds)
+addModule(feedCollection)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)

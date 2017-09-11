@@ -12,18 +12,21 @@
   "license": "MPL-2.0",
   "devDependencies": {
     "babel-core": "6.20.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "6.2.9",
     "babel-plugin-transform-class-properties": "6.19.0",
     "babel-plugin-transform-object-rest-spread": "6.20.2",
     "babel-preset-es2015": "6.18.0",
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-2": "6.18.0",
+    "eslint": "^4.6.1",
     "react": "15.4.1",
     "react-dom": "15.4.1",
     "web-ext": "1.6.0",
     "webpack": "1.14.0"
   },
   "dependencies": {
+    "feedme": "^1.0.1",
     "react-chrome-redux": "^1.3.3",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",

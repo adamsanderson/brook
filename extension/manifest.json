@@ -18,5 +18,7 @@
     "page": "background.html"
   },
 
-  "permissions": ["bookmarks"]
+  "permissions": [
+    "<all_urls>"
+  ]
 }

@@ -3,15 +3,16 @@ import FeedNode from './FeedNode'
 
 class FeedList extends Component {
   static propTypes = {
-    feeds: PropTypes.array.isRequired
+    feeds: PropTypes.array.isRequired,
+    onClickFeed: PropTypes.func.isRequired,
   }
 
   render() {
-    const {feeds} = this.props;
+    const { feeds, onClickFeed } = this.props;
     
     return (
       <ul> 
-        { feeds.map(f => <FeedNode node={f} />) }
+        { feeds.map(f => <FeedNode node={f} onClick={onClickFeed} />) }
       </ul>
     )
   }
