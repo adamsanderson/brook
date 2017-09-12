@@ -3,22 +3,26 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
 import FeedList from '../components/FeedList'
-import { addFeed, fetchFeed } from '../redux/modules/feeds'
+import ItemList from '../components/ItemList'
+
+import { addFeed } from '../redux/modules/feeds'
 import feedCollection from '../redux/modules/feedCollection'
+import ui, { selectFeed } from '../redux/modules/ui'
 
 class App extends React.Component {
   render() {
-    const {feeds, addFeed, fetchFeed} = this.props
+    const {feeds, addFeed, selectFeed, currentItems} = this.props
     
     return (
       <div>
         <div>
           <h1>Feeds</h1>
           <a onClick={ () => addFeed({url: prompt("Feed URL:")}) }>+ Add</a>
-          <FeedList feeds={feeds} onClickFeed={fetchFeed} />
+          <FeedList feeds={feeds} onClickFeed={selectFeed} />
         </div>
         <div>
           <h2>Articles</h2>
+          <ItemList items={currentItems} />
         </div>
       </div>
     )
@@ -26,10 +30,12 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  feeds: feedCollection.selectors.all(state)
+  feeds: feedCollection.selectors.all(state),
+  currentFeed: ui.selectors.currentFeed(state),
+  currentItems: ui.selectors.currentItems(state),
 })
 
 export default connect(mapStateToProps, {
   addFeed,
-  fetchFeed,
+  selectFeed,
 })(App)

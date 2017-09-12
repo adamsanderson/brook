@@ -3,8 +3,19 @@ import { alias } from 'react-chrome-redux'
 import FeedMe from 'feedme';
 
 import { FETCH_FEED, updateFeed } from '../modules/feeds'
+import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 
 const aliases = {
+  UI_SELECT_FEED: (action) => {
+    console.log("Alias", action)
+    const feed = action.payload.feed
+    return (dispatch) => {
+      console.log("Dispatching...")
+      dispatch({type: FETCH_FEED, payload: { feed }})
+      dispatch({type: SELECT_FEED, payload: { feed }})
+    }
+  },
+
   FETCH_FEED: (action) => {
     // If there's a promise, the action has already been handled.
     if (action.promise) return action

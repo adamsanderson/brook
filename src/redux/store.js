@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 
 import feeds from './modules/feeds'
 import feedCollection from './modules/feedCollection'
+import ui from './modules/ui'
 
 import backgroundActions from './middleware/backgroundActions'
 import logger from './middleware/logger'
@@ -23,8 +24,10 @@ function addModule(module) {
   if (module.enhancer)    enhancers.push(module.enhancer)
 }
 
+// Add our local modules
 addModule(feeds)
 addModule(feedCollection)
+addModule(ui)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)
