@@ -11,7 +11,7 @@ class FeedList extends Component {
     const { feeds, onClickFeed } = this.props;
     
     return (
-      <ul> 
+      <ul className="FeedList"> 
         { feeds.map(f => <FeedNode node={f} onClick={onClickFeed} />) }
       </ul>
     )

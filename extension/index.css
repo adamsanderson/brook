@@ -1,13 +1,17 @@
+html, body {
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+}
+
 body {
   padding: 0.5em;
+  color: #66666e;
 }
 
 h1, h2 {
-  border-bottom: 1px solid #cccccc;
-}
-
-.Panel {
-  padding: 0.5em;
+  border-bottom: 1px solid #ccccce;
 }
 
 /* Normalize margins on block elements */
@@ -19,4 +23,62 @@ p, ul, ol, table {
 ul, ol {
   padding: 0;
   padding-left: 1em;
+}
+
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  background: #eeeeef;
+}
+
+li > a {
+  display: block;
+  padding: 0.125em;
+}
+
+.Panel-header {
+  font-weight: bold;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #ccccce;
+  color: #33333c;
+
+  display: flex;
+  justify-content: flex-start;
+}
+
+.Panel-header :first-child {
+  flex: 1;
+}
+
+.Panel-body {
+  overflow-y: scroll;
+}
+
+.ItemList-item a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* Layout Helpers */
+.layout-vertical {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.layout-1of3 {
+  flex: 1;
+}
+
+.layout-2of3 {
+  flex: 2;
 }

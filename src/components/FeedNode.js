@@ -16,7 +16,7 @@ class FeedNode extends Component {
     const {node} = this.props;
     
     return (
-      <li> 
+      <li className="FeedNode"> 
         <a onClick={this.handleOnClick}>{node.title}</a>
       </li>
     )

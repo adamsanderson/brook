@@ -9,9 +9,9 @@ class ItemList extends Component {
     const { items } = this.props;
     
     return (
-      <ul> 
+      <ul className="ItemList"> 
         { items.map(item => (
-          <li>
+          <li className="ItemList-item">
             <a href={item.url}>{item.title}</a>
           </li>
         )) }

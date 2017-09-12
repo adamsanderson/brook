@@ -10,8 +10,7 @@ const store = new Store({
   portName: 'Brook'
 })
 
-const mountNode = document.createElement('div')
-document.body.appendChild(mountNode)
+const mountNode = document.body
 
 const unsubscribe = store.subscribe(() => {
   // Wait until the first update, then unsubscribe,

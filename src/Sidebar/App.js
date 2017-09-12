@@ -14,14 +14,17 @@ class App extends React.Component {
     const {feeds, addFeed, selectFeed, currentItems} = this.props
     
     return (
-      <div>
-        <div>
-          <h1>Feeds</h1>
-          <a onClick={ () => addFeed({url: prompt("Feed URL:")}) }>+ Add</a>
+      <div className="layout-vertical">
+        <p className="Panel-header">
+          <span>Feeds</span>
+          <a onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
+        </p>
+        <div className="Panel-body layout-2of3">
           <FeedList feeds={feeds} onClickFeed={selectFeed} />
         </div>
-        <div>
-          <h2>Articles</h2>
+      
+        <p className="Panel-header">Articles</p>
+        <div className="Panel-body layout-1of3">
           <ItemList items={currentItems} />
         </div>
       </div>
