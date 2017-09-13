@@ -64,9 +64,10 @@ function translateFeedData(data) {
 
 function translateItemData(data) {
   return {
+    id: data.id || data["feedburner:origlink"] || data["link"],
     title: data.title,
     url: data["feedburner:origlink"] || data["link"],
-    createdAt: +new Date(data.pubdate),
+    createdAt: +new Date(data.pubdate || data.published),
     description: data.description,
   }
 }

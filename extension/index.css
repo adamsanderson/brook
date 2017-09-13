@@ -60,14 +60,18 @@ li > a {
   font-weight: bold;
 }
 
+.ItemList-item.isUnread {
+  font-weight: bold;
+}
+
 .ItemList-item a {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  
   color: inherit;
   text-decoration: none;
 }
-
 
 /* Layout Helpers */
 .layout-vertical {

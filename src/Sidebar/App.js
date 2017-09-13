@@ -7,12 +7,12 @@ import ItemList from '../components/ItemList'
 
 import { addFeed } from '../redux/modules/feeds'
 import feedCollection from '../redux/modules/feedCollection'
-import ui, { selectFeed } from '../redux/modules/ui'
+import ui, { selectFeed, selectItem } from '../redux/modules/ui'
 import views from '../redux/modules/views'
 
 class App extends React.Component {
   render() {
-    const {feeds, addFeed, selectFeed, currentItems, isFeedUnread} = this.props
+    const {feeds, addFeed, selectFeed, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
     
     return (
       <div className="layout-vertical">
@@ -26,7 +26,7 @@ class App extends React.Component {
       
         <p className="Panel-header">Articles</p>
         <div className="Panel-body layout-1of3">
-          <ItemList items={currentItems} />
+          <ItemList items={currentItems} onClickItem={selectItem} isItemUnread={isItemUnread} />
         </div>
       </div>
     )
@@ -38,9 +38,11 @@ const mapStateToProps = (state) => ({
   currentFeed: ui.selectors.currentFeed(state),
   currentItems: ui.selectors.currentItems(state),
   isFeedUnread: views.selectors.isFeedUnread(state),
+  isItemUnread: views.selectors.isItemUnread(state),
 })
 
 export default connect(mapStateToProps, {
   addFeed,
   selectFeed,
+  selectItem,
 })(App)
