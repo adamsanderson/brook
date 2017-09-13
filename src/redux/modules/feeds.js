@@ -36,7 +36,7 @@ export function updateFeed(feed, attributes) {
 }
 
 const initialState = {
-  "1": normalizeFeed({id: "1", title: "MonkeyAndCrow!", url: "http://feeds.feedburner.com/MonkeyAndCrow"}),
+  "1": normalizeFeed({id: "1", title: "MonkeyAndCrow!", url: "http://feeds.feedburner.com/MonkeyAndCrow", updatedAt: Date.now()}),
   "2": normalizeFeed({id: "2", title: "Codrops", url: "http://feeds2.feedburner.com/tympanus"}),
 }
 
@@ -71,7 +71,7 @@ function normalizeFeed(feed) {
     url: feed.url,
     title: feed.title || humanizeURL(feed.url),
     items: feed.items || [],
-    updatedAt: feed.updatedAt || new Date()
+    updatedAt: feed.updatedAt || 0
   })
 }
 

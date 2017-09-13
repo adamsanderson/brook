@@ -57,7 +57,8 @@ function translateFeedData(data) {
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map(translateItemData)
-  
+  if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
+
   return feed
 }
 
@@ -65,8 +66,8 @@ function translateItemData(data) {
   return {
     title: data.title,
     url: data["feedburner:origlink"] || data["link"],
-    createdAt: new Date(data.pubdate),
-    description: data.description
+    createdAt: +new Date(data.pubdate),
+    description: data.description,
   }
 }
 

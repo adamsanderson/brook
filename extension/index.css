@@ -56,6 +56,10 @@ li > a {
   overflow-y: scroll;
 }
 
+.FeedNode.isUnread {
+  font-weight: bold;
+}
+
 .ItemList-item a {
   white-space: nowrap;
   text-overflow: ellipsis;

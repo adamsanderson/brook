@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import feeds from './modules/feeds'
 import feedCollection from './modules/feedCollection'
 import ui from './modules/ui'
+import views from './modules/views'
 
 import backgroundActions from './middleware/backgroundActions'
 import logger from './middleware/logger'
@@ -28,6 +29,7 @@ function addModule(module) {
 addModule(feeds)
 addModule(feedCollection)
 addModule(ui)
+addModule(views)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)
