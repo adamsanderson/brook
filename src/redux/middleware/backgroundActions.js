@@ -7,10 +7,8 @@ import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 
 const aliases = {
   UI_SELECT_FEED: (action) => {
-    console.log("Alias", action)
     const feed = action.payload.feed
     return (dispatch) => {
-      console.log("Dispatching...")
       dispatch({type: FETCH_FEED, payload: { feed }})
       dispatch({type: SELECT_FEED, payload: { feed }})
     }
@@ -31,8 +29,7 @@ const aliases = {
             const feedData = parser.done()
             const attributes = translateFeedData(feedData)
 
-            console.log("Full Feed", feedData)
-            console.log("Feed", attributes)
+            console.debug("Full Feed", feedData)
             
             dispatch(updateFeed(feed, attributes))
           })
