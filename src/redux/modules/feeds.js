@@ -3,6 +3,7 @@ import { humanizeURL } from '../../util/url'
 export const ADD_FEED = "ADD_FEED"
 export const REMOVE_FEED = "REMOVE_FEED"
 export const FETCH_FEED = "FETCH_FEED"
+export const FETCH_ALL = "FETCH_ALL"
 export const UPDATE_FEED = "UPDATE_FEED"
 
 const name = __filename
@@ -28,6 +29,13 @@ export function fetchFeed(feed) {
   }
 }
 
+export function fetchAll() {
+  return {
+    type: FETCH_ALL, 
+    payload: { }
+  }
+}
+
 export function updateFeed(feed, attributes) {
   return {
     type: UPDATE_FEED, 
@@ -36,7 +44,7 @@ export function updateFeed(feed, attributes) {
 }
 
 const initialState = {
-  "1": normalizeFeed({id: "1", title: "MonkeyAndCrow!", url: "http://feeds.feedburner.com/MonkeyAndCrow", updatedAt: Date.now()}),
+  "1": normalizeFeed({id: "1", title: "MonkeyAndCrow!", url: "http://feeds.feedburner.com/MonkeyAndCrow"}),
   "2": normalizeFeed({id: "2", title: "Codrops", url: "http://feeds2.feedburner.com/tympanus"}),
 }
 
@@ -63,6 +71,12 @@ const reducer = (state = initialState, action) => {
   }
 }
 
+const selectors = {
+  allFeeds: (state) => {
+    return Object.values(state[name])
+  },
+}
+
 function normalizeFeed(feed) {
   if (!feed.url) throw new Error("Feeds must have a URL")
   
@@ -77,5 +91,6 @@ function normalizeFeed(feed) {
 
 export default {
   name,
-  reducer
+  reducer,
+  selectors,
 }

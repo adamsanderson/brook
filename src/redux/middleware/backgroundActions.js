@@ -2,7 +2,7 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme';
 
-import { FETCH_FEED, updateFeed } from '../modules/feeds'
+import feeds, { FETCH_FEED, updateFeed } from '../modules/feeds'
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 
 const aliases = {
@@ -14,39 +14,61 @@ const aliases = {
     }
   },
 
+  FETCH_ALL: (action) => {
+    return (dispatch, getState) => {
+      const allFeeds = feeds.selectors.allFeeds(getState())
+      // TODO: This will fetch feeds one at a time, adding more calls to
+      // `fetchAll` should trivially queue up more workers.
+      fetchAll(allFeeds, dispatch)
+    }
+  },
+
   FETCH_FEED: (action) => {
     // If there's a promise, the action has already been handled.
     if (action.promise) return action
 
     const feed = action.payload.feed
-    return (dispatch) => {
-      const promise = fetch(feed.url)
-        .then(res => res.text())
-        .then(body => {
-          const parser = new FeedMe(true)
-
-          parser.on('end', function() {
-            const feedData = parser.done()
-            const attributes = translateFeedData(feedData)
-
-            console.debug("Full Feed", feedData)
-            
-            dispatch(updateFeed(feed, attributes))
-          })
-
-          parser.write(body)
-          parser.end()
-
-          return body
-        })
-        .catch(error => {
-          console.error(error)
-          throw error
-        })
-      
-      dispatch({...action, promise})
-    }
+    return (dispatch) => fetchFeed(feed, dispatch)
   }
+}
+
+function fetchFeed(feed, dispatch) {
+  const promise = fetch(feed.url)
+  .then(res => res.text())
+  .then(body => {
+    const parser = new FeedMe(true)
+
+    parser.on('end', function() {
+      const feedData = parser.done()
+      const attributes = translateFeedData(feedData)
+
+      console.debug("Full Feed", feedData)
+      
+      dispatch(updateFeed(feed, attributes))
+    })
+
+    parser.write(body)
+    parser.end()
+
+    return body
+  })
+  .catch(error => {
+    console.error(error)
+    throw error
+  })
+
+  dispatch({
+    type: FETCH_FEED, 
+    payload: { feed }, 
+    promise
+  })
+
+  return promise
+}
+
+function fetchAll(allFeeds, dispatch) {
+  const feed = allFeeds.pop()
+  if (feed) fetchFeed(feed, dispatch).then(() => fetchAll(allFeeds, dispatch))
 }
 
 function translateFeedData(data) {
