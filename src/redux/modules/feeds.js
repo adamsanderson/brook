@@ -6,6 +6,8 @@ export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_ALL = "FETCH_ALL"
 export const UPDATE_FEED = "UPDATE_FEED"
 
+export const FEED = "FEED"
+
 const name = __filename
 
 export function addFeed(feed) {
@@ -46,6 +48,7 @@ export function updateFeed(feed, attributes) {
 const initialState = {
   "1": normalizeFeed({id: "1", title: "MonkeyAndCrow!", url: "http://feeds.feedburner.com/MonkeyAndCrow"}),
   "2": normalizeFeed({id: "2", title: "Codrops", url: "http://feeds2.feedburner.com/tympanus"}),
+  "3": normalizeFeed({id: "3", title: "FlowingData", url: "http://feeds.feedburner.com/FlowingData"}),
 }
 
 const reducer = (state = initialState, action) => {
@@ -75,6 +78,9 @@ const selectors = {
   allFeeds: (state) => {
     return Object.values(state[name])
   },
+  getFeedById: (state) => {
+    return (id) => state[name][id]
+  }
 }
 
 function normalizeFeed(feed) {
@@ -82,6 +88,7 @@ function normalizeFeed(feed) {
   
   return ({
     id: feed.id || Math.random().toString(36).substring(2, 15),
+    type: FEED,
     url: feed.url,
     title: feed.title || humanizeURL(feed.url),
     items: feed.items || [],

@@ -3,7 +3,7 @@ import { alias } from 'react-chrome-redux'
 import thunk from 'redux-thunk'
 
 import feeds from './modules/feeds'
-import feedCollection from './modules/feedCollection'
+import folders from './modules/folders'
 import ui from './modules/ui'
 import views from './modules/views'
 
@@ -27,7 +27,7 @@ function addModule(module) {
 
 // Add our local modules
 addModule(feeds)
-addModule(feedCollection)
+addModule(folders)
 addModule(ui)
 addModule(views)
 

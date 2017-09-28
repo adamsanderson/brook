@@ -2,17 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
-import FeedList from '../components/FeedList'
+import NodeList from '../components/NodeList'
 import ItemList from '../components/ItemList'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
-import feedCollection from '../redux/modules/feedCollection'
-import ui, { selectFeed, selectItem } from '../redux/modules/ui'
+import folders from '../redux/modules/folders'
+import ui, { selectItem } from '../redux/modules/ui'
 import views from '../redux/modules/views'
 
 class App extends React.Component {
   render() {
-    const {feeds, addFeed, fetchAll, selectFeed, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
+    const {nodes, addFeed, fetchAll, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
     
     return (
       <div className="layout-vertical">
@@ -22,7 +22,7 @@ class App extends React.Component {
           <a onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
         </p>
         <div className="Panel-body layout-2of3">
-          <FeedList feeds={feeds} onClickFeed={selectFeed} isFeedUnread={isFeedUnread} />
+          <NodeList nodes={nodes} />
         </div>
       
         <p className="Panel-header">Articles</p>
@@ -35,16 +35,14 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  feeds: feedCollection.selectors.all(state),
+  nodes: folders.selectors.getTopLevelNodes(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentItems: ui.selectors.currentItems(state),
-  isFeedUnread: views.selectors.isFeedUnread(state),
   isItemUnread: views.selectors.isItemUnread(state),
 })
 
 export default connect(mapStateToProps, {
   addFeed,
   fetchAll,
-  selectFeed,
   selectItem,
 })(App)

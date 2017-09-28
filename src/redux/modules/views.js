@@ -28,6 +28,7 @@ const selectors = {
   isFeedUnread: (state) => {
     return (feed) => {
       const viewedAt = state[name].feedsViewedAt[feed.id] || 0
+      console.log("isFeedUnread", feed, viewedAt, viewedAt < feed.updatedAt)
       return viewedAt < feed.updatedAt
     }
   },
