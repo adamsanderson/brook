@@ -1,14 +1,25 @@
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
 
+export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
+
 const name = __filename
 
 const ROOT = "root"
 export const FOLDER = "FOLDER"
 
+export function toggleFolder(folder) {
+  return {
+    type: TOGGLE_FOLDER, 
+    payload: { folder }
+  }
+}
+
 const initialState = { 
   [ROOT]: {
     id: ROOT, 
     name: "Brook", 
+    type: FOLDER,
+    expanded: true,
     children: [
       {type: FEED, id: "1"},
       {type: FEED, id: "2"},
@@ -19,6 +30,7 @@ const initialState = {
     id: "1", 
     name: "Stats/Data", 
     type: FOLDER,
+    expanded: true,
     children: [
       {type: FEED, id: "3"}
     ],
@@ -32,6 +44,9 @@ const reducer = (state = initialState, action) => {
 
     case REMOVE_FEED:
       return feedRemoved(state, action)
+
+    case TOGGLE_FOLDER:
+      return folderToggled(state, action)
 
     default:
       return state
@@ -56,6 +71,13 @@ function feedRemoved(state, action) {
   parent = {...parent, children: parent.children.filter(id => id != feedId)}
   
   return {...state, [parent.id]: parent}
+}
+
+function folderToggled(state, action) {
+  const folder = action.payload.folder
+  const newFolder = {...folder, expanded: !folder.expanded}
+  
+  return {...state, [folder.id]: newFolder}
 }
 
 const selectors = {
