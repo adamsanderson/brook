@@ -56,7 +56,7 @@ function fetchFeed(feed, dispatch) {
 
     parser.on('end', function() {
       const feedData = parser.done()
-      const attributes = translateFeedData(feedData)
+      const attributes = translateFeedData(feedData, feed.url)
 
       console.debug("Full Feed", feedData)
       
@@ -87,21 +87,24 @@ function fetchAll(allFeeds, dispatch) {
   if (feed) fetchFeed(feed, dispatch).then(() => fetchAll(allFeeds, dispatch))
 }
 
-function translateFeedData(data) {
+function translateFeedData(data, feedUrl) {
   const feed = {}
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
-  if (data.items) feed.items = data.items.map(translateItemData)
+  if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
 
   return feed
 }
 
-function translateItemData(data) {
+function translateItemData(data, feedUrl) {
+  let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
+  url = resolveUrl(url, feedUrl)
+
   return {
     id: data.id || data["feedburner:origlink"] || data["link"],
     title: data.title,
-    url: chooseItemUrl(data["feedburner:origlink"] || data["link"]),
+    url,
     createdAt: +new Date(data.pubdate || data.published),
     description: data.description,
   }
@@ -118,6 +121,14 @@ function chooseItemUrl(link) {
   }
 
   return url
+}
+
+function resolveUrl(url, feedUrl) {
+  if (url[0] === "/") {
+    return new window.URL(feedUrl).origin + url
+  } else {
+    return url
+  }
 }
 
 export default alias(aliases)
