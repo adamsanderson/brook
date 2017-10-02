@@ -36,7 +36,7 @@ const aliases = {
 
   IMPORT_OPML: (action) => {
     const xml = action.payload.xml
-    
+
     return function(dispatch, getState) {
       const reader = new OpmlReader({
         onFeed: (feed, parentId) => dispatch(addFeed(feed, parentId)),
@@ -101,10 +101,23 @@ function translateItemData(data) {
   return {
     id: data.id || data["feedburner:origlink"] || data["link"],
     title: data.title,
-    url: data["feedburner:origlink"] || data["link"],
+    url: chooseItemUrl(data["feedburner:origlink"] || data["link"]),
     createdAt: +new Date(data.pubdate || data.published),
     description: data.description,
   }
+}
+
+function chooseItemUrl(link) {
+  let url
+
+  if (typeof link === "string") {
+    url = link
+  } else if (Array.isArray(link)) {
+    const alternate = link.find(l => l.rel === "alternate" && l.type === "text/html")
+    url = alternate.href
+  }
+
+  return url
 }
 
 export default alias(aliases)
