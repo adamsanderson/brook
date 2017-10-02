@@ -22,7 +22,7 @@ class FolderNode extends React.Component {
 
     return (
       <li className="FolderNode">
-        <a onClick={this.handleOnClick}>{folder.name}</a>
+        <a onClick={this.handleOnClick}>{folder.title}</a>
         {folder.expanded && <NodeList nodes={children}/>}
       </li>
     )

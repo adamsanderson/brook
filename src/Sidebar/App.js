@@ -6,20 +6,22 @@ import NodeList from '../components/NodeList'
 import ItemList from '../components/ItemList'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
+import { importSample } from '../redux/modules/import'
 import folders from '../redux/modules/folders'
 import ui, { selectItem } from '../redux/modules/ui'
 import views from '../redux/modules/views'
 
 class App extends React.Component {
   render() {
-    const {nodes, addFeed, fetchAll, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
+    const {nodes, addFeed, fetchAll, importSample, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
     
     return (
       <div className="layout-vertical">
         <p className="Panel-header">
           <span>Feeds</span>
-          <a onClick={ fetchAll }>(R)</a>
-          <a onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
+          <a title="Refresh Feeds" onClick={ fetchAll }>(R)</a>
+          <a title="Import Sample Data" onClick={ importSample }>(I)</a>
+          <a title="Add feed" onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
         </p>
         <div className="Panel-body layout-2of3">
           <NodeList nodes={nodes} />
@@ -45,4 +47,5 @@ export default connect(mapStateToProps, {
   addFeed,
   fetchAll,
   selectItem,
+  importSample,
 })(App)

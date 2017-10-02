@@ -10,10 +10,10 @@ export const FEED = "FEED"
 
 const name = __filename
 
-export function addFeed(feed) {
+export function addFeed(feed, parentId) {
   return {
     type: ADD_FEED, 
-    payload: { feed: normalizeFeed(feed) }
+    payload: { feed: normalizeFeed(feed), parentId }
   }
 }
 

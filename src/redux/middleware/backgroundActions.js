@@ -2,8 +2,11 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme';
 
-import feeds, { FETCH_FEED, updateFeed } from '../modules/feeds'
+import feeds, { FETCH_FEED, updateFeed, addFeed } from '../modules/feeds'
+import { addFolder } from '../modules/folders'
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
+import { IMPORT_OPML } from '../modules/import'
+import OpmlReader from '../../lib/OpmlReader'
 
 const aliases = {
   UI_SELECT_FEED: (action) => {
@@ -29,6 +32,19 @@ const aliases = {
 
     const feed = action.payload.feed
     return (dispatch) => fetchFeed(feed, dispatch)
+  },
+
+  IMPORT_OPML: (action) => {
+    const xml = action.payload.xml
+    
+    return function(dispatch, getState) {
+      const reader = new OpmlReader({
+        onFeed: (feed, parentId) => dispatch(addFeed(feed, parentId)),
+        onFolder: (folder, parentId) => dispatch(addFolder(folder, parentId)),
+      })
+  
+      reader.read(xml)
+    }
   }
 }
 
