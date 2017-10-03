@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import StatusIndicator from './icons/StatusIndicator'
 
 class ItemList extends Component {
   static propTypes = {
@@ -13,18 +14,19 @@ class ItemList extends Component {
   }
 
   render() {
-    const { items, onClickItem, isItemUnread } = this.props;
-    
+    const { items, onClickItem, isItemUnread } = this.props
+
     return (
-      <ul className="ItemList"> 
+      <div className="NodeList"> 
         { items.map(item => (
-          <li className={"ItemList-item " + (isItemUnread(item) ? "isUnread" : "isRead")}>
+          <div title={item.title} className={"Item " + (isItemUnread(item) ? "isUnread" : "isRead")}>
+            <StatusIndicator isUnread={isItemUnread(item)} />
             <a href={item.url} onClick={ (ev) => onClickItem(item) }>
               {item.title}
             </a>
-          </li>
+          </div>
         )) }
-      </ul>
+      </div>
     )
   }
 }

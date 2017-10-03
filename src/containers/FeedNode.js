@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import views from '../redux/modules/views'
 import { selectFeed } from '../redux/modules/ui'
+import StatusIndicator from '../components/icons/StatusIndicator'
 
 class FeedNode extends Component {
 
@@ -23,12 +24,14 @@ class FeedNode extends Component {
 
   render() {
     const {feed, isFeedUnread} = this.props
-    const readClass = isFeedUnread(feed) ? "isUnread" : "isRead"
+    const isUnread = isFeedUnread(feed)
+    const readClass = isUnread ? "isUnread" : "isRead"
 
     return (
-      <li className={"FeedNode " + readClass}> 
+      <div className={"FeedNode " + readClass}> 
+        <StatusIndicator isUnread={isUnread} />
         <a onClick={this.handleOnClick}>{feed.title}</a>
-      </li>
+      </div>
     )
   }
 

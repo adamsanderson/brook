@@ -14,9 +14,9 @@ class NodeList extends Component {
     const { nodes } = this.props;
     
     return (
-      <ul className="FeedList"> 
+      <div className="NodeList"> 
         { nodes.map(n => this.renderChild(n)) }
-      </ul>
+      </div>
     )
   }
 

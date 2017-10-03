@@ -33,11 +33,6 @@ a:hover {
   background: #eeeeef;
 }
 
-li > a {
-  display: block;
-  padding: 0.125em;
-}
-
 .Panel-header {
   font-weight: bold;
   padding-bottom: 0.5em;
@@ -56,8 +51,41 @@ li > a {
   overflow-y: scroll;
 }
 
+.NodeList {
+  line-height: 1.6;
+}
+
+.NodeList > * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.NodeList .NodeList {
+  padding-left: 1em;
+}
+
+.NodeList .isUnread {
+  font-weight: bold;
+}
+
+.NodeList a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.FeedNode {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .FeedNode.isUnread {
   font-weight: bold;
+}
+
+.FeedList .FeedList {
+  padding-left: 1em;
 }
 
 .ItemList-item.isUnread {
@@ -73,7 +101,9 @@ li > a {
   text-decoration: none;
 }
 
-/* Layout Helpers */
+/* 
+  Layout Helpers 
+*/
 .layout-vertical {
   height: 100%;
   display: flex;
@@ -90,3 +120,30 @@ li > a {
 .layout-2of3 {
   flex: 2;
 }
+
+/* 
+  Icons 
+*/
+.Icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+
+  vertical-align: middle;
+  margin-top: -0.125em;   /* Adjusts vertical alignment */
+  margin-right: 0.1em;    /* Adds some space when used inline */
+}
+
+.Icon.StatusIndicator {
+  transition: fill ease-out 500ms;
+}
+.Icon.StatusIndicator.isRead {    fill: #CCCCCE; }
+.Icon.StatusIndicator.isUnread {  fill: #4495FF; }
+
+.Icon.Folder {
+  fill: #66666E;
+  transition: transform ease-out 250ms;
+  transform-origin: 50% 50%;
+}
+.Icon.Folder.isExpanded {  transform: rotate(90deg); }
+.Icon.Folder.isCollapsed { transform: rotate(0deg);  }

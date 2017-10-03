@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import folders, {toggleFolder} from '../redux/modules/folders'
 import NodeList from '../components/NodeList'
+import FolderIcon from '../components/icons/Folder'
 
 class FolderNode extends React.Component {
 
@@ -21,10 +22,11 @@ class FolderNode extends React.Component {
     const {folder, children} = this.props
 
     return (
-      <li className="FolderNode">
+      <div className="FolderNode">
+        <FolderIcon isExpanded={folder.expanded} />
         <a onClick={this.handleOnClick}>{folder.title}</a>
         {folder.expanded && <NodeList nodes={children}/>}
-      </li>
+      </div>
     )
   }
 
