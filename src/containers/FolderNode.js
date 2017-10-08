@@ -9,7 +9,8 @@ import FolderIcon from '../components/icons/Folder'
 class FolderNode extends React.Component {
 
   static propTypes = {
-    folder: PropTypes.object.isRequired
+    folder: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -23,9 +24,8 @@ class FolderNode extends React.Component {
 
     return (
       <div className="FolderNode">
-        <FolderIcon isExpanded={folder.expanded} />
+        <FolderIcon expanded={folder.expanded} />
         <a onClick={this.handleOnClick}>{folder.title}</a>
-        {folder.expanded && <NodeList nodes={children}/>}
       </div>
     )
   }
@@ -36,7 +36,7 @@ class FolderNode extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  children: folders.selectors.getChildren(state, props.folder)
+  // map props
 })
 
 export default connect(mapStateToProps, {

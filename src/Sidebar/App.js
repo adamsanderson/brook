@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
-import NodeList from '../components/NodeList'
+import TreeList from '../components/TreeList'
 import ItemList from '../components/ItemList'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
@@ -24,7 +24,7 @@ class App extends React.Component {
           <a title="Add feed" onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
         </p>
         <div className="Panel-body layout-2of3">
-          <NodeList nodes={nodes} />
+          <TreeList nodes={nodes} />
         </div>
       
         <p className="Panel-header">Articles</p>
@@ -37,7 +37,7 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  nodes: folders.selectors.getTopLevelNodes(state),
+  nodes: folders.selectors.getNodeList(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentItems: ui.selectors.currentItems(state),
   isItemUnread: views.selectors.isItemUnread(state),

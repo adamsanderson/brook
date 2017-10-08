@@ -138,7 +138,8 @@ a:hover {
   transition: fill ease-out 500ms;
 }
 .Icon.StatusIndicator.isRead {    fill: #CCCCCE; }
-.Icon.StatusIndicator.isUnread {  fill: #4495FF; }
+.Icon.StatusIndicator.isUnread {  fill: #90DDF7; }
+.Icon.StatusIndicator.hasError {  fill: #FF4B48; }
 
 .Icon.Folder {
   fill: #66666E;
