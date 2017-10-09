@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { FEED } from '../redux/modules/feeds'
 import { FOLDER, toggleFolder } from '../redux/modules/folders'
 import views from '../redux/modules/views'
-import { selectFeed } from '../redux/modules/ui'
+import ui, { selectFeed } from '../redux/modules/ui'
 
 import FeedNode from '../components/Feed'
 import FolderNode from '../components/Folder'
@@ -31,11 +31,11 @@ class FeedTree extends Component {
   }
 
   renderNode(node) {
-    const {indent, indentUnits} = this.props
+    const {indent, indentUnits, currentFeed} = this.props
     const {item} = node
     const childProps = {
       style: {paddingLeft: indent * node.depth + indentUnits},
-      className: "List-item",
+      className: `List-item ${item === currentFeed ? "isSelected" : ""}`,
       key: `${item.type}-${item.id}`,
     }
     
@@ -53,6 +53,7 @@ class FeedTree extends Component {
 
 const mapStateToProps = (state, props) => ({
   isFeedUnread: views.selectors.isFeedUnread(state),
+  currentFeed: ui.selectors.currentFeed(state),
 })
 
 export default connect(mapStateToProps, {
