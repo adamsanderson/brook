@@ -50,15 +50,19 @@ const aliases = {
 
 function fetchFeed(feed, dispatch) {
   const promise = fetch(feed.url)
-  .then(res => res.text())
+  .then(res => {
+    if (res.ok) {
+      return res.text()
+    } else {
+      throw new Error(`${res.status}: Could not access ${feed.url}`)
+    }
+  })
   .then(body => {
     const parser = new FeedMe(true)
 
     parser.on('end', function() {
       const feedData = parser.done()
       const attributes = translateFeedData(feedData, feed.url)
-
-      console.debug("Full Feed", feedData)
       
       dispatch(updateFeed(feed, attributes))
     })
@@ -69,8 +73,10 @@ function fetchFeed(feed, dispatch) {
     return body
   })
   .catch(error => {
-    console.error(error)
-    throw error
+    console.error("Error while fetching feed from", feed.url, error)
+    dispatch(updateFeed(feed, {error: error.toString()}))
+
+    return error
   })
 
   dispatch({
@@ -89,6 +95,7 @@ function fetchAll(allFeeds, dispatch) {
 
 function translateFeedData(data, feedUrl) {
   const feed = {}
+
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
@@ -98,15 +105,25 @@ function translateFeedData(data, feedUrl) {
 }
 
 function translateItemData(data, feedUrl) {
-  let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
-  url = resolveUrl(url, feedUrl)
+  try {
+    let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
+    url = resolveUrl(url, feedUrl)
 
-  return {
-    id: data.id || data["feedburner:origlink"] || data["link"],
-    title: data.title,
-    url,
-    createdAt: +new Date(data.pubdate || data.published),
-    description: data.description,
+    return {
+      id: data.id || data["feedburner:origlink"] || data["link"],
+      title: data.title,
+      url,
+      createdAt: +new Date(data.pubdate || data.published),
+      description: data.description,
+    }
+  } catch (error) {
+    console.error("Error while parsing item from", feedUrl, error, data)
+    return {
+      id: Math.random().toString(36).substring(2, 15),
+      error: error.toString(),
+      createdAt: 0,
+      data
+    }
   }
 }
 

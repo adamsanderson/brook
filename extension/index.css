@@ -57,7 +57,7 @@ a {
 }
 
 .List .List-item {
-  padding: 0.2em;
+  padding: 0.25em 0.2em;
   text-indent: 0.2em; /* All list items get some padding regardless of indent  */
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -70,6 +70,10 @@ a {
 
 .List .List-item.isSelected {
   background: #eeeeef;
+}
+
+.List .List-item .hasError {
+  color: rgb(110, 54, 54);
 }
 
 /* 

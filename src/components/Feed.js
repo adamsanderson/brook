@@ -27,13 +27,22 @@ class Feed extends Component {
   render() {
     const {feed, isUnread, style, className} = this.props
     const readClass = isUnread ? "isUnread" : "isRead"
+    const error = feed.error
 
     return (
       <div className={`Feed ${readClass} ${className}`} style={style} onClick={this.handleClick} > 
-        <StatusIndicator isUnread={isUnread} />
-        <span>{feed.title}</span>
+        <StatusIndicator isUnread={isUnread} hasError={!!error} />
+        {error ? this.renderError(feed) : this.renderFeed(feed)}
       </div>
     )
+  }
+
+  renderError(feed) {
+    return <span title={feed.error} className="hasError"> {feed.title} </span>
+  }
+
+  renderFeed(feed) {
+    return <span title={feed.title}> {feed.title} </span>
   }
 
   handleClick(event) {

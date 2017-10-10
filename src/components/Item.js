@@ -27,14 +27,27 @@ class Item extends Component {
   render() {
     const {item, isUnread, style, className} = this.props
     const readClass = isUnread ? "isUnread" : "isRead"
+    const error = item.error
 
     return (
       <div className={`Item ${readClass} ${className}`} style={style} > 
-        <StatusIndicator isUnread={isUnread} />
-        <a href={item.url} onClick={ this.handleClick }>
-          {item.title}
-        </a>
+        <StatusIndicator isUnread={isUnread} hasError={!!error} />
+        {error ? this.renderError(error) : this.renderLink(item)}
       </div>
+    )
+  }
+
+  renderLink(item) {
+    return (
+      <a href={item.url} onClick={ this.handleClick } title={item.title}>
+        {item.title}
+      </a>
+    )
+  }
+
+  renderError(error) {
+    return (
+      <span className="hasError">Parse Error</span>
     )
   }
 
