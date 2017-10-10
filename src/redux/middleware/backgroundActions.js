@@ -8,6 +8,8 @@ import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 import { IMPORT_OPML } from '../modules/import'
 import OpmlReader from '../../lib/OpmlReader'
 
+const WORKER_COUNT = 4
+
 const aliases = {
   UI_SELECT_FEED: (action) => {
     const feed = action.payload.feed
@@ -20,9 +22,10 @@ const aliases = {
   FETCH_ALL: (action) => {
     return (dispatch, getState) => {
       const allFeeds = feeds.selectors.allFeeds(getState())
-      // TODO: This will fetch feeds one at a time, adding more calls to
-      // `fetchAll` should trivially queue up more workers.
-      fetchAll(allFeeds, dispatch)
+      // TODO: Make WORKER_COUNT configurable
+      for (let i = 0; i < WORKER_COUNT; i++) {
+        fetchAll(allFeeds, dispatch)
+      }
     }
   },
 
@@ -89,8 +92,12 @@ function fetchFeed(feed, dispatch) {
 }
 
 function fetchAll(allFeeds, dispatch) {
-  const feed = allFeeds.pop()
-  if (feed) fetchFeed(feed, dispatch).then(() => fetchAll(allFeeds, dispatch))
+  window.requestAnimationFrame(() => {
+    const feed = allFeeds.shift()
+    if (feed) fetchFeed(feed, dispatch).then(() => {
+      fetchAll(allFeeds, dispatch)
+    })
+  })
 }
 
 function translateFeedData(data, feedUrl) {
