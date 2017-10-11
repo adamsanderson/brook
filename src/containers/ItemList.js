@@ -20,7 +20,7 @@ class ItemList extends Component {
 
   render() {
     const { items, onClickItem, isItemUnread } = this.props
-
+    
     return (
       <div className="List"> 
         { items.map(item => (

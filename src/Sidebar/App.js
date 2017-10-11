@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
 import FeedTree from '../containers/FeedTree'
-import ItemList from '../containers/ItemList'
+import FeedDetail from '../components/FeedDetail'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
 import { importSample } from '../redux/modules/import'
@@ -12,7 +12,7 @@ import ui from '../redux/modules/ui'
 
 class App extends React.Component {
   render() {
-    const {nodes, addFeed, fetchAll, importSample, selectItem, currentItems, isFeedUnread, isItemUnread} = this.props
+    const {nodes, addFeed, fetchAll, importSample, currentFeed} = this.props
     
     return (
       <div className="layout-vertical">
@@ -26,9 +26,13 @@ class App extends React.Component {
           <FeedTree nodes={nodes} />
         </div>
       
-        <p className="Panel-header">Articles</p>
+        <p className="Panel-header">
+          <span>
+            {currentFeed ? currentFeed.title : "Articles"}
+          </span>
+        </p>
         <div className="Panel-body layout-1of3">
-          <ItemList items={currentItems} />
+          <FeedDetail feed={currentFeed} />
         </div>
       </div>
     )
@@ -37,7 +41,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => ({
   nodes: folders.selectors.getNodeList(state),
-  currentItems: ui.selectors.currentItems(state),
+  currentFeed: ui.selectors.currentFeed(state),
 })
 
 export default connect(mapStateToProps, {
