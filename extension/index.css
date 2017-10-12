@@ -1,3 +1,16 @@
+:root {
+  --color-active:   #007bff;
+  --color-danger:   #dc3545;
+  --color-success:  #28a745;
+  --color-text:     #66666e;
+  --color-dark:     #33333c;
+  --color-light:    #ccccce;
+  --color-lightest: #eeeeef;
+
+  --weight-bold: 600;
+  --weight-black: 700;
+}
+
 html, body {
   height: 100%;
 
@@ -7,7 +20,7 @@ html, body {
 
 body {
   padding: 0;
-  color: #66666e;
+  color: var(--color-text);
 }
 
 h1, h2 {
@@ -30,10 +43,10 @@ a {
 }
 
 .Panel-header {
-  font-weight: bold;
+  font-weight: var(--weight-black);
   padding: 0.5em;
-  border-bottom: 1px solid #ccccce;
-  color: #33333c;
+  border-bottom: 1px solid var(--color-lightest);
+  color: var(--color-dark);
 
   display: flex;
   justify-content: flex-start;
@@ -70,15 +83,15 @@ a {
 }
 
 .List .List-item.isUnread {
-  font-weight: bold;
+  font-weight: var(--weight-bold);
 }
 
 .List .List-item.isSelected {
-  background: #eeeeef;
+  background: var(--color-lightest);
 }
 
 .List .List-item .hasError {
-  color: rgb(110, 54, 54);
+  color: var(--color-danger);
 }
 
 /* 
@@ -117,12 +130,18 @@ a {
 .Icon.StatusIndicator {
   transition: fill ease-out 500ms;
 }
-.Icon.StatusIndicator.isRead {    fill: #CCCCCE; }
-.Icon.StatusIndicator.isUnread {  fill: #90DDF7; }
-.Icon.StatusIndicator.hasError {  fill: #FF4B48; }
+.Icon.StatusIndicator.isRead { 
+  fill: var(--color-light); 
+}
+.Icon.StatusIndicator.isUnread { 
+  fill: var(--color-active); 
+}
+.Icon.StatusIndicator.hasError { 
+  fill: var(--color-danger); 
+}
 
 .Icon.Folder {
-  fill: #66666E;
+  fill: var(--color-dark);
   transition: transform ease-out 250ms;
   transform-origin: 50% 50%;
 }
