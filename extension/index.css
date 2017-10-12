@@ -9,6 +9,9 @@
 
   --weight-bold: 600;
   --weight-black: 700;
+
+  --speed-fast: 250ms;
+  --speed-medium: 500ms;
 }
 
 html, body {
@@ -24,7 +27,7 @@ body {
 }
 
 h1, h2 {
-  border-bottom: 1px solid #ccccce;
+  border-bottom: 1px solid var(--color-light);
 }
 
 /* Normalize margins on block elements */
@@ -128,7 +131,7 @@ a {
 }
 
 .Icon.StatusIndicator {
-  transition: fill ease-out 500ms;
+  transition: fill ease-out var(--speed-medium);
 }
 .Icon.StatusIndicator.isRead { 
   fill: var(--color-light); 
@@ -142,7 +145,7 @@ a {
 
 .Icon.Folder {
   fill: var(--color-dark);
-  transition: transform ease-out 250ms;
+  transition: transform ease-out var(--speed-fast);
   transform-origin: 50% 50%;
 }
 .Icon.Folder.isExpanded {  transform: rotate(90deg); }
