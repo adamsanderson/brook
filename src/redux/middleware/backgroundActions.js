@@ -73,13 +73,12 @@ function fetchFeed(feed, dispatch) {
     parser.write(body)
     parser.end()
 
-    return body
+    return {feed}
   })
   .catch(error => {
     console.error("Error while fetching feed from", feed.url, error)
     dispatch(updateFeed(feed, {error: error.toString()}))
-
-    return error
+    throw error
   })
 
   dispatch({
@@ -94,9 +93,13 @@ function fetchFeed(feed, dispatch) {
 function fetchAll(allFeeds, dispatch) {
   window.requestAnimationFrame(() => {
     const feed = allFeeds.shift()
-    if (feed) fetchFeed(feed, dispatch).then(() => {
-      fetchAll(allFeeds, dispatch)
-    })
+    if (!feed) return
+
+    const next = () => fetchAll(allFeeds, dispatch)
+
+    Promise.race(fetchFeed(feed, dispatch))
+    .then(next)
+    .catch(next)
   })
 }
 

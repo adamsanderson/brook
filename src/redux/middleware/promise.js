@@ -15,9 +15,9 @@ const readyStatePromise = store => next => action => {
   if (!action.promise) {
     return next(action)
   }
-
+  
   function makeAction(ready, data) {
-    let newAction = Object.assign({}, action, { ready }, data)
+    let newAction = Object.assign({}, action, data, { ready })
     delete newAction.promise
     return newAction
   }

@@ -58,20 +58,30 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_FEED:
       return Object.assign({}, state, {[feed.id]: feed})
+
     case REMOVE_FEED:
       const s = Object.assign({}, state)
       delete s[feed.id]
       return s
-    case UPDATE_FEED:
-      const currentFeed = state[feed.id]
-      const attributes = action.payload.attributes
-      if (!currentFeed) return state
 
-      const newFeed = {...currentFeed, ...attributes}
-      return Object.assign({}, state, {[feed.id]: newFeed})
+    case UPDATE_FEED:
+      return feedUpdated(state, feed, action.payload.attributes)
+      
+    case FETCH_FEED: 
+      return feedUpdated(state, feed, {isLoading: !action.ready})
+
     default:
       return state
   }
+}
+
+function feedUpdated(state, feed, attributes) {
+  const currentFeed = state[feed.id]
+  if (!currentFeed) return state
+
+  const newFeed = {...currentFeed, ...attributes}
+
+  return Object.assign({}, state, {[feed.id]: newFeed})
 }
 
 const selectors = {
@@ -89,6 +99,7 @@ function normalizeFeed(feed) {
   return ({
     id: feed.id || Math.random().toString(36).substring(2, 15),
     type: FEED,
+    isLoading: !!feed.isLoading,
     url: feed.url,
     title: feed.title || humanizeURL(feed.url),
     items: feed.items || [],

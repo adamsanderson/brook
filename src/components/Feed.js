@@ -31,7 +31,7 @@ class Feed extends Component {
 
     return (
       <div className={`Feed ${readClass} ${className}`} style={style} onClick={this.handleClick} > 
-        <StatusIndicator isUnread={isUnread} hasError={!!error} />
+        <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={feed.isLoading}/>
         {error ? this.renderError(feed) : this.renderFeed(feed)}
       </div>
     )

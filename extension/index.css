@@ -132,6 +132,7 @@ a {
 
 .Icon.StatusIndicator {
   transition: fill ease-out var(--speed-medium);
+  transition: transform ease-out var(--speed-fast);
 }
 .Icon.StatusIndicator.isRead { 
   fill: var(--color-light); 
@@ -142,6 +143,9 @@ a {
 .Icon.StatusIndicator.hasError { 
   fill: var(--color-danger); 
 }
+.Icon.StatusIndicator.isLoading {
+  animation: pulse var(--speed-fast) infinite alternate-reverse;
+}
 
 .Icon.Folder {
   fill: var(--color-dark);
@@ -150,3 +154,15 @@ a {
 }
 .Icon.Folder.isExpanded {  transform: rotate(90deg); }
 .Icon.Folder.isCollapsed { transform: rotate(0deg);  }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1)
+  }
+  70% {
+    transform: scale(1.4)
+  }
+  100% {
+    transform: scale(1.6)
+  }
+}
