@@ -5,12 +5,18 @@ import { connect } from 'react-redux'
 import FeedTree from '../containers/FeedTree'
 import FeedDetail from '../components/FeedDetail'
 
-import { addFeed, fetchAll } from '../redux/modules/feeds'
+import { addFeed, removeFeed, fetchAll } from '../redux/modules/feeds'
 import { importSample } from '../redux/modules/import'
 import folders from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
 
 class App extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.handleRemoveFeed = this.handleRemoveFeed.bind(this)
+  }
+
   render() {
     const {nodes, addFeed, fetchAll, importSample, currentFeed} = this.props
     
@@ -29,13 +35,20 @@ class App extends React.Component {
         <p className="Panel-header">
           <span>
             {currentFeed ? currentFeed.title : "Articles"}
-          </span>
+            </span>
+            { currentFeed && (
+              <a title="Remove feed" onClick={ this.handleRemoveFeed }>(x)</a>
+            )}
         </p>
         <div className="Panel-body layout-1of3">
           <FeedDetail feed={currentFeed} />
         </div>
       </div>
     )
+  }
+
+  handleRemoveFeed() {
+    this.props.removeFeed(this.props.currentFeed);
   }
 }
 
@@ -46,6 +59,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   addFeed,
+  removeFeed,
   fetchAll,
   importSample,
 })(App)

@@ -118,19 +118,20 @@ function folderRemoved(state, action) {
 
   // Todo: Recursively delete child feeds... how does that get cleaned up?
   //       Or should that be the resposiblity of the action creator?
-  return nodeRemoved(state, feed)
+  return nodeRemoved(state, folder)
 }
 
 function nodeRemoved(state, node) {
   const nodeId = node.id
+  const nodeType = node.type
   const nodes = Object.values(state)
-  const parentIndex = nodes.findIndex((node) => {
-    return node.children.findIndex((c) => c.type === FEED && c.id === nodeId ) >= 0
+  let child;
+  let parent = nodes.find((node) => {
+    child = node.children.find((c) => c.type === nodeType && c.id === nodeId )
+    return child
   })
-
-  let parent = nodes[parentIndex]
-  parent = {...parent, children: parent.children.filter(id => id != nodeId)}
-
+  
+  parent = {...parent, children: parent.children.filter((c) => c !== child)}
   return {...state, [parent.id]: parent}
 }
 
