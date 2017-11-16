@@ -1,8 +1,12 @@
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
+import {BEFORE, OVER, AFTER} from '../../constants'
+import { selectFeed } from './ui';
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
 export const ADD_FOLDER = "ADD_FOLDER"
 export const REMOVE_FOLDER = "REMOVE_FOLDER"
+export const MOVE_FOLDER = "MOVE_FOLDER"
+export const MOVE_FEED = "MOVE_FOLDER"
 
 const name = __filename
 
@@ -13,6 +17,15 @@ export function addFolder(folder, parentId) {
   return {
     type: ADD_FOLDER, 
     payload: { folder: normalizeFolder(folder), parentId }
+  }
+}
+
+export function moveNode(source, target, position) {
+  const type = source.type === FEED ? MOVE_FEED : MOVE_FOLDER
+
+  return {
+    type,
+    payload: { source, target, position }
   }
 }
 
@@ -67,6 +80,12 @@ const reducer = (state = initialState, action) => {
     case REMOVE_FOLDER:
       return folderRemoved(state, action)
 
+    case MOVE_FEED:
+      return feedMoved(state, action)
+    
+    case MOVE_FOLDER:
+      return folderMoved(state, action)
+
     case TOGGLE_FOLDER:
       return folderToggled(state, action)
 
@@ -104,6 +123,37 @@ function nodeAdded(state, node, parentId) {
   return {...state, [parent.id]: parent}
 }
 
+function nodeSiblingAdded(state, source, target, position) {
+  const targetId = target.id
+  const targetType = target.type
+  let childIndex
+  let parent
+  
+  if (targetType === FOLDER && target.expanded && position === 1) {
+    // Special case: dropping "after" an open folder is actually dropping into the first
+    // position of that folder's children
+    parent = state[targetId] || state[ROOT]
+    position = BEFORE
+    childIndex = 0
+  } else {
+    const nodes = Object.values(state)
+    parent = nodes.find((node) => {
+      childIndex = node.children.findIndex((c) => c.type === targetType && c.id === targetId )
+      return childIndex >= 0
+    })
+  }
+  
+  const children = parent.children.slice()
+  if (position === BEFORE) {
+    children.splice(childIndex, 0, source)
+  } else {
+    children.splice(childIndex + 1, 0, source)
+  }
+
+  parent = {...parent, children}
+  return {...state, [parent.id]: parent}
+}
+
 function feedRemoved(state, action) {
   const feed = action.payload.feed
   return nodeRemoved(state, feed)
@@ -135,6 +185,31 @@ function nodeRemoved(state, node) {
   return {...state, [parent.id]: parent}
 }
 
+function feedMoved(state, action) {
+  const {source, target, position} = action.payload
+  
+  return nodeMoved(state, source, target, position)
+}
+
+function folderMoved(state, action) {
+  const {source, target, position} = action.payload
+
+  return nodeMoved(state, source, target, position)
+}
+
+function nodeMoved(state, source, target, position) {
+  if (target.type === FEED && position === 0) return
+
+  state = nodeRemoved(state, source)
+  if (position === OVER) {
+    state = nodeAdded(state, source, target.id)
+  } else {
+    state = nodeSiblingAdded(state, source, target, position)
+  }
+  
+  return state  
+}
+
 function normalizeFolder(folder) {
   return {
     id: folder.id || Math.random().toString(36).substring(2, 15),
@@ -159,6 +234,13 @@ const selectors = {
     return node.children.map(c => {
       return c.type === FOLDER ? state[name][c.id] : state[feeds.name][c.id]
     })
+  },
+  containsNode: (state, parent, target) => {
+    if (parent.id === target.id && parent.type === target.type) return true
+    if (parent.type !== FOLDER) return false
+
+    const children = selectors.getChildren(state, parent)
+    return children.some(child => selectors.containsNode(state, child, target))
   },
   getNodeList: (state, items, list=[], depth=0) => {
     if (!items) items = selectors.getTopLevelNodes(state)

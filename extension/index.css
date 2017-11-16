@@ -14,6 +14,10 @@
   --speed-medium: 500ms;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
 
@@ -78,6 +82,7 @@ a {
 }
 
 .List .List-item {
+  position: relative;
   padding: 0.25em 0.2em;
   text-indent: 0.2em; /* All list items get some padding regardless of indent  */
   white-space: nowrap;
@@ -95,6 +100,30 @@ a {
 
 .List .List-item .hasError {
   color: var(--color-danger);
+}
+
+.List .List-item.isHoveringBefore::after,
+.List .List-item.isHoveringAfter::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-active);
+  pointer-events: none;
+}
+
+.List .List-item.isHoveringBefore::after {
+  top: 0;
+}
+
+.List .List-item.isHoveringAfter::after {
+  bottom: 0;
+}
+
+.List .List-item.isHoveringOver {
+  background: var(--color-active);
+  color: var(--color-lightest);
 }
 
 /* 

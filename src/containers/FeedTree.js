@@ -2,12 +2,12 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
 import { FEED } from '../redux/modules/feeds'
-import { FOLDER, toggleFolder } from '../redux/modules/folders'
+import folder, { FOLDER, toggleFolder, moveNode } from '../redux/modules/folders'
 import views from '../redux/modules/views'
 import ui, { selectFeed } from '../redux/modules/ui'
 
-import FeedNode from '../components/Feed'
-import FolderNode from '../components/Folder'
+import FeedNode from '../components/dnd/DnDFeed'
+import FolderNode from '../components/dnd/DnDFolder'
 
 class FeedTree extends Component {
   static propTypes = {
@@ -41,9 +41,26 @@ class FeedTree extends Component {
     
     switch (item.type) {
       case FEED: 
-        return <FeedNode {...childProps} feed={item} onClick={this.props.selectFeed} isUnread={this.props.isFeedUnread(item)} />
+        return (
+          <FeedNode 
+            {...childProps} 
+            feed={item} 
+            onDrop={this.props.moveNode}
+            allowDrop={this.props.allowDrop}
+            onClick={this.props.selectFeed} 
+            isUnread={this.props.isFeedUnread(item)} 
+          />
+        )
       case FOLDER:
-        return <FolderNode {...childProps} folder={item} onClick={this.props.toggleFolder} />
+        return (
+          <FolderNode 
+            {...childProps} 
+            folder={item} 
+            allowDrop={this.props.allowDrop}
+            onDrop={this.props.moveNode}
+            onClick={this.props.toggleFolder}
+          />
+        )
       default:
         console.error("Unkown node type: ", item)
         throw new Error(`Unknown node type: ${item.type}`)
@@ -54,9 +71,13 @@ class FeedTree extends Component {
 const mapStateToProps = (state, props) => ({
   isFeedUnread: views.selectors.isFeedUnread(state),
   currentFeed: ui.selectors.currentFeed(state),
+  allowDrop: (draggable, dropTarget) => {
+    return !folder.selectors.containsNode(state, draggable, dropTarget)
+  }
 })
 
 export default connect(mapStateToProps, {
   toggleFolder,
-  selectFeed
+  selectFeed,
+  moveNode,
 })(FeedTree)
