@@ -7,19 +7,20 @@ import FeedDetail from '../components/FeedDetail'
 
 import { addFeed, removeFeed, fetchAll } from '../redux/modules/feeds'
 import { importSample } from '../redux/modules/import'
-import folders from '../redux/modules/folders'
+import folders, { removeBranch } from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
 
 class App extends React.Component {
 
   constructor(props) {
     super(props)
-    this.handleRemoveFeed = this.handleRemoveFeed.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
   }
 
   render() {
-    const {nodes, addFeed, fetchAll, importSample, currentFeed} = this.props
-    
+    const {nodes, addFeed, fetchAll, importSample, currentFeed, currentFolder} = this.props
+    const currentItem = this.currentItem();
+
     return (
       <div className="layout-vertical">
         <p className="Panel-header">
@@ -34,10 +35,10 @@ class App extends React.Component {
       
         <p className="Panel-header">
           <span>
-            {currentFeed ? currentFeed.title : "Articles"}
-            </span>
-            { currentFeed && (
-              <a title="Remove feed" onClick={ this.handleRemoveFeed }>(x)</a>
+            {currentItem ? currentItem.title : "Articles"}
+          </span>
+            { currentItem && (
+              <a title="Remove" onClick={ this.handleRemove }>(x)</a>
             )}
         </p>
         <div className="Panel-body layout-1of3">
@@ -47,19 +48,29 @@ class App extends React.Component {
     )
   }
 
-  handleRemoveFeed() {
-    this.props.removeFeed(this.props.currentFeed);
+  handleRemove() {
+    if (this.props.currentFeed) {
+      this.props.removeFeed(this.props.currentFeed)
+    } else if (this.props.currentFolder) {
+      this.props.removeBranch(this.props.currentFolder)
+    }
+  }
+
+  currentItem() {
+    return this.props.currentFeed || this.props.currentFolder
   }
 }
 
 const mapStateToProps = (state) => ({
   nodes: folders.selectors.getNodeList(state),
   currentFeed: ui.selectors.currentFeed(state),
+  currentFolder: ui.selectors.currentFolder(state),
 })
 
 export default connect(mapStateToProps, {
   addFeed,
   removeFeed,
+  removeBranch,
   fetchAll,
   importSample,
 })(App)

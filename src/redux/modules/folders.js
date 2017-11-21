@@ -1,10 +1,11 @@
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
 import {BEFORE, OVER, AFTER} from '../../constants'
-import { selectFeed } from './ui';
+import { SELECT_FOLDER } from './ui';
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
 export const ADD_FOLDER = "ADD_FOLDER"
 export const REMOVE_FOLDER = "REMOVE_FOLDER"
+export const REMOVE_BRANCH = "REMOVE_BRANCH"
 export const MOVE_FOLDER = "MOVE_FOLDER"
 export const MOVE_FEED = "MOVE_FOLDER"
 
@@ -36,9 +37,9 @@ export function removeFolder(folder) {
   }
 }
 
-export function toggleFolder(folder) {
+export function removeBranch(folder) {
   return {
-    type: TOGGLE_FOLDER, 
+    type: REMOVE_BRANCH,
     payload: { folder }
   }
 }
@@ -80,13 +81,16 @@ const reducer = (state = initialState, action) => {
     case REMOVE_FOLDER:
       return folderRemoved(state, action)
 
+    case REMOVE_BRANCH:
+      return branchRemoved(state, action)
+
     case MOVE_FEED:
       return feedMoved(state, action)
     
     case MOVE_FOLDER:
       return folderMoved(state, action)
 
-    case TOGGLE_FOLDER:
+    case SELECT_FOLDER:
       return folderToggled(state, action)
 
     default:
@@ -171,11 +175,27 @@ function folderRemoved(state, action) {
   return nodeRemoved(state, folder)
 }
 
+function branchRemoved(state, action) {
+  const folder = action.payload.folder
+  return nodeRemovedRecursively(state, folder)
+}
+
+function nodeRemovedRecursively(state, node) {
+  (node.children || []).forEach(function(c) {
+    state = nodeRemovedRecursively(state, c)
+  })
+
+  state = nodeRemoved(state, node)
+  delete state[node.id]
+  
+  return state
+}
+
 function nodeRemoved(state, node) {
   const nodeId = node.id
   const nodeType = node.type
   const nodes = Object.values(state)
-  let child;
+  let child
   let parent = nodes.find((node) => {
     child = node.children.find((c) => c.type === nodeType && c.id === nodeId )
     return child

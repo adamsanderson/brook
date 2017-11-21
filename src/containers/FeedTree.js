@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
 import { FEED } from '../redux/modules/feeds'
-import folder, { FOLDER, toggleFolder, moveNode } from '../redux/modules/folders'
+import folder, { FOLDER, moveNode } from '../redux/modules/folders'
 import views from '../redux/modules/views'
-import ui, { selectFeed } from '../redux/modules/ui'
+import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'
@@ -58,7 +58,7 @@ class FeedTree extends Component {
             folder={item} 
             allowDrop={this.props.allowDrop}
             onDrop={this.props.moveNode}
-            onClick={this.props.toggleFolder}
+            onClick={this.props.selectFolder}
           />
         )
       default:
@@ -77,7 +77,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  toggleFolder,
+  selectFolder,
   selectFeed,
   moveNode,
 })(FeedTree)
