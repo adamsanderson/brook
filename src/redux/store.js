@@ -6,6 +6,8 @@ import feeds from './modules/feeds'
 import folders from './modules/folders'
 import ui from './modules/ui'
 import views from './modules/views'
+import discovery from './modules/discovery'
+import activeTab from './modules/activeTab'
 
 import backgroundActions from './middleware/backgroundActions'
 import logger from './middleware/logger'
@@ -30,6 +32,8 @@ addModule(feeds)
 addModule(folders)
 addModule(ui)
 addModule(views)
+addModule(discovery)
+addModule(activeTab)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)

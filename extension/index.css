@@ -4,6 +4,7 @@
   --color-success:  #28a745;
   --color-text:     #66666e;
   --color-dark:     #33333c;
+  --color-grey:     #99999a;
   --color-light:    #ccccce;
   --color-lightest: #eeeeef;
 
@@ -144,6 +145,14 @@ a {
 
 .layout-2of3 {
   flex: 2;
+}
+
+/*
+  Component States
+*/
+
+.is-active {
+  color: var(--color-active);
 }
 
 /* 

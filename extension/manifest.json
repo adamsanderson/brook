@@ -14,9 +14,25 @@
     "default_panel": "sidebar.html"
   },
 
+  "page_action": {
+    "browser_style": true,
+    "default_icon": {
+      "48": "images/Watermelon-48.png",
+      "96": "images/Watermelon-96.png"
+    },
+    "default_title": "Subscribe with Brook"
+  },
+
   "background": {
     "page": "background.html"
   },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"]
+    }
+  ],
 
   "permissions": [
     "<all_urls>"

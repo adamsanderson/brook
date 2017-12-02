@@ -15,11 +15,26 @@ export function humanizeURL(path) {
     const humanized = segment.split(/[-_\+\s]+/).join(" ").replace(/([a-z])([A-Z])/, "$1 $2")
     
     if (humanized.length > 2) {
-      return startCase(humanized)
+      return humanized
     } else {
       return url.hostname
     }
     
+  } catch (err) {
+    console.warn("Could not humanize: "+path+", "+err.toString())
+    return path
+  }
+}
+
+/**
+ * Tries to return a sensible name from a url based on the host name.
+ * @param {String} path 
+ */
+export function humanizeHost(path) {
+  try {
+    const url = coerceToURL(path)
+    return url.hostname
+
   } catch (err) {
     console.warn("Could not humanize: "+path+", "+err.toString())
     return path

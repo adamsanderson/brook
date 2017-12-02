@@ -4,11 +4,13 @@ import { connect } from 'react-redux'
 
 import FeedTree from '../containers/FeedTree'
 import FeedDetail from '../components/FeedDetail'
+import FeedTreeToolbar from '../containers/FeedTreeToolbar'
 
-import { addFeed, removeFeed, fetchAll } from '../redux/modules/feeds'
-import { importSample } from '../redux/modules/import'
+import { removeFeed } from '../redux/modules/feeds'
 import folders, { removeBranch } from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
+import activeTab from '../redux/modules/activeTab'
+import discovery from '../redux/modules/discovery'
 
 class App extends React.Component {
 
@@ -25,9 +27,8 @@ class App extends React.Component {
       <div className="layout-vertical">
         <p className="Panel-header">
           <span>Feeds</span>
-          <a title="Refresh Feeds" onClick={ fetchAll }>(R)</a>
-          <a title="Import Sample Data" onClick={ importSample }>(I)</a>
-          <a title="Add feed" onClick={ () => addFeed({url: prompt("Feed URL:")}) }>(+)</a>
+          
+          <FeedTreeToolbar />
         </p>
         <div className="Panel-body layout-2of3">
           <FeedTree nodes={nodes} />
@@ -68,9 +69,6 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
-  addFeed,
   removeFeed,
   removeBranch,
-  fetchAll,
-  importSample,
 })(App)
