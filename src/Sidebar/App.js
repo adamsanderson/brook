@@ -27,7 +27,6 @@ class App extends React.Component {
       <div className="layout-vertical">
         <p className="Panel-header">
           <span>Feeds</span>
-          
           <FeedTreeToolbar />
         </p>
         <div className="Panel-body layout-2of3">

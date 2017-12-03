@@ -7,6 +7,7 @@
   --color-grey:     #99999a;
   --color-light:    #ccccce;
   --color-lightest: #eeeeef;
+  --color-white:    #ffffff;
 
   --weight-bold: 600;
   --weight-black: 700;
@@ -29,10 +30,6 @@ html, body {
 body {
   padding: 0;
   color: var(--color-text);
-}
-
-h1, h2 {
-  border-bottom: 1px solid var(--color-light);
 }
 
 /* Normalize margins on block elements */
@@ -125,6 +122,22 @@ a {
 .List .List-item.isHoveringOver {
   background: var(--color-active);
   color: var(--color-lightest);
+}
+
+.Menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: var(--color-active);
+  color: var(--color-white);
+  padding: 0.5em;
+}
+
+.Menu .Panel-header {
+  color: var(--color-white);
 }
 
 /* 

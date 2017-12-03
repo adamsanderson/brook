@@ -5,6 +5,7 @@ import {Provider} from 'react-redux'
 import {Store} from 'react-chrome-redux'
 
 import App from './App'
+import ModalRoot from "../modals";
 
 const store = new Store({
   portName: 'Brook'
@@ -20,7 +21,10 @@ const unsubscribe = store.subscribe(() => {
 
   ReactDOM.render(
     <Provider store={store}>
+      <div style={{height: "100%"}}>
         <App/>
+        <ModalRoot/>
+      </div>
     </Provider>,
     mountNode
   )

@@ -38,7 +38,7 @@ function findFeedLinks() {
     title: linkEl.getAttribute("title") || humanizeHost(linkEl.getAttribute("href")),
     url: linkEl.getAttribute("href")
   }))
-
+  
   return feeds
 }
 
@@ -55,15 +55,29 @@ function findFeedHandler() {
         url: document.location.toString()
       }
     ]
+  } else {
+    return []
   }
 }
 
 function reportFeeds(feeds) {
+  feeds = removeDuplicates(feeds)
   store.dispatch(foundFeeds(feeds))
 }
 
 function discardFeeds() {
   store.dispatch(forgetFeeds())
+}
+
+function removeDuplicates(feeds) {
+  const urls = new Set()
+  return feeds.filter(f => {
+    const u = f.url
+    if (urls.has(u)) { return false }
+
+    urls.add(u)
+    return true
+  })
 }
 
 document.addEventListener("visibilitychange", findFeeds)

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
 import { importSample } from '../redux/modules/import'
+import { openModal } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
@@ -33,14 +34,13 @@ class SubscribeButton extends Component {
 
   handleNewSubscription() {
     const feeds = this.props.availableFeeds
+
     if (!feeds.length) {
       return
     } else if (feeds.length === 1) {
-      console.log("Subscribing to ", feeds[0])
       this.props.addFeed(feeds[0])
     } else {
-      console.log("Too many choices!")
-      return
+      this.props.openModal("SubscribeMenu", {feeds});
     }
   }
 }
@@ -53,4 +53,5 @@ export default connect(mapStateToProps, {
   addFeed,
   fetchAll,
   importSample,
+  openModal,
 })(SubscribeButton)

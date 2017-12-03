@@ -8,6 +8,7 @@ import ui from './modules/ui'
 import views from './modules/views'
 import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
+import modal from './modules/modal'
 
 import backgroundActions from './middleware/backgroundActions'
 import logger from './middleware/logger'
@@ -34,6 +35,7 @@ addModule(ui)
 addModule(views)
 addModule(discovery)
 addModule(activeTab)
+addModule(modal)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)
