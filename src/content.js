@@ -62,6 +62,8 @@ function findFeedHandler() {
 
 function reportFeeds(feeds) {
   feeds = removeDuplicates(feeds)
+  feeds = normalizeFeeds(feeds)
+
   store.dispatch(foundFeeds(feeds))
 }
 
@@ -78,6 +80,20 @@ function removeDuplicates(feeds) {
     urls.add(u)
     return true
   })
+}
+
+function normalizeFeeds(feeds) {
+  // Note: this mutates the feeds in place.
+  feeds.forEach((f) => {
+    // Make absolute paths fully qualified:
+    if (f.url[0] === "/") {
+      const url = new URL(window.location)
+      url.pathname = f.url
+      f.url = url.toString()
+    }
+  })
+
+  return feeds
 }
 
 document.addEventListener("visibilitychange", findFeeds)
