@@ -16,7 +16,7 @@ class SubscribeButton extends Component {
   }
 
   render() {
-    const {availableFeeds} = this.props
+    const {availableFeeds, fetchAll, importSample} = this.props
     const hasFeeds = availableFeeds.length > 0
 
     return (
