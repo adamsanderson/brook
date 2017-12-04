@@ -117,10 +117,13 @@ function translateFeedData(data, feedUrl) {
 function translateItemData(data, feedUrl) {
   try {
     let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
+    if (!url) {
+      debugger
+    }
     url = resolveUrl(url, feedUrl)
 
     return {
-      id: data.id || data["feedburner:origlink"] || data["link"],
+      id: data.id || url,
       title: data.title,
       url,
       createdAt: +new Date(data.pubdate || data.published),
@@ -138,18 +141,17 @@ function translateItemData(data, feedUrl) {
 }
 
 function chooseItemUrl(link) {
-  let url
-
   if (typeof link === "string") {
-    url = link
+    return link
   } else if (Array.isArray(link)) {
     const alternate = link.find(l => l.rel === "alternate" && l.type === "text/html")
-    url = alternate.href
+    return alternate.href
+  } else if (link.href) {
+    return link.href
   }
-
-  return url
 }
 
+// TODO: This is very similar to the code used in content.js
 function resolveUrl(url, feedUrl) {
   if (url[0] === "/") {
     return new window.URL(feedUrl).origin + url
