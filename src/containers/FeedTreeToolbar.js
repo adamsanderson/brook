@@ -23,7 +23,7 @@ class SubscribeButton extends Component {
       <span>
         {hasFeeds && (
           <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="is-active">
-            Subscribe:{availableFeeds.length}
+            Subscribe{availableFeeds.length > 1 ? "… " : " "}
           </a>
         )}
         <a title="Refresh Feeds" onClick={ fetchAll }>(R)</a>
