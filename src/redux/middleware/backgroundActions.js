@@ -117,16 +117,14 @@ function translateFeedData(data, feedUrl) {
 function translateItemData(data, feedUrl) {
   try {
     let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
-    if (!url) {
-      debugger
-    }
+    
     url = resolveUrl(url, feedUrl)
-
+    
     return {
       id: data.id || url,
       title: data.title,
       url,
-      createdAt: +new Date(data.pubdate || data.published),
+      createdAt: +new Date(data.pubdate || data.published || data["dc:date"]),
       description: data.description,
     }
   } catch (error) {
