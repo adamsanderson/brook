@@ -12,11 +12,11 @@ class FeedDetail extends React.Component {
     const feed = this.props.feed
 
     if (!feed) {
-      return this.renderEmptyState()
+      return this.renderPendingState()
     } else if (feed.error) {
       return this.renderErrorState(feed)
     } else if (!feed.items || feed.items.length === 0) {
-      return this.renderEmptyState()
+      return this.renderEmptyState(feed)
     } else {
       return this.renderContent(feed)
     }
@@ -35,10 +35,18 @@ class FeedDetail extends React.Component {
     )
   }
 
-  renderEmptyState() {
+  renderPendingState() {
     return (
       <p>
-        …
+
+      </p>
+    )
+  }
+
+  renderEmptyState(feed) {
+    return (
+      <p>
+        {feed.isLoading ? "Loading…" : "No published articles"}
       </p>
     )
   }
