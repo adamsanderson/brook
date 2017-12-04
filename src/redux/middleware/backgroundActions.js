@@ -124,7 +124,7 @@ function translateItemData(data, feedUrl) {
       id: data.id || url,
       title: data.title,
       url,
-      createdAt: +new Date(data.pubdate || data.published || data["dc:date"]),
+      createdAt: +new Date(data.pubdate || data.published || data.updated || data["dc:date"]),
       description: data.description,
     }
   } catch (error) {
