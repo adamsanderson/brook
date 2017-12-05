@@ -7,7 +7,8 @@ export const ADD_FOLDER = "ADD_FOLDER"
 export const REMOVE_FOLDER = "REMOVE_FOLDER"
 export const REMOVE_BRANCH = "REMOVE_BRANCH"
 export const MOVE_FOLDER = "MOVE_FOLDER"
-export const MOVE_FEED = "MOVE_FOLDER"
+export const MOVE_FEED = "MOVE_FEED"
+export const RENAME_FOLDER = "RENAME_FOLDER"
 
 const name = __filename
 
@@ -41,6 +42,13 @@ export function removeBranch(folder) {
   return {
     type: REMOVE_BRANCH,
     payload: { folder }
+  }
+}
+
+export function renameFolder(folder, title) {
+  return {
+    type: RENAME_FOLDER, 
+    payload: { folder, title }
   }
 }
 
@@ -83,6 +91,9 @@ const reducer = (state = initialState, action) => {
 
     case REMOVE_BRANCH:
       return branchRemoved(state, action)
+    
+    case RENAME_FOLDER:
+      return folderRenamed(state, action)
 
     case MOVE_FEED:
       return feedMoved(state, action)
@@ -116,6 +127,14 @@ function folderAdded(state, action) {
 function folderToggled(state, action) {
   const folder = action.payload.folder
   const newFolder = {...folder, expanded: !folder.expanded}
+  
+  return {...state, [folder.id]: newFolder}
+}
+
+function folderRenamed(state, action) {
+  const folder = action.payload.folder
+  const title = action.payload.title
+  const newFolder = {...folder, title, isEditing: false}
   
   return {...state, [folder.id]: newFolder}
 }
@@ -170,8 +189,6 @@ function folderRemoved(state, action) {
   state = Object.assign({}, state)
   delete state[folder.id]
 
-  // Todo: Recursively delete child feeds... how does that get cleaned up?
-  //       Or should that be the resposiblity of the action creator?
   return nodeRemoved(state, folder)
 }
 
@@ -235,7 +252,8 @@ function normalizeFolder(folder) {
     id: folder.id || Math.random().toString(36).substring(2, 15),
     type: FOLDER,
     title: folder.title || "Folder",
-    children: folder.children || []
+    children: folder.children || [],
+    isEditing: folder.isEditing || false,
   }
 }
 

@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
+import { addFolder } from '../redux/modules/folders'
 import { importSample } from '../redux/modules/import'
 import { openModal } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
@@ -13,6 +14,7 @@ class SubscribeButton extends Component {
     super(props)
 
     this.handleNewSubscription = this.handleNewSubscription.bind(this)
+    this.handleAddFolder = this.handleAddFolder.bind(this)
   }
 
   render() {
@@ -26,6 +28,7 @@ class SubscribeButton extends Component {
             Subscribe{availableFeeds.length > 1 ? "… " : " "}
           </a>
         )}
+        <a title="Add Folder" onClick={ this.handleAddFolder }>(F)</a>
         <a title="Refresh Feeds" onClick={ fetchAll }>(R)</a>
         <a title="Import Sample Data" onClick={ importSample }>(I)</a>
       </span>
@@ -43,6 +46,14 @@ class SubscribeButton extends Component {
       this.props.openModal("SubscribeMenu", {feeds});
     }
   }
+
+  handleAddFolder() {
+    const newFolder = {
+      title: "New Folder", 
+      isEditing: true
+    }
+    this.props.addFolder(newFolder)
+  }
 }
 
 const mapStateToProps = (state, props) => ({
@@ -51,6 +62,7 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   addFeed,
+  addFolder,
   fetchAll,
   importSample,
   openModal,

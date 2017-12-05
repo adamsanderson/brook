@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 
 import FolderIcon from '../components/icons/FolderIcon'
+import FolderEditor from './FolderEditor'
 
 class Folder extends React.Component {
 
@@ -23,7 +24,11 @@ class Folder extends React.Component {
     return (
       <div className={`Folder ${className}`} style={style} onClick={this.handleClick} >
         <FolderIcon expanded={folder.expanded} />
-        <span >{folder.title}</span>
+          {
+            folder.isEditing 
+            ? <FolderEditor folder={folder} /> 
+            : <span>{folder.title}</span>
+          }
       </div>
     )
   }
