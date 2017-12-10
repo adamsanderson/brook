@@ -5,19 +5,15 @@ import { connect } from 'react-redux'
 import FeedTree from '../containers/FeedTree'
 import FeedDetail from '../components/FeedDetail'
 import FeedTreeToolbar from '../containers/FeedTreeToolbar'
+import FolderToolbar from '../containers/FolderToolbar'
+import FeedDetailToolbar from '../containers/FeedDetailToolbar'
 
-import { removeFeed } from '../redux/modules/feeds'
-import folders, { removeBranch } from '../redux/modules/folders'
+import folders from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
 import activeTab from '../redux/modules/activeTab'
 import discovery from '../redux/modules/discovery'
 
 class App extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.handleRemove = this.handleRemove.bind(this)
-  }
 
   render() {
     const {nodes, addFeed, fetchAll, importSample, currentFeed, currentFolder} = this.props
@@ -37,23 +33,19 @@ class App extends React.Component {
           <span>
             {currentItem ? currentItem.title : "Articles"}
           </span>
-            { currentItem && (
-              <a title="Remove" onClick={ this.handleRemove }>(x)</a>
-            )}
+            {
+              currentFeed 
+              ? <FeedDetailToolbar feed={currentFeed} />
+              : currentFolder
+              ? <FolderToolbar folder={currentFolder} />
+              : ""
+            }
         </p>
         <div className="Panel-body layout-1of3">
           <FeedDetail feed={currentFeed} />
         </div>
       </div>
     )
-  }
-
-  handleRemove() {
-    if (this.props.currentFeed) {
-      this.props.removeFeed(this.props.currentFeed)
-    } else if (this.props.currentFolder) {
-      this.props.removeBranch(this.props.currentFolder)
-    }
   }
 
   currentItem() {
@@ -68,6 +60,5 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
-  removeFeed,
-  removeBranch,
+  // Actions
 })(App)

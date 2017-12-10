@@ -8,7 +8,7 @@ import { openModal } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
-class SubscribeButton extends Component {
+class FeedTreeToolbar extends Component {
 
   constructor(props) {
     super(props)
@@ -66,4 +66,4 @@ export default connect(mapStateToProps, {
   fetchAll,
   importSample,
   openModal,
-})(SubscribeButton)
+})(FeedTreeToolbar)
