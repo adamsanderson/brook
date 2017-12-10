@@ -8,6 +8,7 @@ export const REMOVE_FOLDER = "REMOVE_FOLDER"
 export const REMOVE_BRANCH = "REMOVE_BRANCH"
 export const MOVE_FOLDER = "MOVE_FOLDER"
 export const MOVE_FEED = "MOVE_FEED"
+export const EDIT_FOLDER = "EDIT_FOLDER"
 export const RENAME_FOLDER = "RENAME_FOLDER"
 
 const name = __filename
@@ -41,6 +42,13 @@ export function removeFolder(folder) {
 export function removeBranch(folder) {
   return {
     type: REMOVE_BRANCH,
+    payload: { folder }
+  }
+}
+
+export function editFolder(folder) {
+  return {
+    type: EDIT_FOLDER, 
     payload: { folder }
   }
 }
@@ -92,6 +100,9 @@ const reducer = (state = initialState, action) => {
     case REMOVE_BRANCH:
       return branchRemoved(state, action)
     
+    case EDIT_FOLDER:
+      return folderEdited(state, action)
+    
     case RENAME_FOLDER:
       return folderRenamed(state, action)
 
@@ -127,6 +138,13 @@ function folderAdded(state, action) {
 function folderToggled(state, action) {
   const folder = action.payload.folder
   const newFolder = {...folder, expanded: !folder.expanded}
+  
+  return {...state, [folder.id]: newFolder}
+}
+
+function folderEdited(state, action) {
+  const folder = action.payload.folder
+  const newFolder = {...folder, isEditing: true}
   
   return {...state, [folder.id]: newFolder}
 }

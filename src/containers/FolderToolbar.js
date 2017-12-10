@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { removeBranch } from '../redux/modules/folders'
+import { removeBranch, editFolder } from '../redux/modules/folders'
 
 class FolderToolbar extends Component {
 
@@ -12,19 +12,24 @@ class FolderToolbar extends Component {
   constructor(props) {
     super(props)
     this.handleRemove = this.handleRemove.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
   }
 
   render() {
     return (
       <span>
+        <a title="Edit" onClick={ this.handleEdit }>(e)</a>
         <a title="Remove" onClick={ this.handleRemove }>(x)</a>
       </span>
     )
   }
 
   handleRemove() {
-    console.log("REMOVE", this.props)
     this.props.removeBranch(this.props.folder)
+  }
+
+  handleEdit() {
+    this.props.editFolder(this.props.folder)
   }
 }
 
@@ -33,5 +38,6 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  removeBranch
+  removeBranch,
+  editFolder
 })(FolderToolbar)

@@ -31,11 +31,11 @@ class FeedTree extends Component {
   }
 
   renderNode(node) {
-    const {indent, indentUnits, currentFeed} = this.props
+    const {indent, indentUnits, currentFeed, currentFolder} = this.props
     const {item} = node
     const childProps = {
       style: {paddingLeft: indent * node.depth + indentUnits},
-      className: `List-item ${item === currentFeed ? "isSelected" : ""}`,
+      className: `List-item ${item === currentFeed || item === currentFolder ? "isSelected" : ""}`,
       key: `${item.type}-${item.id}`,
     }
     
@@ -71,6 +71,7 @@ class FeedTree extends Component {
 const mapStateToProps = (state, props) => ({
   isFeedUnread: views.selectors.isFeedUnread(state),
   currentFeed: ui.selectors.currentFeed(state),
+  currentFolder: ui.selectors.currentFolder(state),
   allowDrop: (draggable, dropTarget) => {
     return !folder.selectors.containsNode(state, draggable, dropTarget)
   }
