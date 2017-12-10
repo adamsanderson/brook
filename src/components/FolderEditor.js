@@ -13,6 +13,7 @@ class FolderEditor extends React.Component {
     super(props)
 
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKey = this.handleKey.bind(this)
   }
 
   componentDidMount() {
@@ -27,12 +28,22 @@ class FolderEditor extends React.Component {
         defaultValue={folder.title} 
         ref={el => this.input = el}
         onBlur={ this.handleSubmit }
+        onKeyUp={ this.handleKey }
       />
     )
   }
 
   handleSubmit() {
     this.props.renameFolder(this.props.folder, this.input.value)
+  }
+
+  handleKey(event) {
+    if (event.keyCode === 13) {
+      this.handleSubmit();
+    } else if (event.keyCode === 27 ) {
+      this.input.value = this.props.folder.title;
+      this.input.blur();
+    }
   }
 }
 
