@@ -8,6 +8,9 @@ import { openModal } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
+import RefreshIcon from 'react-icons/lib/fa/refresh'
+import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
+
 class FeedTreeToolbar extends Component {
 
   constructor(props) {
@@ -28,9 +31,10 @@ class FeedTreeToolbar extends Component {
             Subscribe{availableFeeds.length > 1 ? "… " : " "}
           </a>
         )}
+        <RefreshIcon title="Refresh Feeds" onClick={ fetchAll } />
         <a title="Add Folder" onClick={ this.handleAddFolder }>(F)</a>
-        <a title="Refresh Feeds" onClick={ fetchAll }>(R)</a>
         <a title="Import Sample Data" onClick={ importSample }>(I)</a>
+        <MenuIcon />
       </span>
     )
   }

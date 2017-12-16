@@ -4,13 +4,18 @@ import { addFeed } from '../redux/modules/feeds'
 import { closeModal } from '../redux/modules/modal'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
+import BackIcon from 'react-icons/lib/fa/chevron-left'
 
 class SubscribeMenu extends Component {
   render() {
     return (
       <div className="Menu layout-vertical">
         <p className="Panel-header">
-          <a onClick={ (event) => this.handleClose() }>≪ Back to Feeds</a>
+          <a onClick={ (event) => this.handleClose() }>
+            <BackIcon /> 
+            {" "}
+            Back to Feeds
+          </a>
         </p>
         
         <div className="Panel-body">
