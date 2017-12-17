@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import modal from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
+import FeedTreeMenu from "./FeedTreeMenu";
 
 /*
   Adapted From:
@@ -10,7 +11,8 @@ import SubscribeMenu from './SubscribeMenu'
 */
 
 const MODAL_COMPONENTS = {
-  SubscribeMenu
+  SubscribeMenu,
+  FeedTreeMenu,
 }
 
 const ModalRoot = ({type, props}) => {

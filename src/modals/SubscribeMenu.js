@@ -9,7 +9,7 @@ import BackIcon from 'react-icons/lib/fa/chevron-left'
 class SubscribeMenu extends Component {
   render() {
     return (
-      <div className="Menu layout-vertical">
+      <div className="Modal layout-vertical">
         <p className="Panel-header">
           <a onClick={ (event) => this.handleClose() }>
             <BackIcon /> 

@@ -61,6 +61,16 @@ a {
   flex: 1;
 }
 
+.Panel-header .Icon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.Panel-header .Icon:hover {
+  color: var(--color-active);
+  cursor: pointer;
+}
+
 .Panel-body {
   overflow-y: scroll;
 }
@@ -126,6 +136,14 @@ a {
 
 .Menu {
   position: fixed;
+  background: var(--color-white);
+  padding: 1em;
+  
+  box-shadow: 0 0 5px var(--color-light);
+}
+
+.Modal {
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -136,7 +154,7 @@ a {
   padding: 0.5em;
 }
 
-.Menu .Panel-header {
+.Modal .Panel-header {
   color: var(--color-white);
 }
 
