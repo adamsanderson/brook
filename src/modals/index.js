@@ -5,6 +5,7 @@ import modal from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
 import FeedTreeMenu from "./FeedTreeMenu"
 import FolderMenu from "./FolderMenu"
+import FeedDetailMenu from "./FeedDetailMenu"
 
 /*
   Adapted From:
@@ -15,6 +16,7 @@ const MODALS_COMPONENTS = {
   SubscribeMenu,
   FeedTreeMenu,
   FolderMenu,
+  FeedDetailMenu,
 }
 
 /**

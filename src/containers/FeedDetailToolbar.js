@@ -1,7 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { removeFeed } from '../redux/modules/feeds'
+import { openModal } from '../redux/modules/modal'
+import { MODALS } from '../modals'
+
+import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 
 class FeedDetailToolbar extends Component {
 
@@ -11,19 +14,31 @@ class FeedDetailToolbar extends Component {
 
   constructor(props) {
     super(props)
-    this.handleRemove = this.handleRemove.bind(this)
+    this.handleMenu = this.handleMenu.bind(this)
   }
 
   render() {
     return (
       <span>
-        <a title="Remove" onClick={ this.handleRemove }>(x)</a>
+        <MenuIcon className="Icon" onClick={ this.handleMenu } />
       </span>
     )
   }
 
-  handleRemove() {
-    this.props.removeFeed(this.props.feed)
+  handleMenu(event) {
+    const feed = this.props.feed
+    const rect = event.target.getBoundingClientRect()
+    const targetRegion = {
+      top: rect.top, 
+      left: rect.left, 
+      bottom: rect.bottom, 
+      right: rect.right,
+    }
+    
+    this.props.openModal(MODALS.FeedDetailMenu, {
+      targetRegion, 
+      feed 
+    })
   }
 }
 
@@ -32,5 +47,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  removeFeed
+  openModal
 })(FeedDetailToolbar)
