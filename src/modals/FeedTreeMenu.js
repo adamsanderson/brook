@@ -20,12 +20,14 @@ class FeedTreeMenu extends Component {
     }
     
     return (
-      <div className="Menu" style={position}>
-        <div>
-          <a onClick={ this.handleAddFolder }>Add Folder</a>
-        </div>
-        <div>
-          <a onClick={ this.handleImport }>Import Feeds</a>
+      <div className="Modal" onClick={ this.props.closeModal }>
+        <div className="Menu" style={position}>
+          <div>
+            <a onClick={ this.handleAddFolder }>Add Folder</a>
+          </div>
+          <div>
+            <a onClick={ this.handleImport }>Import Feeds</a>
+          </div>
         </div>
       </div>
     )

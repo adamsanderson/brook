@@ -148,14 +148,7 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-
-  background: var(--color-active);
-  color: var(--color-white);
   padding: 0.5em;
-}
-
-.Modal .Panel-header {
-  color: var(--color-white);
 }
 
 /* 
@@ -176,6 +169,19 @@ a {
 
 .layout-2of3 {
   flex: 2;
+}
+
+/* 
+  Style Variants
+*/
+
+.inverted {
+  background: var(--color-active);
+  color: var(--color-white);
+}
+
+.inverted .Panel-header {
+  color: var(--color-white);
 }
 
 /*
