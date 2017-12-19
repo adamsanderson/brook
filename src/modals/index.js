@@ -3,22 +3,30 @@ import { connect } from 'react-redux'
 
 import modal from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
-import FeedTreeMenu from "./FeedTreeMenu";
+import FeedTreeMenu from "./FeedTreeMenu"
+import FolderMenu from "./FolderMenu"
 
 /*
   Adapted From:
   http://stackoverflow.com/questions/35623656/how-can-i-display-a-modal-dialog-in-redux-that-performs-asynchronous-actions/35641680
 */
 
-const MODAL_COMPONENTS = {
+const MODALS_COMPONENTS = {
   SubscribeMenu,
   FeedTreeMenu,
+  FolderMenu,
 }
+
+/**
+ * All available named modals.
+ */
+export const MODALS = {}
+Object.keys(MODALS_COMPONENTS).forEach(key => MODALS[key] = key)
 
 const ModalRoot = ({type, props}) => {
   if (!type) { return null }
   
-  const SpecificModal = MODAL_COMPONENTS[type]
+  const SpecificModal = MODALS_COMPONENTS[type]
   if (!SpecificModal) {
     throw new Error("Unknown modal type: "+type)
   }

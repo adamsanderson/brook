@@ -1,7 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { removeBranch, editFolder } from '../redux/modules/folders'
+import { openModal } from '../redux/modules/modal'
+import { MODALS } from '../modals'
+
+import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 
 class FolderToolbar extends Component {
 
@@ -11,25 +14,31 @@ class FolderToolbar extends Component {
 
   constructor(props) {
     super(props)
-    this.handleRemove = this.handleRemove.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
+    this.handleMenu = this.handleMenu.bind(this)
   }
 
   render() {
     return (
       <span>
-        <a title="Edit" onClick={ this.handleEdit }>(e)</a>
-        <a title="Remove" onClick={ this.handleRemove }>(x)</a>
+        <MenuIcon className="Icon" onClick={ this.handleMenu } />
       </span>
     )
   }
 
-  handleRemove() {
-    this.props.removeBranch(this.props.folder)
-  }
-
-  handleEdit() {
-    this.props.editFolder(this.props.folder)
+  handleMenu(event) {
+    const folder = this.props.folder
+    const rect = event.target.getBoundingClientRect()
+    const targetRegion = {
+      top: rect.top, 
+      left: rect.left, 
+      bottom: rect.bottom, 
+      right: rect.right,
+    }
+    
+    this.props.openModal(MODALS.FolderMenu, {
+      targetRegion, 
+      folder 
+    })
   }
 }
 
@@ -38,6 +47,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  removeBranch,
-  editFolder
+  openModal,
 })(FolderToolbar)

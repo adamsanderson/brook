@@ -7,6 +7,8 @@ import { openModal } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
+import { MODALS } from '../modals'
+
 import RefreshIcon from 'react-icons/lib/fa/refresh'
 import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 
@@ -44,7 +46,7 @@ class FeedTreeToolbar extends Component {
     } else if (feeds.length === 1) {
       this.props.addFeed(feeds[0])
     } else {
-      this.props.openModal("SubscribeMenu", {feeds})
+      this.props.openModal(MODALS.SubscribeMenu, {feeds})
     }
   }
 
@@ -57,7 +59,7 @@ class FeedTreeToolbar extends Component {
       right: rect.right,
     }
     
-    this.props.openModal("FeedTreeMenu", {targetRegion})
+    this.props.openModal(MODALS.FeedTreeMenu, {targetRegion})
   }
 }
 
