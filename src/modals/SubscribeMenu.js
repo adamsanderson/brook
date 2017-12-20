@@ -26,7 +26,7 @@ class SubscribeMenu extends Component {
           {this.props.feeds.map(feed => (
             <li key={feed.url} className="List-item">
               <StatusIndicator />
-              <a onClick={ (event) => this.handleSubscription(feed) }>
+              <a onClick={ (event) => this.handleSubscription(feed) } title={feed.title}>
                 {feed.title}
               </a>
             </li>
