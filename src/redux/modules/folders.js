@@ -272,6 +272,7 @@ function normalizeFolder(folder) {
     title: folder.title || "Folder",
     children: folder.children || [],
     isEditing: folder.isEditing || false,
+    expanded: true,
   }
 }
 
