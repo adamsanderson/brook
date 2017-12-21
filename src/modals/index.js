@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import modal from '../redux/modules/modal'
+import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
 import FeedTreeMenu from "./FeedTreeMenu"
 import FolderMenu from "./FolderMenu"
@@ -25,7 +25,10 @@ const MODALS_COMPONENTS = {
 export const MODALS = {}
 Object.keys(MODALS_COMPONENTS).forEach(key => MODALS[key] = key)
 
-const ModalRoot = ({type, props}) => {
+/**
+ * ModalRoot displays the current modal.
+ */
+const ModalRoot = ({type, props, closeModal}) => {
   if (!type) { return null }
   
   const SpecificModal = MODALS_COMPONENTS[type]
@@ -33,7 +36,7 @@ const ModalRoot = ({type, props}) => {
     throw new Error("Unknown modal type: "+type)
   }
   
-  return <SpecificModal {...props} />
+  return <SpecificModal closeModal={closeModal} {...props} />
 }
 
 ModalRoot.propTypes = {
@@ -42,5 +45,6 @@ ModalRoot.propTypes = {
 }
 
 export default connect(
-  state => modal.selectors.modal(state)
+  state => modal.selectors.modal(state),
+  { closeModal }
 )(ModalRoot)

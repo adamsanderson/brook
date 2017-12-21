@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { openModal } from '../redux/modules/modal'
+import { openModalRightAlignedBelow } from '../redux/modules/modal'
 import { MODALS } from '../modals'
 
 import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
@@ -26,18 +26,9 @@ class FeedDetailToolbar extends Component {
   }
 
   handleMenu(event) {
-    const feed = this.props.feed
-    const rect = event.target.getBoundingClientRect()
-    const targetRegion = {
-      top: rect.top, 
-      left: rect.left, 
-      bottom: rect.bottom, 
-      right: rect.right,
-    }
-    
-    this.props.openModal(MODALS.FeedDetailMenu, {
-      targetRegion, 
-      feed 
+    const el = event.target
+    this.props.openModalRightAlignedBelow(el, MODALS.FeedDetailMenu, {
+      feed: this.props.feed, 
     })
   }
 }
@@ -47,5 +38,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  openModal
+  openModalRightAlignedBelow
 })(FeedDetailToolbar)

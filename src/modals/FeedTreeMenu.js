@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { closeModal } from '../redux/modules/modal'
+
 import { addFolder } from '../redux/modules/folders'
 import { importSample } from '../redux/modules/import'
+import PopupLayout from "./layouts/PopupLayout";
 
 class FeedTreeMenu extends Component {
   constructor(props) {
@@ -13,23 +14,17 @@ class FeedTreeMenu extends Component {
   }
 
   render() {    
-    const {targetRegion, importSample} = this.props
-    const position = {
-      top: targetRegion.bottom + 5, 
-      right: document.body.clientWidth - targetRegion.right,
-    }
+    const { importSample, position, closeModal } = this.props
     
     return (
-      <div className="Modal" onClick={ this.props.closeModal }>
-        <div className="Menu" style={position}>
-          <div>
-            <a onClick={ this.handleAddFolder }>Add Folder</a>
-          </div>
-          <div>
-            <a onClick={ this.handleImport }>Import Feeds</a>
-          </div>
+      <PopupLayout position={position} onClose={closeModal}>
+        <div>
+          <a onClick={ this.handleAddFolder }>Add Folder</a>
         </div>
-      </div>
+        <div>
+          <a onClick={ this.handleImport }>Import Feeds</a>
+        </div>
+      </PopupLayout>
     )
   }
 
@@ -59,7 +54,6 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  closeModal,
   addFolder,
   importSample,
 })(FeedTreeMenu)

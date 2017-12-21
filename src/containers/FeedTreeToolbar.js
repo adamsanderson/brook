@@ -2,8 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
-
-import { openModal } from '../redux/modules/modal'
+import { openModal, openModalRightAlignedBelow } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
@@ -51,15 +50,8 @@ class FeedTreeToolbar extends Component {
   }
 
   handleMenu(event) {
-    const rect = event.target.getBoundingClientRect()
-    const targetRegion = {
-      top: rect.top, 
-      left: rect.left, 
-      bottom: rect.bottom, 
-      right: rect.right,
-    }
-    
-    this.props.openModal(MODALS.FeedTreeMenu, {targetRegion})
+    const el = event.target;
+    this.props.openModalRightAlignedBelow(el, MODALS.FeedTreeMenu)
   }
 }
 
@@ -71,4 +63,5 @@ export default connect(mapStateToProps, {
   addFeed,
   fetchAll,
   openModal,
+  openModalRightAlignedBelow,
 })(FeedTreeToolbar)

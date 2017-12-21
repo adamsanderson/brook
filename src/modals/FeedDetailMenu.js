@@ -1,12 +1,14 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { closeModal } from '../redux/modules/modal'
+
+import PopupLayout from './layouts/PopupLayout'
 import { removeFeed } from '../redux/modules/feeds'
 
 class FeedDetailMenu extends Component {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
+    position: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -16,31 +18,20 @@ class FeedDetailMenu extends Component {
   }
 
   render() {    
-    const {targetRegion, importSample} = this.props
-    const position = {
-      top: targetRegion.bottom + 5, 
-      right: document.body.clientWidth - targetRegion.right,
-    }
+    const {position, importSample} = this.props
     
     return (
-      <div className="Modal" onClick={ this.props.closeModal }>
-        <div className="Menu" style={position}>
-          <div>
-            <a onClick={ this.handleRemove }>Delete Feed</a>
-          </div>
+      <PopupLayout position={position} onClose={this.props.closeModal}>
+        <div>
+          <a onClick={ this.handleRemove }>Delete Feed</a>
         </div>
-      </div>
+      </PopupLayout>
     )
   }
 
   handleRemove() {
-    this.handleClose()
-
-    this.props.removeFeed(this.props.feed)
-  }
-
-  handleClose() {
     this.props.closeModal()
+    this.props.removeFeed(this.props.feed)
   }
 }
 
@@ -49,6 +40,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  closeModal,
   removeFeed,
 })(FeedDetailMenu)

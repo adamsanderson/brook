@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 import { addFeed } from '../redux/modules/feeds'
-import { closeModal } from '../redux/modules/modal'
 
 import FullPageLayout from './layouts/FullPageLayout'
 import StatusIndicator from '../components/icons/StatusIndicator'
@@ -40,5 +39,4 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   addFeed,
-  closeModal,
 })(SubscribeMenu)

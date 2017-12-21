@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { openModal } from '../redux/modules/modal'
+import { openModalRightAlignedBelow } from '../redux/modules/modal'
 import { MODALS } from '../modals'
 
 import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
@@ -27,16 +27,8 @@ class FolderToolbar extends Component {
 
   handleMenu(event) {
     const folder = this.props.folder
-    const rect = event.target.getBoundingClientRect()
-    const targetRegion = {
-      top: rect.top, 
-      left: rect.left, 
-      bottom: rect.bottom, 
-      right: rect.right,
-    }
-    
-    this.props.openModal(MODALS.FolderMenu, {
-      targetRegion, 
+    const el = event.target
+    this.props.openModalRightAlignedBelow(el, MODALS.FolderMenu, {
       folder 
     })
   }
@@ -47,5 +39,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  openModal,
+  openModalRightAlignedBelow,
 })(FolderToolbar)

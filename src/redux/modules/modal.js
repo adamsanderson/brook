@@ -1,3 +1,4 @@
+import { rightAlignedBelow } from "../../lib/position";
 export const CLOSE = "Modal/CLOSE"
 export const OPEN  = "Modal/OPEN"
 
@@ -9,10 +10,19 @@ export function closeModal() {
   }
 }
 
-export function openModal(type, props) {
+export function openModal(type, props={}) {
   return {
     type: OPEN,
     payload: {type: type, props: props}
+  }
+}
+
+export function openModalRightAlignedBelow(element, type, props={}) {
+  const position = rightAlignedBelow(element)
+
+  return {
+    type: OPEN,
+    payload: {type: type, props: {...props, position}}
   }
 }
 
