@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
 
 import { addFolder } from '../redux/modules/folders'
-import { importSample } from '../redux/modules/import'
+import { openModal } from '../redux/modules/modal'
+
+import { MODALS } from "./index";
 import PopupLayout from "./layouts/PopupLayout";
 
 class FeedTreeMenu extends Component {
@@ -29,7 +31,7 @@ class FeedTreeMenu extends Component {
   }
 
   handleAddFolder() {
-    this.handleClose()
+    this.props.closeModal()
 
     const newFolder = {
       title: "New Folder", 
@@ -39,14 +41,9 @@ class FeedTreeMenu extends Component {
   }
 
   handleImport() {
-    this.handleClose()
-
-    this.props.importSample()
+    this.props.openModal(MODALS.ImportModal)
   }
 
-  handleClose() {
-    this.props.closeModal()
-  }
 }
 
 const mapStateToProps = (state, props) => ({
@@ -55,5 +52,5 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   addFolder,
-  importSample,
+  openModal,
 })(FeedTreeMenu)

@@ -106,10 +106,6 @@ a {
   background: var(--color-lightest);
 }
 
-.List .List-item .hasError {
-  color: var(--color-danger);
-}
-
 .List .List-item.isHoveringBefore::after,
 .List .List-item.isHoveringAfter::after {
   content: '';
@@ -171,6 +167,11 @@ a {
   flex: 2;
 }
 
+.layout-fill {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 /* 
   Style Variants
 */
@@ -188,8 +189,16 @@ a {
   Component States
 */
 
-.is-active {
+.isActive {
   color: var(--color-active);
+}
+
+.hasError {
+  color: var(--color-danger);
+}
+
+.inverted .hasError {
+  color: #ffbfca;
 }
 
 /* 

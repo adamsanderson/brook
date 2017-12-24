@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
+import ImportModal from './ImportModal'
 import FeedTreeMenu from "./FeedTreeMenu"
 import FolderMenu from "./FolderMenu"
 import FeedDetailMenu from "./FeedDetailMenu"
@@ -17,6 +18,7 @@ const MODALS_COMPONENTS = {
   FeedTreeMenu,
   FolderMenu,
   FeedDetailMenu,
+  ImportModal,
 }
 
 /**

@@ -27,7 +27,7 @@ class FeedTreeToolbar extends Component {
     return (
       <span>
         {hasFeeds && (
-          <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="is-active">
+          <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
             Subscribe{availableFeeds.length > 1 ? "… " : " "}
           </a>
         )}

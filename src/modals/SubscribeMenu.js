@@ -4,7 +4,6 @@ import { addFeed } from '../redux/modules/feeds'
 
 import FullPageLayout from './layouts/FullPageLayout'
 import StatusIndicator from '../components/icons/StatusIndicator'
-import BackIcon from 'react-icons/lib/fa/chevron-left'
 
 class SubscribeMenu extends Component {
   render() {

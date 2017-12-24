@@ -2,6 +2,7 @@ export default class OpmlReader {
   constructor(handlers) {
     this.handleFeed = handlers.onFeed
     this.handleFolder = handlers.onFolder
+    this.handleFinish = handlers.onFinish
   }
 
   read(xml) {
@@ -10,6 +11,7 @@ export default class OpmlReader {
     const root = doc.querySelector("body")
     
     this._readChildren(root)
+    if (this.handleFinish) this.handleFinish()
   }
 
   _readNode(node, parentId) {
@@ -20,9 +22,9 @@ export default class OpmlReader {
       
       if (node.getAttribute("type") === "rss") {
         const url = node.getAttribute("xmlUrl")
-        this.handleFeed({id, title, url}, parentId)
+        if (this.handleFeed) this.handleFeed({id, title, url}, parentId)
       } else {
-        this.handleFolder({id, title}, parentId)
+        if (this.handleFolder) this.handleFolder({id, title}, parentId)
       }
     }
     
