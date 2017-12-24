@@ -18,7 +18,7 @@ class FeedDetailMenu extends Component {
   }
 
   render() {    
-    const {position, importSample} = this.props
+    const { position } = this.props
     
     return (
       <PopupLayout position={position} onClose={this.props.closeModal}>

@@ -16,7 +16,7 @@ import discovery from '../redux/modules/discovery'
 class App extends React.Component {
 
   render() {
-    const {nodes, addFeed, fetchAll, importSample, currentFeed, currentFolder} = this.props
+    const {nodes, currentFeed, currentFolder} = this.props
     const currentItem = this.currentItem();
 
     return (

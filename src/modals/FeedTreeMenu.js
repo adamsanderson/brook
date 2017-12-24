@@ -16,7 +16,7 @@ class FeedTreeMenu extends Component {
   }
 
   render() {    
-    const { importSample, position, closeModal } = this.props
+    const { position, closeModal } = this.props
     
     return (
       <PopupLayout position={position} onClose={closeModal}>

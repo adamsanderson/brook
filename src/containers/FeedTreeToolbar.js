@@ -21,7 +21,7 @@ class FeedTreeToolbar extends Component {
   }
 
   render() {
-    const {availableFeeds, fetchAll, importSample} = this.props
+    const {availableFeeds, fetchAll} = this.props
     const hasFeeds = availableFeeds.length > 0
 
     return (
