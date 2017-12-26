@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 
 import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
@@ -31,14 +33,25 @@ Object.keys(MODALS_COMPONENTS).forEach(key => MODALS[key] = key)
  * ModalRoot displays the current modal.
  */
 const ModalRoot = ({type, props, closeModal}) => {
-  if (!type) { return null }
-  
-  const SpecificModal = MODALS_COMPONENTS[type]
-  if (!SpecificModal) {
-    throw new Error("Unknown modal type: "+type)
+  let modal = null
+
+  if (type) {
+    const SpecificModal = MODALS_COMPONENTS[type]
+    if (!SpecificModal) {
+      throw new Error("Unknown modal type: "+type)
+    }
+    modal = (
+      <CSSTransition classNames="Slide" timeout={{enter: 200, exit: 150}} >
+        <SpecificModal closeModal={closeModal} {...props} />
+      </CSSTransition>
+    )
   }
   
-  return <SpecificModal closeModal={closeModal} {...props} />
+  return (
+    <TransitionGroup>
+      {modal}
+    </TransitionGroup>
+  )
 }
 
 ModalRoot.propTypes = {

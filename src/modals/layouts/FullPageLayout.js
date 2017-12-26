@@ -1,17 +1,17 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { closeModal } from '../../redux/modules/modal'
 
+import { closeModal } from '../../redux/modules/modal'
 import BackIcon from 'react-icons/lib/fa/chevron-left'
 
-class SubscribeMenu extends Component {
+class FullPageLayout extends Component {
 
   static defaultProps = {
     backMessage: "Back to Feeds"
   }
 
   render() {
-    const {closeModal, backMessage, children} = this.props
+    const {closeModal, backMessage, children, ...rest} = this.props
 
     return (
       <div className="Modal inverted layout-vertical">
@@ -36,4 +36,4 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   closeModal,
-})(SubscribeMenu)
+})(FullPageLayout)

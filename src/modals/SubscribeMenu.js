@@ -1,14 +1,14 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { addFeed } from '../redux/modules/feeds'
 
+import { addFeed } from '../redux/modules/feeds'
 import FullPageLayout from './layouts/FullPageLayout'
 import StatusIndicator from '../components/icons/StatusIndicator'
 
 class SubscribeMenu extends Component {
   render() {
     return (
-      <FullPageLayout>
+      <FullPageLayout {...this.props}>
         <p>
           Subscribe to:
         </p>
