@@ -14,7 +14,7 @@ class FullPageLayout extends Component {
     const {closeModal, backMessage, children, ...rest} = this.props
 
     return (
-      <div className="Modal inverted layout-vertical">
+      <div className="Modal FullPageLayout inverted layout-vertical">
         <p className="Panel-header">
           <a onClick={ closeModal }>
             <BackIcon /> 

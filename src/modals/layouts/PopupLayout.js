@@ -11,7 +11,7 @@ class PopupLayout extends Component {
     const { position, children, onClose, ...rest } = this.props
     
     return (
-      <div className="Modal" onClickCapture={ onClose }>
+      <div className="Modal PopupLayout" onClickCapture={ onClose }>
         <div className="Menu" style={ position }>
           { children }
         </div>

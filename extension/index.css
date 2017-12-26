@@ -259,26 +259,45 @@ a {
   Transitions 
 */
 
-.Slide-enter {
+/* Full Page Modals */
+.Modal-enter.FullPageLayout, .Modal-exit.Modal-exit-active.FullPageLayout {
   opacity: 0.01;
   transform: translateX(-200px);
 }
 
-.Slide-enter.Slide-enter-active {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 200ms ease-in,
-              transform 250ms ease-in;
-}
-
-.Slide-exit {
+.Modal-exit.FullPageLayout, .Modal-enter.Modal-enter-active.FullPageLayout {
   opacity: 1;
   transform: translateX(0);
 }
 
-.Slide-exit.Slide-exit-active {
-  opacity: 0.01;
-  transform: translateX(-200px);
+.Modal-enter.Modal-enter-active.FullPageLayout{
+  transition: opacity 150ms ease-in,
+              transform 200ms ease-in;
+}
+
+.Modal-exit.Modal-exit-active.FullPageLayout{
   transition: opacity 100ms ease-in, 
               transform 150ms ease-in;
 }
+
+/* Popup Modals */
+.Modal-enter.PopupLayout, .Modal-exit.Modal-exit-active.PopupLayout {
+  opacity: 0.01;
+  transform: translateY(-10px);
+}
+
+.Modal-exit.PopupLayout, .Modal-enter.Modal-enter-active.PopupLayout {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.Modal-enter.Modal-enter-active.PopupLayout{
+  transition: opacity 200ms ease-in,
+              transform 100ms ease-in;
+}
+
+.Modal-exit.Modal-exit-active.PopupLayout{
+  transition: opacity 150ms ease-in, 
+              transform 50ms ease-in;
+}
+

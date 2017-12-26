@@ -41,7 +41,7 @@ const ModalRoot = ({type, props, closeModal}) => {
       throw new Error("Unknown modal type: "+type)
     }
     modal = (
-      <CSSTransition classNames="Slide" timeout={{enter: 200, exit: 150}} >
+      <CSSTransition classNames="Modal" timeout={{enter: 200, exit: 150}} >
         <SpecificModal closeModal={closeModal} {...props} />
       </CSSTransition>
     )
