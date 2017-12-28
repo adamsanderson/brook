@@ -197,6 +197,10 @@ a {
   color: var(--color-danger);
 }
 
+.isWarning {
+  color: var(--color-danger);
+}
+
 .inverted .hasError {
   color: #ffbfca;
 }

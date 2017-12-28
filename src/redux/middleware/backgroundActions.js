@@ -22,6 +22,7 @@ const aliases = {
   FETCH_ALL: (action) => {
     return (dispatch, getState) => {
       const allFeeds = feeds.selectors.allFeeds(getState())
+      
       // TODO: Make WORKER_COUNT configurable
       for (let i = 0; i < WORKER_COUNT; i++) {
         fetchAll(allFeeds, dispatch)

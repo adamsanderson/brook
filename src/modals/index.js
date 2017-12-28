@@ -9,6 +9,7 @@ import ImportModal from './ImportModal'
 import FeedTreeMenu from "./FeedTreeMenu"
 import FolderMenu from "./FolderMenu"
 import FeedDetailMenu from "./FeedDetailMenu"
+import DebugMenu from "./DebugMenu"
 
 /*
   Adapted From:
@@ -21,6 +22,7 @@ const MODALS_COMPONENTS = {
   FolderMenu,
   FeedDetailMenu,
   ImportModal,
+  DebugMenu,
 }
 
 /**

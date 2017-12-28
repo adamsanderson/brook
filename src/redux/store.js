@@ -11,6 +11,7 @@ import views from './modules/views'
 import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
 import modal from './modules/modal'
+import { resetableReducer } from './reset'
 
 import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'
@@ -46,7 +47,7 @@ addModule(modal)
 middleware.push(logger)
 
 // Create store
-const rootReducer = combineReducers(reducers)
+const rootReducer = resetableReducer(combineReducers(reducers))
 const enhancedMiddleware = compose(
   applyMiddleware(...middleware),
   ...enhancers
@@ -57,6 +58,7 @@ const store = createStore(
   enhancedMiddleware
 )
 
+// Save state at most once every 1s
 store.subscribe(throttle(() => {
   const state = store.getState()
   const savedState = pick(state, serializePaths)
