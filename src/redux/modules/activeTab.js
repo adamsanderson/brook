@@ -1,6 +1,6 @@
 export const CHANGE_TAB = "CHANGE_TAB"
 
-const name = __filename
+const name = "activeTab"
 
 export function changeTab(tabId) {
   return {

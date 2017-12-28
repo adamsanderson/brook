@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "feedme": "^1.0.1",
+    "lodash": "^4.17.4",
     "react-chrome-redux": "^1.3.3",
     "react-icons": "^2.2.7",
     "react-redux": "^5.0.6",

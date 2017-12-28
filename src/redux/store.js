@@ -1,6 +1,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { alias } from 'react-chrome-redux'
 import thunk from 'redux-thunk'
+import throttle from 'lodash/throttle'
+import pick from 'lodash/pick'
 
 import feeds from './modules/feeds'
 import folders from './modules/folders'
@@ -11,6 +13,7 @@ import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 
 import backgroundActions from './middleware/backgroundActions'
+import { loadState, saveState } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
 
@@ -18,6 +21,7 @@ const initialState = {}
 const reducers = {}
 const middleware = [backgroundActions, thunk, promise]
 const enhancers = []
+const serializePaths = []
 
 // Register Modules:
 function addModule(module) {
@@ -26,6 +30,7 @@ function addModule(module) {
   if (module.reducer)     reducers[module.name] = module.reducer
   if (module.middleware)  middleware.push(module.middleware)
   if (module.enhancer)    enhancers.push(module.enhancer)
+  if (module.serialize)   serializePaths.push(module.name)
 }
 
 // Add our local modules
@@ -48,8 +53,15 @@ const enhancedMiddleware = compose(
 )
 const store = createStore(
   rootReducer,
-  initialState,
+  loadState() || initialState,
   enhancedMiddleware
 )
+
+store.subscribe(throttle(() => {
+  const state = store.getState()
+  const savedState = pick(state, serializePaths)
+  
+  saveState(savedState)
+}, 1000))
 
 export default store

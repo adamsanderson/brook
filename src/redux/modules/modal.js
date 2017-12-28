@@ -2,7 +2,7 @@ import { rightAlignedBelow } from "../../lib/position";
 export const CLOSE = "Modal/CLOSE"
 export const OPEN  = "Modal/OPEN"
 
-const name = __filename
+const name = "modal"
 
 export function closeModal() {
   return {

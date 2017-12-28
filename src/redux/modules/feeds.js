@@ -8,7 +8,7 @@ export const UPDATE_FEED = "UPDATE_FEED"
 
 export const FEED = "FEED"
 
-const name = __filename
+const name = "feeds"
 
 export function addFeed(feed, parentId) {
   return {
@@ -111,4 +111,5 @@ export default {
   name,
   reducer,
   selectors,
+  serialize: true,
 }

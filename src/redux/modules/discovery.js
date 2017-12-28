@@ -1,7 +1,7 @@
 export const FOUND_FEEDS = "FOUND_FEEDS"
 export const FORGET_FEEDS = "FORGET_FEEDS"
 
-const name = __filename
+const name = "discovery"
 
 export function foundFeeds(feeds) {
   return {

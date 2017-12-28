@@ -11,7 +11,7 @@ export const MOVE_FEED = "MOVE_FEED"
 export const EDIT_FOLDER = "EDIT_FOLDER"
 export const RENAME_FOLDER = "RENAME_FOLDER"
 
-const name = __filename
+const name = "folders"
 
 const ROOT = "ROOT"
 export const FOLDER = "FOLDER"
@@ -327,5 +327,6 @@ const selectors = {
 export default {
   name,
   reducer,
-  selectors
+  selectors,
+  serialize: true,
 }

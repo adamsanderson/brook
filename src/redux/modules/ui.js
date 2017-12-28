@@ -8,7 +8,7 @@ export const SELECT_FOLDER = "SELECT_FOLDER"
 
 export const SELECT_ITEM = "SELECT_ITEM"
 
-const name = __filename
+const name = "ui"
 
 export function selectFeed(feed) {
   return {
@@ -79,5 +79,6 @@ const selectors = {
 export default {
   name,
   reducer,
-  selectors
+  selectors,
+  serialize: true,
 }

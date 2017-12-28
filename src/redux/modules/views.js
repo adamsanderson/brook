@@ -1,6 +1,6 @@
 import { SELECT_FEED, SELECT_ITEM } from './ui'
 
-const name = __filename
+const name = "views"
 
 const initialState = {
   feedsViewedAt: {},
@@ -42,5 +42,6 @@ const selectors = {
 export default {
   name,
   reducer,
-  selectors
+  selectors,
+  serialize: true,
 }
