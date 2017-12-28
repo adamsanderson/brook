@@ -126,7 +126,6 @@ function translateItemData(data, feedUrl) {
       title: data.title,
       url,
       createdAt: +new Date(data.pubdate || data.published || data.updated || data["dc:date"]),
-      description: data.description,
     }
   } catch (error) {
     console.error("Error while parsing item from", feedUrl, error, data)
