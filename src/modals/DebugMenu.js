@@ -5,7 +5,7 @@ import { resetData } from '../redux/reset'
 
 import PopupLayout from "./layouts/PopupLayout";
 
-class FeedTreeMenu extends Component {
+class DebugMenu extends Component {
   constructor(props) {
     super(props)
 
@@ -36,4 +36,4 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   resetData,
-})(FeedTreeMenu)
+})(DebugMenu)
