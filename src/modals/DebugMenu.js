@@ -19,6 +19,9 @@ class DebugMenu extends Component {
       <PopupLayout position={position} onClose={closeModal}>
         <h4>Debug Menu</h4>
         <div className="isWarning">
+          <a href="#">Open in Browser</a>
+        </div>
+        <div className="isWarning">
           <a onClick={ this.handleReset }>Reset Data</a>
         </div>
       </PopupLayout>
