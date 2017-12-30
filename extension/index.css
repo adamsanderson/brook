@@ -147,6 +147,19 @@ a {
   padding: 0.5em;
 }
 
+.EmptyState {
+  padding: 0.5em 1em;
+  color: var(--color-grey);
+}
+
+.EmptyState-icon {
+  display: block;
+  width: 80%;
+  height: auto;
+  margin: auto;
+  color: var(--color-lightest);
+}
+
 /* 
   Layout Helpers 
 */
@@ -221,6 +234,7 @@ a {
 .Icon.StatusIndicator {
   transition: fill ease-out var(--speed-medium);
   transition: transform ease-out var(--speed-fast);
+  will-change: transform, fill;
 }
 .Icon.StatusIndicator.isRead { 
   fill: var(--color-light); 

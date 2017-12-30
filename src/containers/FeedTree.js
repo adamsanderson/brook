@@ -5,9 +5,12 @@ import { FEED } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode } from '../redux/modules/folders'
 import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
+import { openModal } from '../redux/modules/modal'
+import EmptyImage from 'react-icons/lib/fa/newspaper-o'
 
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'
+import { MODALS } from '../modals'
 
 class FeedTree extends Component {
   static propTypes = {
@@ -20,9 +23,35 @@ class FeedTree extends Component {
     indentUnits: "em"
   }
 
+  constructor(props) {
+    super(props)
+
+    this.handleShowImport = this.handleShowImport.bind(this)
+  }
+
   render() {
     const {nodes} = this.props
 
+    if (nodes.length === 0) {
+      return this.renderEmptyState()
+    } else {
+      return this.renderContent(nodes)
+    }
+  }
+
+  renderEmptyState() {
+    return (
+      <div className="EmptyState">
+        <EmptyImage className="EmptyState-icon" />
+        <p>
+          <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
+          or <a href="#" onClick={this.handleShowImport}>import</a> existing ones.
+        </p>
+      </div>
+    )
+  }
+
+  renderContent(nodes) {
     return (
       <div className="List">
         {nodes.map((n) => this.renderNode(n))}
@@ -64,7 +93,12 @@ class FeedTree extends Component {
       default:
         console.error("Unkown node type: ", item)
         throw new Error(`Unknown node type: ${item.type}`)
-    } 
+    }
+  }
+
+  handleShowImport(event) {
+    event.preventDefault()
+    this.props.openModal(MODALS.ImportModal)
   }
 }
 
@@ -81,4 +115,5 @@ export default connect(mapStateToProps, {
   selectFolder,
   selectFeed,
   moveNode,
+  openModal
 })(FeedTree)
