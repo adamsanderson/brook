@@ -235,9 +235,15 @@ function nodeRemoved(state, node) {
     child = node.children.find((c) => c.type === nodeType && c.id === nodeId )
     return child
   })
+
+  // If there is a parent, then update it, otherwise we have removed a root node.
+  if (parent) {
+    parent = {...parent, children: parent.children.filter((c) => c !== child)}
+    return {...state, [parent.id]: parent}
+  } else {
+    return state
+  }
   
-  parent = {...parent, children: parent.children.filter((c) => c !== child)}
-  return {...state, [parent.id]: parent}
 }
 
 function feedMoved(state, action) {
