@@ -7,6 +7,7 @@ import { addFolder } from '../modules/folders'
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 import { IMPORT_OPML } from '../modules/import'
 import OpmlReader from '../../lib/OpmlReader'
+import { resolveUrl } from '../../util/url'
 
 const WORKER_COUNT = 4
 
@@ -106,7 +107,7 @@ function fetchAll(allFeeds, dispatch) {
 
 function translateFeedData(data, feedUrl) {
   const feed = {}
-
+  console.log(data)
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
@@ -146,15 +147,6 @@ function chooseItemUrl(link) {
     return alternate.href
   } else if (link.href) {
     return link.href
-  }
-}
-
-// TODO: This is very similar to the code used in content.js
-function resolveUrl(url, feedUrl) {
-  if (url[0] === "/") {
-    return new window.URL(feedUrl).origin + url
-  } else {
-    return url
   }
 }
 

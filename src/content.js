@@ -1,6 +1,6 @@
 import { Store } from 'react-chrome-redux'
 import { foundFeeds, forgetFeeds } from "./redux/modules/discovery";
-import { humanizeHost } from "./util/url";
+import { humanizeHost, resolveUrl } from "./util/url";
 
 const store = new Store({
   portName: 'Brook'
@@ -85,12 +85,8 @@ function removeDuplicates(feeds) {
 function normalizeFeeds(feeds) {
   // Note: this mutates the feeds in place.
   feeds.forEach((f) => {
-    // Make absolute paths fully qualified:
-    if (f.url[0] === "/") {
-      const url = new URL(window.location)
-      url.pathname = f.url
-      f.url = url.toString()
-    }
+    // Make paths fully qualified:
+    f.url = resolveUrl(f.url)
   })
 
   return feeds

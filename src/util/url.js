@@ -1,3 +1,7 @@
+/*
+ * Assorted functions for working with urls.
+ */
+
 /**
   Attempts to provide a reasonable "name" for a URL.
   Invalid urls will return an empty string.
@@ -39,6 +43,18 @@ export function humanizeHost(path) {
     console.warn("Could not humanize: "+path+", "+err.toString())
     return path
   }
+}
+
+/**
+ * Resolves a url against the base url.  This is simply a wrapper around
+ * the [URL constructor](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
+ * that will always return a String.
+ * 
+ * @param {String} url 
+ * @param {String} base 
+ */
+export function resolveUrl(url, base=window.location) {
+  return new window.URL(url, base).toString()
 }
 
 /**
