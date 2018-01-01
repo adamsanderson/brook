@@ -3,24 +3,15 @@
   "name": "brook-feed-reader",
   "version": "1.0",
   "author": "Adam Sanderson <netghost@gmail.com>",
-
+  
   "sidebar_action": {
     "browser_style": true,
     "default_icon": {
-      "48": "images/Watermelon-48.png",
-      "96": "images/Watermelon-96.png"
+      "96": "images/Brook.svg",
+      "48": "images/Brook.svg"
     },
     "default_title": "Brook",
     "default_panel": "sidebar.html"
-  },
-
-  "page_action": {
-    "browser_style": true,
-    "default_icon": {
-      "48": "images/Watermelon-48.png",
-      "96": "images/Watermelon-96.png"
-    },
-    "default_title": "Subscribe with Brook"
   },
 
   "background": {
