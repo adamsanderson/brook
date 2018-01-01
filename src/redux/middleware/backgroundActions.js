@@ -107,7 +107,7 @@ function fetchAll(allFeeds, dispatch) {
 
 function translateFeedData(data, feedUrl) {
   const feed = {}
-  console.log(data)
+  
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
