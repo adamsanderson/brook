@@ -44,14 +44,21 @@ class Item extends Component {
     )
   }
 
-  renderError(error) {
+  renderError(error, item) {
     return (
-      <span className="hasError">Parse Error</span>
+      <span className="hasError" onClick={ this.handleClick }> Parse Error</span>
     )
   }
 
   handleClick(event) {
-    this.props.onClick(this.props.item)
+    const item = this.props.item
+
+    if (item.error) {
+      console.error("Brook Item Error:", item.error)
+      console.error(item.data)
+    } else {
+      this.props.onClick(this.props.item)
+    }
   }
 }
 
