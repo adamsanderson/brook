@@ -54,7 +54,8 @@ const aliases = {
 }
 
 function fetchFeed(feed, dispatch) {
-  const promise = fetch(feed.url)
+  const cache = feed.error ? "reload" : "default"
+  const promise = fetch(feed.url, { cache })
   .then(res => {
     if (res.ok) {
       return res.text()
@@ -112,7 +113,8 @@ function translateFeedData(data, feedUrl) {
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
-
+  feed.error = undefined 
+  
   return feed
 }
 
