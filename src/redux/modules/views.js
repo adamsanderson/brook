@@ -1,6 +1,16 @@
 import { SELECT_FEED, SELECT_ITEM } from './ui'
+import { REMOVE_FEED } from './feeds'
+
+export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
 const name = "views"
+
+export function markAllItemsViewed(feed) {
+  return {
+    type: MARK_ALL_ITEMS_VIEWED,
+    payload: { feed }
+  }
+}
 
 const initialState = {
   feedsViewedAt: {},
@@ -10,18 +20,46 @@ const initialState = {
 const reducer = (state = initialState, action) => {  
   switch (action.type) {
     case SELECT_FEED:
-      const feed = action.payload.feed
-      const feedsViewedAt = Object.assign({}, state.feedsViewedAt)
-      feedsViewedAt[feed.id] = Date.now()
-      return {...state, feedsViewedAt}
+      return selectedFeed(state, action)
     case SELECT_ITEM:
-      const item = action.payload.item
-      const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
-      itemsViewedAt[item.id] = Date.now()
-      return {...state, itemsViewedAt}
+      return selectedItem(state, action)
+    case REMOVE_FEED:
+      return removedFeed(state, action)
+    case MARK_ALL_ITEMS_VIEWED:
+      return markedAllItemsViewed(state, action)
     default:
       return state
   }
+}
+
+function selectedFeed(state, action) {
+  const feed = action.payload.feed
+  const feedsViewedAt = Object.assign({}, state.feedsViewedAt)
+  feedsViewedAt[feed.id] = Date.now()
+  
+  return {...state, feedsViewedAt}
+}
+
+function selectedItem(state, action) {
+  const item = action.payload.item
+  const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
+  itemsViewedAt[item.id] = Date.now()
+  return {...state, itemsViewedAt}
+}
+
+function removedFeed(state, action) {
+  const feed = action.payload.feed
+  const feedsViewedAt = Object.assign({}, state.feedsViewedAt)
+  delete feedsViewedAt[feed.id]
+  return {...state, feedsViewedAt}
+}
+
+function markedAllItemsViewed(state, action) {
+  const feed = action.payload.feed
+  const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
+  feed.items.forEach(item => itemsViewedAt[item.id] = Date.now())
+  
+  return {...state, itemsViewedAt}
 }
 
 const selectors = {
