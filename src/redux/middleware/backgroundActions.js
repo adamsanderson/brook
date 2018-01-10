@@ -2,8 +2,8 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme';
 
-import feeds, { FETCH_FEED, updateFeed, addFeed } from '../modules/feeds'
-import { addFolder } from '../modules/folders'
+import feeds, { FEED, FETCH_FEED, updateFeed, addFeed, removeFeed } from '../modules/feeds'
+import folders, { FOLDER, REMOVE_BRANCH, addFolder, removeFolder } from '../modules/folders'
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 import { IMPORT_OPML } from '../modules/import'
 import OpmlReader from '../../lib/OpmlReader'
@@ -14,9 +14,25 @@ const WORKER_COUNT = 4
 const aliases = {
   UI_SELECT_FEED: (action) => {
     const feed = action.payload.feed
-    return (dispatch) => {
+    return (dispatch, getState) => {
       dispatch({type: FETCH_FEED, payload: { feed }})
       dispatch({type: SELECT_FEED, payload: { feed }})
+    }
+  },
+
+  REMOVE_BRANCH: (action) => {
+    return (dispatch, getState) => {
+      const state = getState()
+      removeRecursively(action.payload.folder)
+      
+      function removeRecursively(node) {
+        if (node.type === FEED) {
+          dispatch(removeFeed(node))
+        } else if (node.type === FOLDER) {
+          dispatch(removeFolder(node))
+          folders.selectors.getChildren(state, node).forEach(n => removeRecursively(n))
+        }
+      }
     }
   },
 
@@ -32,7 +48,7 @@ const aliases = {
   },
 
   FETCH_FEED: (action) => {
-    // If there's a promise, the action has already been handled.
+    // If there's a promise, the action has already been kicked off by the background.
     if (action.promise) return action
 
     const feed = action.payload.feed
@@ -114,7 +130,7 @@ function translateFeedData(data, feedUrl) {
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
   feed.error = undefined 
-  
+
   return feed
 }
 

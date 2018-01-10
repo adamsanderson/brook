@@ -97,9 +97,6 @@ const reducer = (state = initialState, action) => {
     case REMOVE_FOLDER:
       return folderRemoved(state, action)
 
-    case REMOVE_BRANCH:
-      return branchRemoved(state, action)
-    
     case EDIT_FOLDER:
       return folderEdited(state, action)
     
@@ -210,22 +207,6 @@ function folderRemoved(state, action) {
   return nodeRemoved(state, folder)
 }
 
-function branchRemoved(state, action) {
-  const folder = action.payload.folder
-  return nodeRemovedRecursively(state, folder)
-}
-
-function nodeRemovedRecursively(state, node) {
-  (node.children || []).forEach(function(c) {
-    state = nodeRemovedRecursively(state, c)
-  })
-
-  state = nodeRemoved(state, node)
-  delete state[node.id]
-  
-  return state
-}
-
 function nodeRemoved(state, node) {
   const nodeId = node.id
   const nodeType = node.type
@@ -236,7 +217,8 @@ function nodeRemoved(state, node) {
     return child
   })
 
-  // If there is a parent, then update it, otherwise we have removed a root node.
+  // If there is a parent, update it.  A parent may not exist if we are removing a branch
+  // or if this is a root node.
   if (parent) {
     parent = {...parent, children: parent.children.filter((c) => c !== child)}
     return {...state, [parent.id]: parent}
@@ -327,7 +309,7 @@ const selectors = {
     })
     
     return list
-  }
+  },
 }
 
 export default {
