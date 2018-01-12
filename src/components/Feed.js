@@ -41,7 +41,7 @@ class Feed extends Component {
   }
 
   renderFeed(feed) {
-    return <span title={feed.title}> {feed.title} </span>
+    return <a title={feed.title}> {feed.title} </a>
   }
 
   handleClick(event) {

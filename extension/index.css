@@ -96,6 +96,18 @@ a {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.List .List-item :last-child {
+  /* Last item in a list should expand to fill */
+  flex-grow: 1;
+}
+
+.List .List-item .Icon {
+  flex-shrink: 0;
 }
 
 .List .List-item.isUnread {
