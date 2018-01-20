@@ -6,7 +6,9 @@
   "scripts": {
     "build": "webpack -w -v --display-error-details --progress --colors",
     "start": "web-ext run -s extension/",
-    "start-verbose": "web-ext run --verbose -s extension/"
+    "start-verbose": "web-ext run --verbose -s extension/",
+    "lint-package": "web-ext lint -s extension/",
+    "package": "web-ext build -s extension/"
   },
   "author": "",
   "license": "MPL-2.0",
