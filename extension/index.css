@@ -45,6 +45,11 @@ ul, ol {
 
 a {
   cursor: pointer;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .Panel-header {
@@ -81,12 +86,7 @@ a {
 }
 
 .List a {
-  text-decoration: none;
   color: inherit;
-}
-
-.List a:hover {
-  text-decoration: underline;
 }
 
 .List .List-item {
@@ -145,9 +145,14 @@ a {
 .Menu {
   position: fixed;
   background: var(--color-white);
-  padding: 1em;
+  padding: 0.5em;
   
   box-shadow: 0 0 5px var(--color-light);
+}
+
+.Menu a {
+  display: inline-block;
+  padding: 0.25em;
 }
 
 .Modal {
