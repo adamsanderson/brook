@@ -66,20 +66,7 @@ const initialState = {
     title: "Brook", 
     type: FOLDER,
     expanded: true,
-    children: [
-      {type: FEED, id: "1"},
-      {type: FEED, id: "2"},
-      {type: FOLDER, id: "1"},
-    ]
-  },
-  "1": {
-    id: "1", 
-    title: "Stats/Data", 
-    type: FOLDER,
-    expanded: true,
-    children: [
-      {type: FEED, id: "3"}
-    ],
+    children: []
   },
 }
 

@@ -42,6 +42,9 @@ const reducer = (state = initialState, action) => {
 const selectors = {
   availableFeeds: (state, tabId) => {
     return state[name].feeds[tabId] || []
+  },
+  hasAvailableFeeds: (state, tabId) => {
+    return selectors.availableFeeds(state, tabId).length > 0
   }
 }
 

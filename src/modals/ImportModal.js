@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import { connect } from 'react-redux'
+
 import { importOpml } from '../redux/modules/import'
-
 import FullPageLayout from './layouts/FullPageLayout'
-
 import OpmlReader from '../lib/OpmlReader'
+import FileButton from '../components/FileButton';
 
 class ImportModal extends Component {
   constructor(props) {
@@ -20,16 +20,16 @@ class ImportModal extends Component {
   render() {
     return (
       <FullPageLayout>
+        <h2>Import Feeds</h2>
         <p>
           Import a feed list from other readers or services.
         </p>
         
         <form>
           <p>
-            <label>
-              Select OPML File: 
-              <input type="file" className="layout-fill" onChange={this.handleFile}/>
-            </label>
+            <FileButton onChange={this.handleFile} accept=".opml,text/xml">
+              Select OPML File
+            </FileButton>
           </p>
           {this.state.error && (
             <p className="hasError">

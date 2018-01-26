@@ -11,6 +11,8 @@ import EmptyImage from 'react-icons/lib/fa/newspaper-o'
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'
 import { MODALS } from '../modals'
+import discovery from '../redux/modules/discovery';
+import activeTab from '../redux/modules/activeTab';
 
 class FeedTree extends Component {
   static propTypes = {
@@ -33,7 +35,9 @@ class FeedTree extends Component {
     const {nodes} = this.props
 
     if (nodes.length === 0) {
-      return this.renderEmptyState()
+      return this.props.hasAvailableFeeds 
+        ? this.renderSubscribeEmptyState() 
+        : this.renderEmptyState();
     } else {
       return this.renderContent(nodes)
     }
@@ -42,10 +46,24 @@ class FeedTree extends Component {
   renderEmptyState() {
     return (
       <div className="EmptyState">
-        <EmptyImage className="EmptyState-icon" />
+        <h2>No Feeds</h2>
+        <EmptyImage className="EmptyState-icon layout-fill-icon" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
           or <a href="#" onClick={this.handleShowImport}>import</a> existing ones.
+        </p>
+      </div>
+    )
+  }
+
+  renderSubscribeEmptyState() {
+    return (
+      <div className="EmptyState">
+        <h2>Subscribe</h2>
+        <EmptyImage className="EmptyState-icon layout-fill-icon" />
+        <p>
+          Click the <b>Subscribe</b> button
+          to add this site to your feed list.
         </p>
       </div>
     )
@@ -106,6 +124,7 @@ const mapStateToProps = (state, props) => ({
   isFeedUnread: views.selectors.isFeedUnread(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentFolder: ui.selectors.currentFolder(state),
+  hasAvailableFeeds: discovery.selectors.hasAvailableFeeds(state, activeTab.selectors.getActiveTabId(state)),
   allowDrop: (draggable, dropTarget) => {
     return !folder.selectors.containsNode(state, draggable, dropTarget)
   }

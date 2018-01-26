@@ -164,16 +164,25 @@ a:hover {
   padding: 0.5em;
 }
 
+.Button {
+  padding: 0.25em;
+  border: 1px solid;
+  border-radius: 2px;
+  cursor: pointer;
+
+  transition: box-shadow ease-out var(--speed-fast);
+}
+
+.Button:hover {
+  box-shadow: 0 0 8px;
+}
+
 .EmptyState {
   padding: 0.5em 1em;
   color: var(--color-grey);
 }
 
 .EmptyState-icon {
-  display: block;
-  width: 80%;
-  height: auto;
-  margin: auto;
   color: var(--color-lightest);
 }
 
@@ -200,6 +209,18 @@ a:hover {
 .layout-fill {
   box-sizing: border-box;
   width: 100%;
+}
+
+.layout-fill-icon {
+  display: block;
+  width: 80%;
+  height: auto;
+  margin: auto;
+}
+
+.layout-visually-hidden {
+  position: fixed;
+  right: -100%;
 }
 
 /* 
