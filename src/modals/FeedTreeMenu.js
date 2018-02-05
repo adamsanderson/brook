@@ -17,7 +17,7 @@ class FeedTreeMenu extends Component {
   }
 
   render() {    
-    const { position, closeModal, hasCheckpoint } = this.props
+    const { position, closeModal, hasCheckpoint, checkpointName } = this.props
     
     return (
       <PopupLayout position={position} onClose={closeModal}>
@@ -28,7 +28,7 @@ class FeedTreeMenu extends Component {
           <a onClick={ this.handleImport }>Import Feeds</a>
         </div>
         {hasCheckpoint && <div>
-          <a onClick={ this.props.rollback }>Undo</a>
+          <a onClick={ this.props.rollback }>Undo {checkpointName}</a>
         </div>}
       </PopupLayout>
     )
@@ -51,7 +51,8 @@ class FeedTreeMenu extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  hasCheckpoint: checkpointSelectors.hasCheckpoint(state)
+  hasCheckpoint: checkpointSelectors.hasCheckpoint(state),
+  checkpointName: checkpointSelectors.getCheckpointName(state),
 })
 
 export default connect(mapStateToProps, {

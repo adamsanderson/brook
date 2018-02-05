@@ -22,7 +22,7 @@ export function removeFeed(feed) {
     type: REMOVE_FEED, 
     payload: { feed },
     meta: {
-      checkpoint: true
+      checkpoint: "Deleted feed"
     }
   }
 }
