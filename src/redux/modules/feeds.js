@@ -20,7 +20,10 @@ export function addFeed(feed, parentId) {
 export function removeFeed(feed) {
   return {
     type: REMOVE_FEED, 
-    payload: { feed }
+    payload: { feed },
+    meta: {
+      checkpoint: true
+    }
   }
 }
 

@@ -12,11 +12,13 @@ import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 import { resetableReducer } from './reset'
+import { checkpointableReducer } from './checkpoint';
 
 import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
+
 
 const initialState = {}
 const reducers = {}
@@ -47,7 +49,12 @@ addModule(modal)
 middleware.push(logger)
 
 // Create store
-const rootReducer = resetableReducer(combineReducers(reducers))
+const rootReducer = resetableReducer(
+  checkpointableReducer(
+    combineReducers(reducers),
+    {exclude: [modal.name, discovery.name, activeTab.name]}
+  )
+)
 const enhancedMiddleware = compose(
   applyMiddleware(...middleware),
   ...enhancers

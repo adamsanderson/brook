@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { addFolder } from '../redux/modules/folders'
 import { openModal } from '../redux/modules/modal'
+import { rollback, selectors as checkpointSelectors } from "../redux/checkpoint";
 
 import { MODALS } from "./index";
 import PopupLayout from "./layouts/PopupLayout";
@@ -16,7 +17,7 @@ class FeedTreeMenu extends Component {
   }
 
   render() {    
-    const { position, closeModal } = this.props
+    const { position, closeModal, hasCheckpoint } = this.props
     
     return (
       <PopupLayout position={position} onClose={closeModal}>
@@ -26,6 +27,9 @@ class FeedTreeMenu extends Component {
         <div>
           <a onClick={ this.handleImport }>Import Feeds</a>
         </div>
+        {hasCheckpoint && <div>
+          <a onClick={ this.props.rollback }>Undo</a>
+        </div>}
       </PopupLayout>
     )
   }
@@ -47,10 +51,11 @@ class FeedTreeMenu extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  // state...
+  hasCheckpoint: checkpointSelectors.hasCheckpoint(state)
 })
 
 export default connect(mapStateToProps, {
   addFolder,
   openModal,
+  rollback,
 })(FeedTreeMenu)
