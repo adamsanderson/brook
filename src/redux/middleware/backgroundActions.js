@@ -2,17 +2,18 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme';
 
-import feeds, { FEED, FETCH_FEED, updateFeed, addFeed, removeFeed } from '../modules/feeds'
+import feeds, { FEED, FETCH_FEED, FETCH_ALL, updateFeed, addFeed, removeFeed } from '../modules/feeds'
 import folders, { FOLDER, REMOVE_BRANCH, addFolder, removeFolder } from '../modules/folders'
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 import { IMPORT_OPML } from '../modules/import'
+import { UI_SHOW, backendShowToast } from '../modules/toast'
 import OpmlReader from '../../lib/OpmlReader'
 import { resolveUrl } from '../../util/url'
 
 const WORKER_COUNT = 4
 
 const aliases = {
-  UI_SELECT_FEED: (action) => {
+  [UI_SELECT_FEED]: (action) => {
     const feed = action.payload.feed
     return (dispatch, getState) => {
       dispatch({type: FETCH_FEED, payload: { feed }})
@@ -20,7 +21,7 @@ const aliases = {
     }
   },
 
-  REMOVE_BRANCH: (action) => {
+  [REMOVE_BRANCH]: (action) => {
     return (dispatch, getState) => {
       const state = getState()
       removeRecursively(action.payload.folder)
@@ -36,7 +37,7 @@ const aliases = {
     }
   },
 
-  FETCH_ALL: (action) => {
+  [FETCH_ALL]: (action) => {
     return (dispatch, getState) => {
       const allFeeds = feeds.selectors.allFeeds(getState())
       
@@ -47,7 +48,7 @@ const aliases = {
     }
   },
 
-  FETCH_FEED: (action) => {
+  [FETCH_FEED]: (action) => {
     // If there's a promise, the action has already been kicked off by the background.
     if (action.promise) return action
 
@@ -55,7 +56,7 @@ const aliases = {
     return (dispatch) => fetchFeed(feed, dispatch)
   },
 
-  IMPORT_OPML: (action) => {
+  [IMPORT_OPML]: (action) => {
     const xml = action.payload.xml
 
     return function(dispatch, getState) {
@@ -66,7 +67,13 @@ const aliases = {
   
       reader.read(xml)
     }
+  },
+
+  [UI_SHOW]: (action) => {
+    console.log("In UI_SHOW")
+    return backendShowToast(action)
   }
+
 }
 
 function fetchFeed(feed, dispatch) {

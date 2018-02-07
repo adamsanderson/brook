@@ -19,12 +19,13 @@ import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
+import timeoutScheduler from './middleware/timeoutScheduler'
 import notifications from './middleware/notifications'
 
 
 const initialState = {}
 const reducers = {}
-const middleware = [backgroundActions, thunk, promise, notifications]
+const middleware = [notifications, backgroundActions, thunk, promise, timeoutScheduler]
 const enhancers = []
 const serializePaths = []
 
