@@ -70,7 +70,6 @@ const aliases = {
   },
 
   [UI_SHOW]: (action) => {
-    console.log("In UI_SHOW")
     return backendShowToast(action)
   }
 
