@@ -144,9 +144,9 @@ a:hover {
 
 .Menu {
   position: fixed;
-  background: var(--color-white);
   padding: 0.5em;
-  
+
+  background: var(--color-white);
   box-shadow: 0 0 5px var(--color-light);
 }
 
@@ -162,6 +162,37 @@ a:hover {
   left: 0;
   right: 0;
   padding: 0.5em;
+}
+
+.Toast {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 0.5em;
+  min-width: 80%;
+  max-width: 100%;
+  
+  display: flex;
+  background: var(--color-white);
+  box-shadow: 0 0 5px var(--color-light);
+}
+
+.Toast-message {
+  flex: 1;
+  overflow: hidden;
+}
+
+.Toast-action {
+  padding: 0 0.25em;
+  color: var(--color-active);
+}
+
+.Toast-close {
+  padding: 0 0.25em;
+}
+
+.Toast-close:hover {
+  text-decoration: none;
 }
 
 .Button {
@@ -355,5 +386,26 @@ a:hover {
 .Modal-exit.Modal-exit-active.PopupLayout{
   transition: opacity 100ms ease-in, 
               transform 50ms ease-in;
+}
+
+/* Toast Modals */
+.Modal-enter.Toast, .Modal-exit.Modal-exit-active.Toast {
+  opacity: 0.01;
+  transform: translateY(20px);
+}
+
+.Modal-exit.Toast, .Modal-enter.Modal-enter-active.Toast {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.Modal-enter.Modal-enter-active.Toast{
+  transition: opacity 200ms ease-in,
+              transform 200ms ease-in;
+}
+
+.Modal-exit.Modal-exit-active.Toast{
+  transition: opacity 100ms ease-in, 
+              transform 150ms ease-in;
 }
 

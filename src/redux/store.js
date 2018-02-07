@@ -11,6 +11,7 @@ import views from './modules/views'
 import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
 import modal from './modules/modal'
+import toast from './modules/toast'
 import { resetableReducer } from './reset'
 import { checkpointableReducer } from './checkpoint';
 
@@ -18,11 +19,12 @@ import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
+import notifications from './middleware/notifications'
 
 
 const initialState = {}
 const reducers = {}
-const middleware = [backgroundActions, thunk, promise]
+const middleware = [backgroundActions, thunk, promise, notifications]
 const enhancers = []
 const serializePaths = []
 
@@ -44,6 +46,7 @@ addModule(views)
 addModule(discovery)
 addModule(activeTab)
 addModule(modal)
+addModule(toast)
 
 // Add the logger last so that it can report on everything:
 middleware.push(logger)

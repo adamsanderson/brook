@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-
 import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
 import ImportModal from './ImportModal'
