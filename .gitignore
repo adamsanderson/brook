@@ -3,6 +3,7 @@
 yarn.lock
 extension/dist
 node_modules
+web-ext-artifacts
 
 # Ignore my junk drawer of ideas
 TODO
