@@ -1,4 +1,4 @@
-import { rightAlignedBelow } from "../../lib/position";
+import { rightAlignedBelow } from "../../lib/position"
 export const CLOSE = "Modal/CLOSE"
 export const OPEN  = "Modal/OPEN"
 

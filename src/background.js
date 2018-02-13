@@ -2,7 +2,7 @@ import store from './redux/store'
 import { wrapStore } from 'react-chrome-redux'
 
 import { changeTab } from "./redux/modules/activeTab"
-import { fetchAll } from "./redux/modules/feeds";
+import { fetchAll } from "./redux/modules/feeds"
 
 wrapStore(store, {portName: 'Brook'})
 

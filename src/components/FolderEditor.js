@@ -40,10 +40,10 @@ class FolderEditor extends React.Component {
 
   handleKey(event) {
     if (event.keyCode === 13) {
-      this.handleSubmit();
+      this.handleSubmit()
     } else if (event.keyCode === 27 ) {
-      this.input.value = this.props.folder.title;
-      this.input.blur();
+      this.input.value = this.props.folder.title
+      this.input.blur()
     }
   }
 }

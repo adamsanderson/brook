@@ -12,7 +12,7 @@ import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 import toast from './modules/toast'
 import { resetableReducer } from './reset'
-import { checkpointableReducer } from './checkpoint';
+import { checkpointableReducer } from './checkpoint'
 
 import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'

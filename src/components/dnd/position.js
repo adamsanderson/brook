@@ -1,4 +1,4 @@
-import { BEFORE, OVER, AFTER } from "../../constants";
+import { BEFORE, OVER, AFTER } from "../../constants"
 
 export const HOVER_CLASSES = {
   [BEFORE]: "isHoveringBefore",

@@ -1,6 +1,6 @@
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
 import {BEFORE, OVER} from '../../constants'
-import { SELECT_FOLDER } from './ui';
+import { SELECT_FOLDER } from './ui'
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
 export const ADD_FOLDER = "ADD_FOLDER"

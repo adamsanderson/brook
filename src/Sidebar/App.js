@@ -21,7 +21,7 @@ class App extends React.Component {
 
   render() {
     const {nodes, currentFeed, currentFolder} = this.props
-    const currentItem = this.currentItem();
+    const currentItem = this.currentItem()
 
     return (
       <div className="layout-vertical">

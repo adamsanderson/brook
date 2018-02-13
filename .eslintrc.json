@@ -21,7 +21,8 @@
     "no-unused-vars": ["error", { 
       "ignoreRestSiblings": true,
       "args": "none"
-    }]
+    }],
+    "semi": ["error", "never"]
   },
   "env": {
     "browser": true,

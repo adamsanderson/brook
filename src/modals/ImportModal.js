@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { importOpml } from '../redux/modules/import'
 import FullPageLayout from './layouts/FullPageLayout'
 import OpmlReader from '../lib/OpmlReader'
-import FileButton from '../components/FileButton';
+import FileButton from '../components/FileButton'
 
 class ImportModal extends React.Component {
   static propTypes = {
@@ -75,10 +75,10 @@ class ImportModal extends React.Component {
         onFeed: (feed) => { feedCount++ },
         onFinish: () => {
           if (feedCount > 0) {
-            this.props.closeModal();
-            this.props.importOpml(text);
+            this.props.closeModal()
+            this.props.importOpml(text)
           } else {
-            this.failWithInvalid();
+            this.failWithInvalid()
           }
         }
       })

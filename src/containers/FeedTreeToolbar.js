@@ -58,7 +58,7 @@ class FeedTreeToolbar extends React.Component {
   }
 
   handleMenu(event) {
-    const el = event.target;
+    const el = event.target
     const modalName = event.shiftKey ? MODALS.DebugMenu : MODALS.FeedTreeMenu
     this.props.openModalRightAlignedBelow(el, modalName)
   }

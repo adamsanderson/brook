@@ -1,6 +1,6 @@
 import { Store } from 'react-chrome-redux'
-import { foundFeeds, forgetFeeds } from "./redux/modules/discovery";
-import { humanizeHost, resolveUrl } from "./util/url";
+import { foundFeeds, forgetFeeds } from "./redux/modules/discovery"
+import { humanizeHost, resolveUrl } from "./util/url"
 
 const store = new Store({
   portName: 'Brook'

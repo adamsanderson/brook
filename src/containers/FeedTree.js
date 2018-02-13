@@ -12,8 +12,8 @@ import EmptyImage from 'react-icons/lib/fa/newspaper-o'
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'
 import { MODALS } from '../modals'
-import discovery from '../redux/modules/discovery';
-import activeTab from '../redux/modules/activeTab';
+import discovery from '../redux/modules/discovery'
+import activeTab from '../redux/modules/activeTab'
 
 class FeedTree extends React.Component {
   static propTypes = {
@@ -48,7 +48,7 @@ class FeedTree extends React.Component {
     if (nodes.length === 0) {
       return this.props.hasAvailableFeeds 
         ? this.renderSubscribeEmptyState() 
-        : this.renderEmptyState();
+        : this.renderEmptyState()
     } else {
       return this.renderContent(nodes)
     }

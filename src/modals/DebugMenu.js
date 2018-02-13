@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { resetData } from '../redux/reset'
 
-import PopupLayout from "./layouts/PopupLayout";
+import PopupLayout from "./layouts/PopupLayout"
 
 class DebugMenu extends React.Component {
   static propTypes = {

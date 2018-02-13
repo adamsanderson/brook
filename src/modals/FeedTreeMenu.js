@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import { addFolder } from '../redux/modules/folders'
 import { openModal } from '../redux/modules/modal'
 
-import { MODALS } from "./index";
-import PopupLayout from "./layouts/PopupLayout";
+import { MODALS } from "./index"
+import PopupLayout from "./layouts/PopupLayout"
 
 class FeedTreeMenu extends React.Component {
   

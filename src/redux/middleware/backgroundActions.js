@@ -1,6 +1,6 @@
 import { alias } from 'react-chrome-redux'
 
-import FeedMe from 'feedme';
+import FeedMe from 'feedme'
 
 import feeds, { FEED, FETCH_FEED, FETCH_ALL, updateFeed, addFeed, removeFeed } from '../modules/feeds'
 import folders, { FOLDER, REMOVE_BRANCH, addFolder, removeFolder } from '../modules/folders'
