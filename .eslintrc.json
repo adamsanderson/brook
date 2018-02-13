@@ -12,7 +12,9 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
   "rules": {
     "no-console": ["error", {
@@ -22,7 +24,8 @@
       "ignoreRestSiblings": true,
       "args": "none"
     }],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "import/no-extraneous-dependencies": ["error"]
   },
   "env": {
     "browser": true,
