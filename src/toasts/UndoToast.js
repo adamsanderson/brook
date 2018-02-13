@@ -1,10 +1,18 @@
 // todo: component that accepts an action name and callback
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { rollback, selectors as checkpointSelectors } from '../redux/checkpoint'
 
-class UndoToast extends Component {
+class UndoToast extends React.Component {
+
+  static propTypes = {
+    hasCheckpoint: PropTypes.bool,
+    checkpointName: PropTypes.string,
+    rollback: PropTypes.func.isRequired,
+    hideToast: PropTypes.func.isRequired,
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.hasCheckpoint) {

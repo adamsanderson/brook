@@ -1,6 +1,11 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export default ({expanded}) => {
+FolderIcon.propTypes = {
+  expanded: PropTypes.bool,
+}
+
+export default function FolderIcon({expanded}) {
   const expansionClass = expanded ? "isExpanded" : "isCollapsed"
 
   return (

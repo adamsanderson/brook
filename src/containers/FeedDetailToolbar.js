@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { openModalRightAlignedBelow } from '../redux/modules/modal'
@@ -6,10 +7,11 @@ import { MODALS } from '../modals'
 
 import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 
-class FeedDetailToolbar extends Component {
+class FeedDetailToolbar extends React.Component {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
+    openModalRightAlignedBelow: PropTypes.func.isRequired,
   }
 
   constructor(props) {

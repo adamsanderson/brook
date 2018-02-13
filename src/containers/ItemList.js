@@ -1,12 +1,12 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import StatusIndicator from '../components/icons/StatusIndicator'
 import Item from '../components/Item'
 import { selectItem } from '../redux/modules/ui'
 import views from '../redux/modules/views'
 
-class ItemList extends Component {
+class ItemList extends React.Component {
   static propTypes = {
     items: PropTypes.array.isRequired,
     onClickItem: PropTypes.func,
@@ -24,7 +24,13 @@ class ItemList extends Component {
     return (
       <div className="List"> 
         { items.map(item => (
-          <Item item={item} isUnread={isItemUnread(item)} onClick={onClickItem} className="List-item" />
+          <Item 
+            key={item.id}
+            item={item} 
+            isUnread={isItemUnread(item)} 
+            onClick={onClickItem} 
+            className="List-item" 
+          />
         ))}
       </div>
     )

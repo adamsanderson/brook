@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import Folder from '../Folder'
 import { HOVER_CLASSES, getDragItem, draggablePosition } from "./position"
@@ -8,6 +9,7 @@ class DnDFolder extends React.Component {
     onDrop: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
     folder: PropTypes.object.isRequired,
+    className: PropTypes.string,
   }
 
   constructor(props) {

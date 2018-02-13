@@ -16,7 +16,7 @@ export function humanizeURL(path) {
     const segment = pathname.replace(/\/+$/,"").split("/").pop()
     
     // Split on non common non alphanumeric symbols and word breaks:
-    const humanized = segment.split(/[-_\+\s]+/).join(" ").replace(/([a-z])([A-Z])/, "$1 $2")
+    const humanized = segment.split(/[-_+\s]+/).join(" ").replace(/([a-z])([A-Z])/, "$1 $2")
     
     if (humanized.length > 2) {
       return humanized

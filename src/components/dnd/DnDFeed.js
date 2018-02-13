@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import Feed from '../Feed'
 import { HOVER_CLASSES, getDragItem, draggablePosition } from "./position"
@@ -8,6 +9,7 @@ class DnDFeed extends React.Component {
     onDrop: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
     feed: PropTypes.object.isRequired,
+    className: PropTypes.string,
   }  
 
   constructor(props) {
@@ -38,7 +40,7 @@ class DnDFeed extends React.Component {
         onDrop={this.handleDrop}
       >
         <Feed 
-          { ...this.props } 
+          { ...props } 
           className={ [className, hoverClassName].join(" ") }   
         />
       </div>

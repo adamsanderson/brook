@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { importOpml } from '../redux/modules/import'
@@ -6,7 +7,12 @@ import FullPageLayout from './layouts/FullPageLayout'
 import OpmlReader from '../lib/OpmlReader'
 import FileButton from '../components/FileButton';
 
-class ImportModal extends Component {
+class ImportModal extends React.Component {
+  static propTypes = {
+    importOpml: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
 

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -30,10 +31,16 @@ const MODALS_COMPONENTS = {
 export const MODALS = {}
 Object.keys(MODALS_COMPONENTS).forEach(key => MODALS[key] = key)
 
+ModalRoot.propTypes = {
+  type: PropTypes.string.isRequired,
+  props: PropTypes.object,
+  closeModal: PropTypes.func.isRequired,
+}
+
 /**
  * ModalRoot displays the current modal.
  */
-const ModalRoot = ({type, props, closeModal}) => {
+function ModalRoot({type, props, closeModal}) {
   let modal = null
 
   if (type) {
@@ -55,11 +62,6 @@ const ModalRoot = ({type, props, closeModal}) => {
       {modal}
     </TransitionGroup>
   )
-}
-
-ModalRoot.propTypes = {
-  type: PropTypes.string,
-  props: PropTypes.object
 }
 
 export default connect(

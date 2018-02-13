@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
 import { renameFolder } from '../redux/modules/folders'
@@ -7,6 +7,7 @@ import { renameFolder } from '../redux/modules/folders'
 class FolderEditor extends React.Component {
   static propTypes = {
     folder: PropTypes.object.isRequired,
+    renameFolder: PropTypes.func.isRequired,
   }
 
   constructor(props) {

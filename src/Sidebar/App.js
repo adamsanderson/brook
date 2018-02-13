@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import FeedTree from '../containers/FeedTree'
@@ -10,10 +10,14 @@ import FeedDetailToolbar from '../containers/FeedDetailToolbar'
 
 import folders from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
-import activeTab from '../redux/modules/activeTab'
-import discovery from '../redux/modules/discovery'
 
 class App extends React.Component {
+
+  static propTypes = {
+    nodes: PropTypes.array.isRequired,
+    currentFeed: PropTypes.object,
+    currentFolder: PropTypes.object,
+  }
 
   render() {
     const {nodes, currentFeed, currentFolder} = this.props

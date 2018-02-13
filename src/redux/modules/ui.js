@@ -43,18 +43,19 @@ const reducer = (state = initialState, action) => {
     case SELECT_FOLDER:
       return { ...state, selectedId: action.payload.folder.id, selectedType: FOLDER }
     case REMOVE_FEED: 
-      const feed = action.payload.feed
-      return feed.id === state.selectedId && state.selectedType === FEED
-        ? { ...state, selectedId: undefined }
-        : state
+      return reduceRemoveItem(state, action.payload.feed)
     case REMOVE_FOLDER: 
-      const folder = action.payload.folder
-      return folder.id === state.selectedId && state.selectedType === FOLDER
-        ? { ...state, selectedId: undefined }
-        : state
+      return reduceRemoveItem(state, action.payload.folder)
     default:
       return state
   }
+}
+
+function reduceRemoveItem(state, item) {
+  if (item.type !== state.selectedType) return state
+  if (item.id !== state.selectedId) return state
+
+  return { ...state, selectedId: undefined, selectedType: undefined }
 }
 
 const selectors = {

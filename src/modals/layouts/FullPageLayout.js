@@ -1,17 +1,23 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { closeModal } from '../../redux/modules/modal'
 import BackIcon from 'react-icons/lib/fa/chevron-left'
 
-class FullPageLayout extends Component {
+class FullPageLayout extends React.Component {
+  static propTypes = {
+    closeModal: PropTypes.func.isRequired, 
+    backMessage: PropTypes.string, 
+    children: PropTypes.node.isRequired
+  }
 
   static defaultProps = {
     backMessage: "Back to Feeds"
   }
 
   render() {
-    const {closeModal, backMessage, children, ...rest} = this.props
+    const {closeModal, backMessage, children} = this.props
 
     return (
       <div className="Modal FullPageLayout inverted layout-vertical">

@@ -1,8 +1,9 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
 
-class Item extends Component {
+class Item extends React.Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired,
@@ -31,7 +32,7 @@ class Item extends Component {
     return (
       <div className={`Item ${readClass} ${className}`} style={style} > 
         <StatusIndicator isUnread={isUnread} hasError={!!error} />
-        {error ? this.renderError(error) : this.renderLink(item)}
+        {error ? this.renderError(error, item) : this.renderLink(item)}
       </div>
     )
   }
@@ -44,7 +45,7 @@ class Item extends Component {
     )
   }
 
-  renderError(error, item) {
+  renderError(_error, _item) {
     return (
       <span className="hasError" onClick={ this.handleClick }> Parse Error</span>
     )

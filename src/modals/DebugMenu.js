@@ -1,11 +1,18 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { resetData } from '../redux/reset'
 
 import PopupLayout from "./layouts/PopupLayout";
 
-class DebugMenu extends Component {
+class DebugMenu extends React.Component {
+  static propTypes = {
+    position: PropTypes.object.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    resetData: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
 

@@ -1,15 +1,19 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import PopupLayout from './layouts/PopupLayout'
 import { removeFeed } from '../redux/modules/feeds'
 import { markAllItemsViewed } from '../redux/modules/views'
 
-class FeedDetailMenu extends Component {
+class FeedDetailMenu extends React.Component {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
     position: PropTypes.object.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    removeFeed: PropTypes.func.isRequired,
+    markAllItemsViewed: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -20,10 +24,10 @@ class FeedDetailMenu extends Component {
   }
 
   render() {    
-    const { position, feed } = this.props
+    const { position, feed, closeModal } = this.props
     
     return (
-      <PopupLayout position={position} onClose={this.props.closeModal}>
+      <PopupLayout position={position} onClose={closeModal}>
         { feed.items && (
           <div>
             <a onClick={ this.handleMarkAllRead }>Mark All Read</a>

@@ -23,20 +23,28 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FOUND_FEEDS:
-      return { ...state, 
-        feeds: { ...state.feeds, 
-          [action._sender.tab.id]: action.payload.feeds
-        } 
-      }
-    case FORGET_FEEDS:
-      let feeds = Object.assign({}, state.feeds)
-      delete feeds[action._sender.tab.id]
-
-      return { ...state, feeds }
+    case [FOUND_FEEDS]:
+      return reduceFoundFeeds(state, action)
+    case [FORGET_FEEDS]:
+      return reduceForgetFeeds(state, action)
   }
 
   return state
+}
+
+function reduceFoundFeeds(state, action) {
+  return { ...state, 
+    feeds: { ...state.feeds, 
+      [action._sender.tab.id]: action.payload.feeds
+    } 
+  }
+}
+
+function reduceForgetFeeds(state, action) {
+  let feeds = Object.assign({}, state.feeds)
+  delete feeds[action._sender.tab.id]
+
+  return { ...state, feeds }
 }
 
 const selectors = {

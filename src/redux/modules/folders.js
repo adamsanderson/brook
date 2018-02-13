@@ -1,5 +1,5 @@
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
-import {BEFORE, OVER, AFTER} from '../../constants'
+import {BEFORE, OVER} from '../../constants'
 import { SELECT_FOLDER } from './ui';
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
@@ -108,7 +108,7 @@ function feedAdded(state, action) {
   const feed = action.payload.feed
   const parentId = action.payload.parentId
 
-  return nodeAdded(state, action.payload.feed, action.payload.parentId)
+  return nodeAdded(state, feed, parentId)
 }
 
 function folderAdded(state, action) {
@@ -116,7 +116,7 @@ function folderAdded(state, action) {
   const parentId = action.payload.parentId
 
   state = {...state, [folder.id]: folder}
-  return nodeAdded(state, folder, action.payload.parentId)
+  return nodeAdded(state, folder, parentId)
 }
 
 function folderToggled(state, action) {
@@ -171,7 +171,7 @@ function nodeSiblingAdded(state, source, target, position) {
   const children = parent.children.slice()
   if (position === BEFORE) {
     children.splice(childIndex, 0, source)
-  } else {
+  } else { // Otherwise it's AFTER
     children.splice(childIndex + 1, 0, source)
   }
 

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
@@ -19,10 +20,16 @@ const TOAST_COMPONENTS = {
 export const TOASTS = {}
 Object.keys(TOAST_COMPONENTS).forEach(key => TOASTS[key] = key)
 
+ToastRoot.propTypes = {
+  type: PropTypes.string.isRequired,
+  props: PropTypes.object,
+  hideToast: PropTypes.func.isRequired,
+}
+
 /**
  * ToastRoot displays the current toast.
  */
-const ToastRoot = ({type, props, hideToast}) => {
+function ToastRoot({type, props, hideToast}) {
   let toast = null
 
   if (type) {
@@ -49,11 +56,6 @@ const ToastRoot = ({type, props, hideToast}) => {
       {toast}
     </TransitionGroup>
   )
-}
-
-ToastRoot.propTypes = {
-  type: PropTypes.string,
-  props: PropTypes.object
 }
 
 export default connect(

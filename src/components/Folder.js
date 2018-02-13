@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import FolderIcon from '../components/icons/FolderIcon'
 import FolderEditor from './FolderEditor'

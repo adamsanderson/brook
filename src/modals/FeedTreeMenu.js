@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { addFolder } from '../redux/modules/folders'
@@ -7,7 +8,16 @@ import { openModal } from '../redux/modules/modal'
 import { MODALS } from "./index";
 import PopupLayout from "./layouts/PopupLayout";
 
-class FeedTreeMenu extends Component {
+class FeedTreeMenu extends React.Component {
+  
+  static propTypes = {
+    position: PropTypes.object.isRequired, 
+    closeModal: PropTypes.func.isRequired, 
+    openModal: PropTypes.func.isRequired, 
+    addFolder: PropTypes.func.isRequired, 
+    addModal: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props)
 
@@ -16,7 +26,7 @@ class FeedTreeMenu extends Component {
   }
 
   render() {    
-    const { position, closeModal, hasCheckpoint, checkpointName } = this.props
+    const { position, closeModal } = this.props
     
     return (
       <PopupLayout position={position} onClose={closeModal}>

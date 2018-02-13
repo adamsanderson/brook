@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import { alias } from 'react-chrome-redux'
 import thunk from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import pick from 'lodash/pick'

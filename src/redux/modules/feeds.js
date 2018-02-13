@@ -59,22 +59,26 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {[feed.id]: feed})
 
     case REMOVE_FEED:
-      const s = Object.assign({}, state)
-      delete s[feed.id]
-      return s
+      return reduceRemoveFeed(state, feed)
 
     case UPDATE_FEED:
-      return feedUpdated(state, feed, action.payload.attributes)
+      return reduceFeedUpdate(state, feed, action.payload.attributes)
       
     case FETCH_FEED: 
-      return feedUpdated(state, feed, {isLoading: !action.ready})
+      return reduceFeedUpdate(state, feed, {isLoading: !action.ready})
 
     default:
       return state
   }
 }
 
-function feedUpdated(state, feed, attributes) {
+function reduceRemoveFeed(state, feed) {
+  const nextState = Object.assign({}, state)
+  delete nextState[feed.id]
+  return nextState
+}
+
+function reduceFeedUpdate(state, feed, attributes) {
   const currentFeed = state[feed.id]
   if (!currentFeed) return state
 

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { FEED } from '../redux/modules/feeds'
@@ -14,10 +15,20 @@ import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery';
 import activeTab from '../redux/modules/activeTab';
 
-class FeedTree extends Component {
+class FeedTree extends React.Component {
   static propTypes = {
     nodes: PropTypes.array.isRequired,
     indent: PropTypes.number,
+    indentUnits: PropTypes.string, 
+    currentFeed: PropTypes.object, 
+    currentFolder: PropTypes.object,
+    hasAvailableFeeds: PropTypes.bool.isRequired,
+    selectFolder: PropTypes.func.isRequired,
+    selectFeed: PropTypes.func.isRequired,
+    moveNode: PropTypes.func.isRequired,
+    openModal: PropTypes.func.isRequired,
+    allowDrop: PropTypes.func.isRequired,
+    isFeedUnread: PropTypes.func.isRequired,
   }
 
   static defaultProps = {

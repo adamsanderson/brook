@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 /**
  * Logs all actions and states after they are dispatched.
  * 

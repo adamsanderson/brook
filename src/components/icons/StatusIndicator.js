@@ -1,6 +1,13 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export default ({isUnread, hasError, isLoading}) => {
+StatusIndicator.propTypes = {
+  isUnread: PropTypes.bool,
+  hasError: PropTypes.bool,
+  isLoading: PropTypes.bool,
+}
+
+export default function StatusIndicator({isUnread, hasError, isLoading}) {
   const readClass = isUnread ? "isUnread" : "isRead"
   const errorClass = hasError ? "hasError" : ""
   const loadingClass = isLoading ? "isLoading" : ""

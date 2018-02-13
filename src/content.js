@@ -93,6 +93,7 @@ function normalizeFeeds(feeds) {
 }
 
 document.addEventListener("visibilitychange", findFeeds)
+// TODO: This apparently doesn't trigger...
 document.addEventListener("unload", discardFeeds)
 
 findFeeds()

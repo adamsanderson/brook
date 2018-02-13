@@ -1,13 +1,18 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { editFolder, removeBranch } from '../redux/modules/folders'
 import PopupLayout from './layouts/PopupLayout'
 
-class FolderMenu extends Component {
+class FolderMenu extends React.Component {
 
   static propTypes = {
     folder: PropTypes.object.isRequired,
+    position: PropTypes.object.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    editFolder: PropTypes.func.isRequired,
+    removeBranch: PropTypes.func.isRequired,
   }
 
   constructor(props) {

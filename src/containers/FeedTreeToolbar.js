@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { addFeed, fetchAll } from '../redux/modules/feeds'
@@ -11,7 +12,14 @@ import { MODALS } from '../modals'
 import RefreshIcon from 'react-icons/lib/fa/refresh'
 import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 
-class FeedTreeToolbar extends Component {
+class FeedTreeToolbar extends React.Component {
+  static propTypes = {
+    availableFeeds: PropTypes.array.isRequired,
+    addFeed: PropTypes.func.isRequired,
+    fetchAll: PropTypes.func.isRequired,
+    openModal: PropTypes.func.isRequired,
+    openModalRightAlignedBelow: PropTypes.func.isRequired,
+  }
 
   constructor(props) {
     super(props)
