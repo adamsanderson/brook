@@ -1,5 +1,7 @@
-const path = require('path');
-const webpack = require('webpack');
+/* eslint-disable */
+
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -14,26 +16,25 @@ module.exports = {
   output: {
     // This copies each source entry into the extension dist folder named
     // after its entry config key.
-    path: 'extension/dist',
+    path: path.join(__dirname, 'extension/dist'),
     filename: '[name].js',
   },
   module: {
     // This transpiles all code (except for third party modules) using Babel.
-    loaders: [{
+    rules: [{
       exclude: /node_modules/,
       test: /\.js$/,
       // Babel options are in .babelrc
-      loaders: ['babel'],
+      use: {
+        loader: "babel-loader"
+      },
     }],
   },
   resolve: {
     // This allows you to import modules just like you would in a NodeJS app.
-    extensions: ['', '.js', '.jsx'],
-    root: [
-      path.resolve(__dirname),
-    ],
-    modulesDirectories: [
-      'src',
+    extensions: ['.js', '.jsx'],
+    modules: [
+      path.join(__dirname, "src"),
       'node_modules',
     ],
   },
@@ -52,4 +53,4 @@ module.exports = {
   // This will expose source map files so that errors will point to your
   // original source files instead of the transpiled files.
   devtool: 'sourcemap',
-};
+}
