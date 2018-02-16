@@ -21,7 +21,7 @@ export const TOASTS = {}
 Object.keys(TOAST_COMPONENTS).forEach(key => TOASTS[key] = key)
 
 ToastRoot.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   props: PropTypes.object,
   hideToast: PropTypes.func.isRequired,
 }

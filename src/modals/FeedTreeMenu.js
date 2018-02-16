@@ -15,7 +15,6 @@ class FeedTreeMenu extends React.Component {
     closeModal: PropTypes.func.isRequired, 
     openModal: PropTypes.func.isRequired, 
     addFolder: PropTypes.func.isRequired, 
-    addModal: PropTypes.func.isRequired,
   }
 
   constructor(props) {

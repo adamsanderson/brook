@@ -32,7 +32,7 @@ export const MODALS = {}
 Object.keys(MODALS_COMPONENTS).forEach(key => MODALS[key] = key)
 
 ModalRoot.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   props: PropTypes.object,
   closeModal: PropTypes.func.isRequired,
 }
