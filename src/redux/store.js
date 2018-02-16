@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import pick from 'lodash/pick'
 
+import ENV from '../util/env'
 import feeds from './modules/feeds'
 import folders from './modules/folders'
 import ui from './modules/ui'
@@ -20,7 +21,6 @@ import logger from './middleware/logger'
 import promise from './middleware/promise'
 import timeoutScheduler from './middleware/timeoutScheduler'
 import notifications from './middleware/notifications'
-
 
 const initialState = {}
 const reducers = {}
@@ -49,7 +49,9 @@ addModule(modal)
 addModule(toast)
 
 // Add the logger last so that it can report on everything:
-middleware.push(logger)
+if (!ENV.production) {
+  middleware.push(logger)
+}
 
 // Create store
 const rootReducer = resetableReducer(
