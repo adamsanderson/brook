@@ -20,7 +20,8 @@
     "no-console": ["error", {
       "allow": ["warn", "error"] 
     }],
-    "no-unused-vars": ["error", { 
+    "no-unused-vars": ["error", {
+      "varsIgnorePattern": "_", 
       "ignoreRestSiblings": true,
       "args": "none"
     }],
@@ -32,5 +33,13 @@
     "es6": true,
     "amd": true,
     "webextensions": true
-  }
+  },
+  "overrides": [
+    {
+      "files": "test/**/*.test.js",
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
