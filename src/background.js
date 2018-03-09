@@ -4,6 +4,8 @@ import { wrapStore } from 'react-chrome-redux'
 import { changeTab } from "./redux/modules/activeTab"
 import { fetchAll } from "./redux/modules/feeds"
 
+const MINUTE = 60 * 1000
+
 wrapStore(store, {portName: 'Brook'})
 
 // Track when tabs change
@@ -12,5 +14,7 @@ browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
 
 // Schedule fetching feeds every 15m
 setInterval(() => {
-  store.dispatch(fetchAll())
-}, 15 * 60 * 1000)
+  if (navigator.onLine) {
+    store.dispatch(fetchAll())
+  }
+}, 15 * MINUTE)
