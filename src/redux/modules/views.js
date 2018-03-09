@@ -3,6 +3,10 @@ import { REMOVE_FEED } from './feeds'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
+// Ignore feeds that have languished unread for over 2 weeks.
+const WEEK = 7 * 24 * 60 * 60 * 1000
+const FEED_AGE_LIMIT = 2 * WEEK
+
 const name = "views"
 
 export function markAllItemsViewed(feed) {
@@ -66,7 +70,7 @@ const selectors = {
   isFeedUnread: (state) => {
     return (feed) => {
       const viewedAt = state[name].feedsViewedAt[feed.id] || 0
-      return viewedAt < feed.updatedAt
+      return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
     }
   },
   isItemUnread: (state) => {
