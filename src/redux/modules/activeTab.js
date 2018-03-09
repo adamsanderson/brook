@@ -15,7 +15,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case [CHANGE_TAB]:
+    case CHANGE_TAB:
       return { 
         ...state,
         activeTabId: action.payload.tabId

@@ -23,9 +23,9 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case [FOUND_FEEDS]:
+    case FOUND_FEEDS:
       return reduceFoundFeeds(state, action)
-    case [FORGET_FEEDS]:
+    case FORGET_FEEDS:
       return reduceForgetFeeds(state, action)
   }
 
