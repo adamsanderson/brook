@@ -267,6 +267,10 @@ a:hover {
   color: var(--color-white);
 }
 
+.secondary {
+  color: var(--color-light);
+}
+
 /*
   Component States
 */

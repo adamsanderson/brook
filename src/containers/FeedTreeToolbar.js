@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { addFeed, fetchAll } from '../redux/modules/feeds'
+import feeds, { addFeed, fetchAll } from '../redux/modules/feeds'
 import { openModal, openModalRightAlignedBelow } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
@@ -15,6 +15,7 @@ import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
 class FeedTreeToolbar extends React.Component {
   static propTypes = {
     availableFeeds: PropTypes.array.isRequired,
+    allFeedsByUrl: PropTypes.object.isRequired,
     addFeed: PropTypes.func.isRequired,
     fetchAll: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
@@ -29,20 +30,38 @@ class FeedTreeToolbar extends React.Component {
   }
 
   render() {
-    const {availableFeeds, fetchAll} = this.props
-    const hasFeeds = availableFeeds.length > 0
-
+    const fetchAll = this.props.fetchAll
+    
     return (
       <span>
-        {hasFeeds && (
-          <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
-            Subscribe{availableFeeds.length > 1 ? "… " : " "}
-          </a>
-        )}
+        { this.renderSubscribeButton() }
         <RefreshIcon className="Icon" title="Refresh Feeds" onClick={ fetchAll } />
         <MenuIcon className="Icon" onClick={ this.handleMenu } />
       </span>
     )
+  }
+
+  renderSubscribeButton() {
+    const {availableFeeds, allFeedsByUrl} = this.props
+    const hasFeeds = availableFeeds.length > 0
+    const allSubscribed = availableFeeds.every(feed => allFeedsByUrl[feed.url])
+
+    if (!hasFeeds) { return }
+    
+    if (allSubscribed) {
+      return (
+        <span className="secondary">
+          Subscribed 
+          {" "}
+        </span>
+      )
+    } else {
+      return (
+        <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
+          Subscribe{availableFeeds.length > 1 ? "… " : " "}
+        </a>
+      )
+    }
   }
 
   handleNewSubscription() {
@@ -65,7 +84,8 @@ class FeedTreeToolbar extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  availableFeeds: discovery.selectors.availableFeeds(state, activeTab.selectors.getActiveTabId(state))
+  availableFeeds: discovery.selectors.availableFeeds(state, activeTab.selectors.getActiveTabId(state)),
+  allFeedsByUrl: feeds.selectors.allFeedsByUrl(state),
 })
 
 export default connect(mapStateToProps, {

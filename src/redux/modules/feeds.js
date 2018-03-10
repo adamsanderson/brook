@@ -91,6 +91,16 @@ const selectors = {
   allFeeds: (state) => {
     return Object.values(state[name])
   },
+  allFeedsByUrl: (state) => {
+    const feedsByUrl = {}
+    const allFeeds = selectors.allFeeds(state)
+    
+    allFeeds.forEach((feed) => {
+      feedsByUrl[feed.url] = feed
+    })
+
+    return feedsByUrl
+  },
   getFeedById: (state) => {
     return (id) => state[name][id]
   }
@@ -103,7 +113,7 @@ function normalizeFeed(feed) {
     id: feed.id || Math.random().toString(36).substring(2, 15),
     type: FEED,
     isLoading: !!feed.isLoading,
-    url: feed.url,
+    url: new URL(feed.url).toString(),
     title: feed.title || humanizeURL(feed.url),
     items: feed.items || [],
     updatedAt: feed.updatedAt || 0
