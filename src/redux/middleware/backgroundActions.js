@@ -7,6 +7,7 @@ import folders, { FOLDER, REMOVE_BRANCH, addFolder, removeFolder } from '../modu
 import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
 import { IMPORT_OPML } from '../modules/import'
 import { UI_SHOW, backendShowToast } from '../modules/toast'
+import { startBatch, endBatch } from '../checkpoint'
 import OpmlReader from '../../lib/OpmlReader'
 import { resolveUrl } from '../../util/url'
 
@@ -23,9 +24,11 @@ const aliases = {
 
   [REMOVE_BRANCH]: (action) => {
     return (dispatch, getState) => {
+      dispatch(startBatch("Deleted folder"))
       const state = getState()
       removeRecursively(action.payload.folder)
-      
+      dispatch(endBatch())
+
       function removeRecursively(node) {
         if (node.type === FEED) {
           dispatch(removeFeed(node))
