@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { FEED } from '../redux/modules/feeds'
-import folder, { FOLDER, moveNode } from '../redux/modules/folders'
+import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
 import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
@@ -24,6 +24,7 @@ class FeedTree extends React.Component {
     currentFolder: PropTypes.object,
     hasAvailableFeeds: PropTypes.bool.isRequired,
     selectFolder: PropTypes.func.isRequired,
+    renameFolder: PropTypes.func.isRequired,
     selectFeed: PropTypes.func.isRequired,
     moveNode: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
@@ -117,6 +118,7 @@ class FeedTree extends React.Component {
             allowDrop={this.props.allowDrop}
             onDrop={this.props.moveNode}
             onClick={this.props.selectFolder}
+            onRename={this.props.renameFolder }
           />
         )
       default:
@@ -145,5 +147,6 @@ export default connect(mapStateToProps, {
   selectFolder,
   selectFeed,
   moveNode,
-  openModal
+  openModal,
+  renameFolder,
 })(FeedTree)

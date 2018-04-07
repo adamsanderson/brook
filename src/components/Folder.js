@@ -9,6 +9,7 @@ class Folder extends React.Component {
   static propTypes = {
     folder: PropTypes.object.isRequired,
     onClick: PropTypes.func,
+    onRename: PropTypes.func,
     style: PropTypes.object,
     className: PropTypes.string,
   }
@@ -19,14 +20,14 @@ class Folder extends React.Component {
   }
 
   render() {
-    const {folder, style, className} = this.props
+    const {folder, style, className, onRename} = this.props
 
     return (
       <div className={`Folder ${className}`} style={style} onClick={this.handleClick} >
         <FolderIcon expanded={folder.expanded} />
           {
             folder.isEditing 
-            ? <FolderEditor folder={folder} /> 
+            ? <FolderEditor folder={folder} onRename={onRename} /> 
             : <span>{folder.title}</span>
           }
       </div>

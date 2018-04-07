@@ -1,13 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { connect } from 'react-redux'
-import { renameFolder } from '../redux/modules/folders'
-
 class FolderEditor extends React.Component {
   static propTypes = {
     folder: PropTypes.object.isRequired,
-    renameFolder: PropTypes.func.isRequired,
+    onRename: PropTypes.func,
   }
 
   constructor(props) {
@@ -35,7 +32,10 @@ class FolderEditor extends React.Component {
   }
 
   handleSubmit() {
-    this.props.renameFolder(this.props.folder, this.input.value)
+    const onRename = this.props.onRename
+    if (!onRename) return
+
+    onRename(this.props.folder, this.input.value)
   }
 
   handleKey(event) {
@@ -48,10 +48,4 @@ class FolderEditor extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  //
-})
-
-export default connect(mapStateToProps, {
-  renameFolder
-})(FolderEditor)
+export default FolderEditor
