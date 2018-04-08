@@ -13,7 +13,7 @@ export const RENAME_FOLDER = "RENAME_FOLDER"
 
 const name = "folders"
 
-const ROOT = "ROOT"
+export const ROOT = "ROOT"
 export const FOLDER = "FOLDER"
 
 export function addFolder(folder, parentId) {
