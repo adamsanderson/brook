@@ -1,4 +1,4 @@
-import { humanizeURL } from '../../util/url'
+import { buildFeed } from "../factories"
 
 export const ADD_FEED = "ADD_FEED"
 export const REMOVE_FEED = "REMOVE_FEED"
@@ -13,7 +13,7 @@ const name = "feeds"
 export function addFeed(feed, parentId) {
   return {
     type: ADD_FEED, 
-    payload: { feed: normalizeFeed(feed), parentId }
+    payload: { feed: buildFeed(feed), parentId }
   }
 }
 
@@ -104,20 +104,6 @@ const selectors = {
   getFeedById: (state) => {
     return (id) => state[name][id]
   }
-}
-
-function normalizeFeed(feed) {
-  if (!feed.url) throw new Error("Feeds must have a URL")
-  
-  return ({
-    id: feed.id || Math.random().toString(36).substring(2, 15),
-    type: FEED,
-    isLoading: !!feed.isLoading,
-    url: new URL(feed.url).toString(),
-    title: feed.title || humanizeURL(feed.url),
-    items: feed.items || [],
-    updatedAt: feed.updatedAt || 0
-  })
 }
 
 export default {

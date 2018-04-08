@@ -1,17 +1,23 @@
+import { reduceEach } from "../../helpers"
+import { buildFeed, buildFolder } from "../../../src/redux/factories"
 import { OVER, BEFORE, AFTER } from "../../../src/constants"
-
 import folders, {
   ROOT,
   addFolder,
   moveNode,
-  FOLDER,
 } from "../../../src/redux/modules/folders"
 
 import { 
-  addFeed, FEED,
+  addFeed,
 } from "../../../src/redux/modules/feeds"
 
 const reducer = folders.reducer
+
+// Fixtures
+const feed   = Object.freeze(buildFeed({url: "http://example.com"}))
+const feed1  = Object.freeze(buildFeed({url: "http://example.com/1"}))
+const feed2  = Object.freeze(buildFeed({url: "http://example.com/2"}))
+const folder = Object.freeze(buildFolder())
 
 describe('folder reducer', () => {
   it('should contain the ROOT in its initial state', () => {
@@ -21,7 +27,6 @@ describe('folder reducer', () => {
 
   describe('adding nodes', () => {
     it('should add feeds to root', () => {
-      const feed = buildFeed()
       const state = reducer(undefined, addFeed(feed))
       const root = state[ROOT]
 
@@ -29,8 +34,6 @@ describe('folder reducer', () => {
     })
 
     it('should add feeds in order', () => {
-      const feed1 = buildFeed()
-      const feed2 = buildFeed()
       const state = reduceEach(reducer, [
         addFeed(feed1),
         addFeed(feed2),
@@ -43,7 +46,6 @@ describe('folder reducer', () => {
     })
 
     it('should add folders to root', () => {
-      const folder = buildFolder()
       const state = reducer(undefined, addFolder(folder))
       const root = state[ROOT]
 
@@ -51,8 +53,6 @@ describe('folder reducer', () => {
     })
 
     it('should add feeds to folders', () => {
-      const folder = buildFolder()
-      const feed = buildFeed()
       const state = reduceEach(reducer, [
         addFolder(folder),
         addFeed(feed, folder.id),
@@ -64,8 +64,6 @@ describe('folder reducer', () => {
 
   describe('moving nodes', () => {
     it('should move feeds between folders', () => {
-      const folder = buildFolder()
-      const feed = buildFeed()
       const state = reduceEach(reducer, [
         addFolder(folder),
         addFeed(feed),
@@ -77,8 +75,6 @@ describe('folder reducer', () => {
     })
 
     it('should move items before others', () => {
-      const folder = buildFolder()
-      const feed = buildFeed()
       const state = reduceEach(reducer, [
         addFolder(folder),
         addFeed(feed),
@@ -90,8 +86,6 @@ describe('folder reducer', () => {
     })
 
     it('should move items after others', () => {
-      const folder = buildFolder()
-      const feed = buildFeed()
       const state = reduceEach(reducer, [
         addFolder(folder),
         addFeed(feed),
@@ -103,39 +97,14 @@ describe('folder reducer', () => {
     })
 
     it('should move feeds into open folders when position is AFTER', () => {
-      const folder = buildFolder()
-      folder.expanded = true
-      const feed = buildFeed()
+      let expanded = {...folder, expanded: true}
       const state = reduceEach(reducer, [
-        addFolder(folder),
+        addFolder(expanded),
         addFeed(feed),
-        moveNode(feed, folder, AFTER)
+        moveNode(feed, expanded, AFTER)
       ])
       
-      expect(state[folder.id].children.some(c => c.id === feed.id))
+      expect(state[expanded.id].children.some(c => c.id === feed.id))
     })
   })
 })
-
-var id = 1
-function buildFeed() {
-  return {
-    id: id++,
-    type: FEED,
-    url: "http://example.com/" + id,
-  }
-}
-
-function buildFolder() {
-  return {
-    id: id++,
-    type: FOLDER,
-  }
-}
-
-function reduceEach(reducer, actions, initialState = undefined) {
-  let state = initialState
-  actions.forEach(a => state = reducer(state, a))
-
-  return state
-}

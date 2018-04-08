@@ -1,3 +1,4 @@
+import { buildFolder } from "../factories"
 import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
 import {BEFORE, OVER} from '../../constants'
 import { SELECT_FOLDER } from './ui'
@@ -19,7 +20,7 @@ export const FOLDER = "FOLDER"
 export function addFolder(folder, parentId) {
   return {
     type: ADD_FOLDER, 
-    payload: { folder: normalizeFolder(folder), parentId }
+    payload: { folder: buildFolder(folder), parentId }
   }
 }
 
@@ -238,17 +239,6 @@ function nodeMoved(state, source, target, position) {
   }
   
   return state  
-}
-
-function normalizeFolder(folder) {
-  return {
-    id: folder.id || Math.random().toString(36).substring(2, 15),
-    type: FOLDER,
-    title: folder.title || "Folder",
-    children: folder.children || [],
-    isEditing: folder.isEditing || false,
-    expanded: true,
-  }
 }
 
 const selectors = {
