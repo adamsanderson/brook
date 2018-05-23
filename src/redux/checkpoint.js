@@ -1,4 +1,6 @@
 import omit from 'lodash/omit'
+import get from 'lodash/get'
+import has from 'lodash/has'
 
 export const ROLLBACK = "CHECKPOINT:ROLLBACK"
 export const START_BATCH = "CHECKPOINT:START_BATCH"
@@ -37,23 +39,28 @@ export function checkpointableReducer(reducer, options={}) {
   return (state, action) => {
     if (action.type === ROLLBACK && state[KEY]) {
       return Object.assign({}, omit(state, [KEY]), state[KEY].checkpoint)
+
     } else if (action.type === START_BATCH) {
       const checkpoint = omit(state, options.exclude)
-      const nextState = reducer(state, action)
-      return {...nextState, [KEY]: {checkpoint, name: action.meta && action.meta.checkpoint, transaction: true}}
+      return nextState(state, action, {checkpoint, name: action.meta.checkpoint, transaction: true})
+
     } else if (action.type === END_BATCH) {
       const checkpoint = {...state[KEY], transaction: false}
-      const nextState = reducer(state, action)
-      return {...nextState, [KEY]: checkpoint}
-    } else if (action.meta && action.meta.checkpoint && !state[KEY].transaction) {
+      return nextState(state, action, checkpoint)
+
+    } else if (has(action, ["meta", "checkpoint"]) && !get(state, [KEY, 'transaction'])) {
       const checkpoint = omit(state, options.exclude)
-      const nextState = reducer(state, action)
-      return {...nextState, [KEY]: {checkpoint, name: action.meta.checkpoint}}
+      return nextState(state, action, {checkpoint, name: action.meta.checkpoint})
+
     } else {
       const checkpointState = state[KEY]
-      const nextState = reducer(state, action)
-      return {...nextState, [KEY]: checkpointState}
+      return nextState(state, action, checkpointState)
     }
+  }
+
+  function nextState(state, action, checkpointState) {
+    const reduced = reducer(omit(state, [KEY]), action)
+    return {...reduced, [KEY]: checkpointState}
   }
 }
 
