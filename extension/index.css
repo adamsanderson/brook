@@ -60,10 +60,13 @@ a:hover {
 
   display: flex;
   justify-content: flex-start;
+  white-space: nowrap;
 }
 
 .Panel-header :first-child {
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Panel-header .Icon {
@@ -77,6 +80,7 @@ a:hover {
 }
 
 .Panel-body {
+  padding-top: 0.25em;
   overflow-y: auto;
 }
 

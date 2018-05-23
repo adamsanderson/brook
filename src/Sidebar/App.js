@@ -25,15 +25,15 @@ class App extends React.Component {
 
     return (
       <div className="layout-vertical">
-        <p className="Panel-header">
+        <div className="Panel-header">
           <span>Feeds</span>
           <FeedTreeToolbar />
-        </p>
+        </div>
         <div className="Panel-body layout-2of3">
           <FeedTree nodes={nodes} />
         </div>
       
-        <p className="Panel-header">
+        <div className="Panel-header">
           <span>
             {currentItem ? currentItem.title : "Articles"}
           </span>
@@ -44,7 +44,7 @@ class App extends React.Component {
               ? <FolderToolbar folder={currentFolder} />
               : ""
             }
-        </p>
+        </div>
         <div className="Panel-body layout-1of3">
           <FeedDetail feed={currentFeed} />
         </div>
