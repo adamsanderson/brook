@@ -10,10 +10,10 @@ export function foundFeeds(feeds) {
   }
 }
 
-export function forgetFeeds() {
+export function forgetFeeds(tabId) {
   return {
     type: FORGET_FEEDS, 
-    payload: { }
+    payload: { tabId }
   }
 }
 
@@ -41,8 +41,9 @@ function reduceFoundFeeds(state, action) {
 }
 
 function reduceForgetFeeds(state, action) {
+  const tabId = action.payload.tabId
   let feeds = Object.assign({}, state.feeds)
-  delete feeds[action._sender.tab.id]
+  delete feeds[tabId || action._sender.tab.id]
 
   return { ...state, feeds }
 }

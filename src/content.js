@@ -1,5 +1,5 @@
 import { Store } from 'react-chrome-redux'
-import { foundFeeds, forgetFeeds } from "./redux/modules/discovery"
+import { foundFeeds } from "./redux/modules/discovery"
 import { humanizeHost, resolveUrl } from "./util/url"
 
 const store = new Store({
@@ -67,10 +67,6 @@ function reportFeeds(feeds) {
   store.dispatch(foundFeeds(feeds))
 }
 
-function discardFeeds() {
-  store.dispatch(forgetFeeds())
-}
-
 function removeDuplicates(feeds) {
   const urls = new Set()
   return feeds.filter(f => {
@@ -93,7 +89,5 @@ function normalizeFeeds(feeds) {
 }
 
 document.addEventListener("visibilitychange", findFeeds)
-// TODO: This apparently doesn't trigger...
-document.addEventListener("unload", discardFeeds)
 
 findFeeds()
