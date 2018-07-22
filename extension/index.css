@@ -14,6 +14,8 @@
 
   --speed-fast: 250ms;
   --speed-medium: 500ms;
+  --speed-slow: 1000ms;
+  --speed-very-slow: 2000ms;
 }
 
 * {
@@ -334,6 +336,10 @@ a:hover {
 .Icon.Folder.isExpanded {  transform: rotate(90deg); }
 .Icon.Folder.isCollapsed { transform: rotate(0deg);  }
 
+.Icon.isSpinning {
+  animation: spin var(--speed-slow) infinite linear;
+}
+
 /* 
   Animations 
 */
@@ -347,6 +353,15 @@ a:hover {
   }
   100% {
     transform: scale(1.6)
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0)
+  }
+  100% {
+    transform: rotate(360deg)
   }
 }
 

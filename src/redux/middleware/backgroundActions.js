@@ -10,6 +10,7 @@ import { UI_SHOW, backendShowToast } from '../modules/toast'
 import { startBatch, endBatch } from '../checkpoint'
 import OpmlReader from '../../lib/OpmlReader'
 import { resolveUrl } from '../../util/url'
+import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 
 const WORKER_COUNT = 4
 
@@ -42,10 +43,14 @@ const aliases = {
 
   [FETCH_ALL]: (action) => {
     return (dispatch, getState) => {
-      const allFeeds = feeds.selectors.allFeeds(getState())
-      
+      const state = getState()
+      const allFeeds = feeds.selectors.allFeeds(state)
+
+      if (workers.selectors.hasFeedWorkers(state)) return
+
       // TODO: Make WORKER_COUNT configurable
       for (let i = 0; i < WORKER_COUNT; i++) {
+        dispatch(startedFeedWorker())
         fetchFromQueue(allFeeds, dispatch)
       }
     }
@@ -121,7 +126,10 @@ function fetchFeed(feed, dispatch) {
 function fetchFromQueue(feedQueue, dispatch) {
   window.requestAnimationFrame(() => {
     const feed = feedQueue.shift()
-    if (!feed) return
+    if (!feed) {
+      dispatch(finishedFeedWorker())
+      return
+    }
 
     const next = () => fetchFromQueue(feedQueue, dispatch)
 

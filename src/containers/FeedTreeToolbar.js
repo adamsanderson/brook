@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import feeds, { addFeed, fetchAll } from '../redux/modules/feeds'
+import workers from '../redux/modules/workers'
 import { openModal, openModalRightAlignedBelow } from '../redux/modules/modal'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
@@ -16,6 +17,7 @@ class FeedTreeToolbar extends React.Component {
   static propTypes = {
     availableFeeds: PropTypes.array.isRequired,
     allFeedsByUrl: PropTypes.object.isRequired,
+    isFetching: PropTypes.bool,
     addFeed: PropTypes.func.isRequired,
     fetchAll: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
@@ -30,12 +32,12 @@ class FeedTreeToolbar extends React.Component {
   }
 
   render() {
-    const fetchAll = this.props.fetchAll
+    const { fetchAll, isFetching } = this.props
     
     return (
       <span>
         { this.renderSubscribeButton() }
-        <RefreshIcon className="Icon" title="Refresh Feeds" onClick={ fetchAll } />
+        <RefreshIcon className={`Icon ${isFetching ? "isSpinning" : ""}`} title="Refresh Feeds" onClick={ fetchAll } />
         <MenuIcon className="Icon" onClick={ this.handleMenu } />
       </span>
     )
@@ -86,6 +88,7 @@ class FeedTreeToolbar extends React.Component {
 const mapStateToProps = (state, props) => ({
   availableFeeds: discovery.selectors.availableFeeds(state, activeTab.selectors.getActiveTabId(state)),
   allFeedsByUrl: feeds.selectors.allFeedsByUrl(state),
+  isFetching: workers.selectors.hasFeedWorkers(state),
 })
 
 export default connect(mapStateToProps, {

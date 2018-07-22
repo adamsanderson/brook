@@ -12,6 +12,7 @@ import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 import toast from './modules/toast'
+import workers from './modules/workers'
 import { resetableReducer } from './reset'
 import { checkpointableReducer } from './checkpoint'
 
@@ -47,6 +48,7 @@ addModule(discovery)
 addModule(activeTab)
 addModule(modal)
 addModule(toast)
+addModule(workers)
 
 // Add the logger last so that it can report on everything:
 if (!ENV.production) {
