@@ -46,7 +46,7 @@ const aliases = {
       
       // TODO: Make WORKER_COUNT configurable
       for (let i = 0; i < WORKER_COUNT; i++) {
-        fetchAll(allFeeds, dispatch)
+        fetchFromQueue(allFeeds, dispatch)
       }
     }
   },
@@ -118,16 +118,14 @@ function fetchFeed(feed, dispatch) {
   return promise
 }
 
-function fetchAll(allFeeds, dispatch) {
+function fetchFromQueue(feedQueue, dispatch) {
   window.requestAnimationFrame(() => {
-    const feed = allFeeds.shift()
+    const feed = feedQueue.shift()
     if (!feed) return
 
-    const next = () => fetchAll(allFeeds, dispatch)
+    const next = () => fetchFromQueue(feedQueue, dispatch)
 
-    Promise.race(fetchFeed(feed, dispatch))
-    .then(next)
-    .catch(next)
+    fetchFeed(feed, dispatch).finally(next)
   })
 }
 
