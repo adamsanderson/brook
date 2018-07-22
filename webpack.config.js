@@ -45,6 +45,10 @@ module.exports = {
     Buffer: true
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'shared',
+      minChunks: Infinity,
+    }),
     // Since some NodeJS modules expect to be running in Node, it is helpful
     // to set this environment var to avoid reference errors.
     new webpack.DefinePlugin({
