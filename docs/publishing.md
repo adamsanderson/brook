@@ -9,7 +9,7 @@ yarn package
 
 Upload the zip file from the `web-ext-artifacts` directory to mozilla:
 
-https://addons.mozilla.org/en-US/developers/addon/brook/
+https://addons.mozilla.org/en-US/developers/addon/brook-feed-reader/versions/submit/
 
 After uploading the zip file, Brook will be available as an addon.
 
