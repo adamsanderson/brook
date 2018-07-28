@@ -1,18 +1,11 @@
 import { Store } from 'react-chrome-redux'
 import { foundFeeds } from "./redux/modules/discovery"
-import { humanizeHost, resolveUrl } from "./util/url"
+import { resolveUrl } from './util/url'
+import { discoverFeeds } from './discoveryStrategies'
 
 const store = new Store({
   portName: 'Brook'
 })
-
-// Search for known permutations of possible feed sources:
-const SELECTORS = `
-  link[rel~=feed][type="application/rss+xml"],
-  link[rel~=alternate][type="application/rss+xml"],
-  link[rel~=feed][type="application/atom+xml"],
-  link[rel~=alternate][type="application/atom+xml"]
-`
 
 /**
  * Detect feeds on current page.
@@ -20,44 +13,9 @@ const SELECTORS = `
  * in the active page.
  */
 function findFeeds() {
-  // Only search for feeds in an active view:
   if (document.hidden) { return }
 
-  let feeds = findFeedLinks()
-  if (!feeds.length) feeds = findFeedHandler()
-
-  reportFeeds(feeds)
-}
-
-/**
- * Searches the current page for discovery links.
- */
-function findFeedLinks() {
-  const feedLinks = document.querySelectorAll(SELECTORS)
-  const feeds = Array.from(feedLinks).map(linkEl => ({
-    title: linkEl.getAttribute("title") || humanizeHost(linkEl.getAttribute("href")),
-    url: linkEl.getAttribute("href")
-  }))
-  
-  return feeds
-}
-
-/**
- * Detects firefox's feed handler HTML.  This is sub-optimal, but I'm not sure how to:
- * 1. Hook into the existing feed handler.
- * 2. Detect a feed before it gets rewritten.
- */
-function findFeedHandler() {
-  if (document.querySelector('html#feedHandler') && document.querySelector('script[src^="chrome://"]')) {
-    return [
-      {
-        title: document.title,
-        url: document.location.toString()
-      }
-    ]
-  } else {
-    return []
-  }
+  reportFeeds(discoverFeeds(document))
 }
 
 function reportFeeds(feeds) {
