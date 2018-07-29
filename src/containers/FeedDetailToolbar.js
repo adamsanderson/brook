@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { openModalRightAlignedBelow } from '../redux/modules/modal'
 import { MODALS } from '../modals'
 
-import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
+import { MoreVertical as MenuIcon } from 'react-feather'
 
 class FeedDetailToolbar extends React.Component {
 

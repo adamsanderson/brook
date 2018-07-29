@@ -10,8 +10,10 @@ import activeTab from '../redux/modules/activeTab'
 
 import { MODALS } from '../modals'
 
-import RefreshIcon from 'react-icons/lib/fa/refresh'
-import MenuIcon from 'react-icons/lib/fa/ellipsis-v'
+import { 
+  MoreVertical as MenuIcon,
+  RefreshCw as RefreshIcon,
+} from 'react-feather'
 
 class FeedTreeToolbar extends React.Component {
   static propTypes = {

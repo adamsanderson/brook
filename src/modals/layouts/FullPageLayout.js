@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { closeModal } from '../../redux/modules/modal'
-import BackIcon from 'react-icons/lib/fa/chevron-left'
+import { ArrowLeft as BackIcon } from 'react-feather'
 
 class FullPageLayout extends React.Component {
   static propTypes = {
@@ -23,7 +23,7 @@ class FullPageLayout extends React.Component {
       <div className="Modal FullPageLayout inverted layout-vertical">
         <p className="Panel-header">
           <a onClick={ closeModal }>
-            <BackIcon /> 
+            <BackIcon className="Icon"/> 
             {" " + backMessage}
           </a>
         </p>
