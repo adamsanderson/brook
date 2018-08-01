@@ -157,6 +157,14 @@ a:hover {
   right: 0.25em;
 }
 
+.Feed svg.Feed-action {
+  fill: var(--color-white);
+}
+
+.Feed svg.Feed-action:hover {
+  color: var(--color-danger);
+}
+
 .Menu {
   position: fixed;
   padding: 0.5em;
