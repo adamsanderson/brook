@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
+import { XCircle as DeleteIcon } from 'react-feather'
 
 class Feed extends React.Component {
 
@@ -9,6 +10,7 @@ class Feed extends React.Component {
     feed: PropTypes.object.isRequired,
     isUnread: PropTypes.bool,
     onClick: PropTypes.func,
+    onDelete: PropTypes.func,
     style: PropTypes.object,
     className: PropTypes.string,
   }
@@ -22,6 +24,7 @@ class Feed extends React.Component {
   constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   render() {
@@ -30,7 +33,10 @@ class Feed extends React.Component {
     const error = feed.error
 
     return (
-      <div className={`Feed ${readClass} ${className}`} style={style} onClick={this.handleClick} > 
+      <div className={`Feed ${readClass} ${className}`} style={style} onClick={this.handleClick} >
+        { this.props.onDelete &&
+          <DeleteIcon className="Feed-action Icon" onClick={this.handleDelete}/>
+        }
         <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={feed.isLoading}/>
         {error ? this.renderError(feed) : this.renderFeed(feed)}
       </div>
@@ -47,6 +53,10 @@ class Feed extends React.Component {
 
   handleClick(event) {
     this.props.onClick(this.props.feed)
+  }
+
+  handleDelete(event) {
+    this.props.onDelete(this.props.feed)
   }
 }
 

@@ -148,6 +148,15 @@ a:hover {
   color: var(--color-lightest);
 }
 
+.Feed {
+  position: relative;
+}
+
+.Feed .Feed-action {
+  position: absolute;
+  right: 0.25em;
+}
+
 .Menu {
   position: fixed;
   padding: 0.5em;

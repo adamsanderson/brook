@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { FEED } from '../redux/modules/feeds'
+import { FEED, removeFeed } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
 import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
@@ -30,6 +30,7 @@ class FeedTree extends React.Component {
     openModal: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
     isFeedUnread: PropTypes.func.isRequired,
+    removeFeed: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -92,9 +93,10 @@ class FeedTree extends React.Component {
   renderNode(node) {
     const {indent, indentUnits, currentFeed, currentFolder} = this.props
     const {item} = node
+    const isSelected = item === currentFeed || item === currentFolder
     const childProps = {
       style: {paddingLeft: indent * node.depth + indentUnits},
-      className: `List-item ${item === currentFeed || item === currentFolder ? "isSelected" : ""}`,
+      className: `List-item ${isSelected ? "isSelected" : ""}`,
       key: `${item.type}-${item.id}`,
     }
     
@@ -107,6 +109,7 @@ class FeedTree extends React.Component {
             onDrop={this.props.moveNode}
             allowDrop={this.props.allowDrop}
             onClick={this.props.selectFeed} 
+            onDelete={isSelected ? this.props.removeFeed : undefined}
             isUnread={this.props.isFeedUnread(item)} 
           />
         )
@@ -149,4 +152,5 @@ export default connect(mapStateToProps, {
   moveNode,
   openModal,
   renameFolder,
+  removeFeed,
 })(FeedTree)

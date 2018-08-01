@@ -2,12 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { openModalRightAlignedBelow } from '../redux/modules/modal'
 import views, { markAllItemsViewed } from '../redux/modules/views'
-import { MODALS } from '../modals'
 
 import { 
-  MoreVertical as MenuIcon,
   CheckCircle as MarkReadIcon,
  } from 'react-feather'
 
@@ -26,7 +23,6 @@ class FeedDetailToolbar extends React.Component {
 
   constructor(props) {
     super(props)
-    this.handleMenu = this.handleMenu.bind(this)
     this.handleMarkAllRead = this.handleMarkAllRead.bind(this)
   }
 
@@ -38,16 +34,8 @@ class FeedDetailToolbar extends React.Component {
           this.props.feed.items.some(this.props.isItemUnread) && 
           <MarkReadIcon className="Icon" onClick= { this.handleMarkAllRead } />
         }
-        <MenuIcon className="Icon" onClick={ this.handleMenu } />
       </span>
     )
-  }
-
-  handleMenu(event) {
-    const el = event.target
-    this.props.openModalRightAlignedBelow(el, MODALS.FeedDetailMenu, {
-      feed: this.props.feed, 
-    })
   }
 
   handleMarkAllRead() {
@@ -60,6 +48,5 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  openModalRightAlignedBelow,
   markAllItemsViewed
 })(FeedDetailToolbar)
