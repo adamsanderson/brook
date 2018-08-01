@@ -12,7 +12,10 @@ const name = "views"
 export function markAllItemsViewed(feed) {
   return {
     type: MARK_ALL_ITEMS_VIEWED,
-    payload: { feed }
+    payload: { feed },
+    meta: {
+      checkpoint: "Marked all read"
+    }
   }
 }
 
