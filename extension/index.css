@@ -71,6 +71,10 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+.Panel-header a {
+  font-weight: normal;
+}
+
 .Panel-header .Icon {
   width: 1.2em;
   height: 1.2em;
