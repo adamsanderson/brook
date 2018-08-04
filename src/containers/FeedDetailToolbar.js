@@ -12,7 +12,6 @@ class FeedDetailToolbar extends React.Component {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
-    openModalRightAlignedBelow: PropTypes.func.isRequired,
     markAllItemsViewed: PropTypes.func.isRequired,
     isItemUnread: PropTypes.func
   }
