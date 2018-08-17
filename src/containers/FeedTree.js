@@ -42,6 +42,17 @@ class FeedTree extends React.Component {
     super(props)
 
     this.handleShowImport = this.handleShowImport.bind(this)
+    this.depthStyleCache = []
+  }
+
+  getDepthStyle(depth) {
+    if (!this.depthStyleCache[depth]) {
+      const {indent, indentUnits} = this.props
+      this.depthStyleCache[depth] = {paddingLeft: indent * depth + indentUnits}
+      console.log(`depth:`, depth, this.depthStyleCache[depth])
+    }
+
+    return this.depthStyleCache[depth]
   }
 
   render() {
@@ -91,11 +102,11 @@ class FeedTree extends React.Component {
   }
 
   renderNode(node) {
-    const {indent, indentUnits, currentFeed, currentFolder} = this.props
+    const {currentFeed, currentFolder} = this.props
     const {item} = node
     const isSelected = item === currentFeed || item === currentFolder
     const childProps = {
-      style: {paddingLeft: indent * node.depth + indentUnits},
+      style: this.getDepthStyle(node.depth),
       className: `List-item ${isSelected ? "isSelected" : ""}`,
       key: `${item.type}-${item.id}`,
     }
