@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import isEqual from 'react-fast-compare'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
 import { XCircle as DeleteIcon } from 'react-feather'
@@ -19,6 +20,22 @@ class Feed extends React.Component {
     isUnread: false,
     onClick: (event) => true,
     className: "",
+  }
+
+  // Feeds are evaluated and rendered any time that the user interacts
+  // with th feed tree.  Unfortunately not all props can be easily compared 
+  // since the drag an drop wrapper's `allowDrop` is regenerated on each render.
+  //
+  // To work around this for now, we implement a custom `shouldComponentUpdate`.
+  shouldComponentUpdate(nextProps) {
+    if (this.props === nextProps) return false
+    
+    return (this.props.className !== nextProps.className) ||
+      (this.props.style !== nextProps.style) ||
+      (this.props.onDelete !== nextProps.onDelete) ||
+      (this.props.onClick !== nextProps.onClick) ||
+      (this.props.isUnread !== nextProps.isUnread) ||
+      (!isEqual(this.props.feed, nextProps.feed))
   }
 
   constructor(props) {
