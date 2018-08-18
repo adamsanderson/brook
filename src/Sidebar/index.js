@@ -7,6 +7,7 @@ import {Store} from 'react-chrome-redux'
 import App from './App'
 import ModalRoot from "../modals"
 import ToastRoot from "../toasts"
+import linkHandler from "../util/linkHandler"
 
 const store = new Store({
   portName: 'Brook'
@@ -20,6 +21,8 @@ const unsubscribe = store.subscribe(() => {
   // https://github.com/tshaddix/react-chrome-redux/wiki/Advanced-Usage#initializing-ui-components
   unsubscribe()
 
+  window.addEventListener("click", linkHandler)
+  
   ReactDOM.render(
     <Provider store={store}>
       <div style={{height: "100%"}}>

@@ -53,18 +53,7 @@ class Item extends React.Component {
 
   handleClick(event) {
     const item = this.props.item
-
-    // Firefox changed the semantics of following a link (brilliant!) and always opens
-    // sidebar tabs in new windows.  So we need to manualy handle clicking links…
-    if (item.url) {
-      if (event.metaKey) {
-        browser.tabs.create({url: item.url, active: false})
-      } else {
-        browser.tabs.update({url: item.url})
-      }
-      event.preventDefault()
-    }
-
+    
     if (item.error) {
       console.error("Brook Item Error:", item.error)
       console.error(item.data)
