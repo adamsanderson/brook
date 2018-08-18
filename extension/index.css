@@ -71,7 +71,8 @@ a:hover {
   text-overflow: ellipsis;
 }
 
-.Panel-header a {
+.Panel-header a,
+.Panel-header .secondary {
   font-weight: normal;
 }
 
