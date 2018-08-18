@@ -234,6 +234,7 @@ a:hover {
 
 .Button:hover {
   box-shadow: 0 0 8px;
+  text-decoration: none;
 }
 
 .EmptyState {
@@ -307,12 +308,21 @@ a:hover {
   color: var(--color-active);
 }
 
-.hasError {
+.hasError,
+.hasError a,
+.hasError a:visited {
   color: var(--color-danger);
 }
 
-.isWarning {
+.isWarning
+.isWarning a,
+.isWarning a:visited {
   color: var(--color-danger);
+}
+
+.hasError a,
+.isWarning a {
+  text-decoration: underline;
 }
 
 .inverted .hasError {

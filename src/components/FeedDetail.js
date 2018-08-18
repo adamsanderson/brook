@@ -26,7 +26,8 @@ class FeedDetail extends React.Component {
     return (
       <div>
         <p className="hasError">
-          There was an error reading this feed.
+          There was an error reading this feed: &nbsp; 
+          <a href={feed.url}>View page</a>
         </p>
         <p>
           <code>{feed.error}</code>
