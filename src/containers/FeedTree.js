@@ -49,7 +49,6 @@ class FeedTree extends React.Component {
     if (!this.depthStyleCache[depth]) {
       const {indent, indentUnits} = this.props
       this.depthStyleCache[depth] = {paddingLeft: indent * depth + indentUnits}
-      console.log(`depth:`, depth, this.depthStyleCache[depth])
     }
 
     return this.depthStyleCache[depth]
