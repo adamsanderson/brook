@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import toast, {hideToast} from '../redux/modules/toast'
+import toast, {hideToast, holdToast, releaseToast} from '../redux/modules/toast'
 import UndoToast from './UndoToast'
 /*
   Adapted From:
@@ -24,12 +24,14 @@ ToastRoot.propTypes = {
   type: PropTypes.string,
   props: PropTypes.object,
   hideToast: PropTypes.func.isRequired,
+  holdToast: PropTypes.func.isRequired,
+  releaseToast: PropTypes.func.isRequired,
 }
 
 /**
  * ToastRoot displays the current toast.
  */
-function ToastRoot({type, props, hideToast}) {
+function ToastRoot({type, props, hideToast, holdToast, releaseToast}) {
   let toast = null
 
   if (type) {
@@ -41,7 +43,7 @@ function ToastRoot({type, props, hideToast}) {
       <CSSTransition classNames="Modal" addEndListener={(node, done) => {
         node.addEventListener('transitionend', done)
       }} >
-        <div className="Toast">
+        <div className="Toast" onMouseEnter={holdToast} onMouseLeave={releaseToast}>
           <SpecificToast hideToast={hideToast} {...props} />
           <a className="Toast-close" onClick={hideToast} >
             ✖
@@ -60,5 +62,9 @@ function ToastRoot({type, props, hideToast}) {
 
 export default connect(
   state => toast.selectors.toast(state),
-  { hideToast }
+  { 
+    hideToast,
+    holdToast,
+    releaseToast,
+  }
 )(ToastRoot)

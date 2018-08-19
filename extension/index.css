@@ -196,8 +196,8 @@ a:hover {
   position: fixed;
   bottom: 0;
   left: 0;
-  padding: 0.5em;
-  min-width: 80%;
+  padding: 1em 0.5em;
+  min-width: 15em;
   max-width: 100%;
   
   display: flex;
