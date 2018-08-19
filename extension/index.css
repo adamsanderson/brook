@@ -292,8 +292,9 @@ a:hover {
   color: var(--color-white);
 }
 
-.inverted .Panel-header {
-  color: var(--color-white);
+.inverted > * {
+  --color-active: #FFFFFF;
+  --color-dark: #FFFFFF;
 }
 
 .secondary {
