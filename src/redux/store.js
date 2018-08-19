@@ -66,18 +66,25 @@ const enhancedMiddleware = compose(
   applyMiddleware(...middleware),
   ...enhancers
 )
-const store = createStore(
-  rootReducer,
-  loadState() || initialState,
-  enhancedMiddleware
-)
 
-// Save state at most once every 1s
-store.subscribe(throttle(() => {
-  const state = store.getState()
-  const savedState = pick(state, serializePaths)
-  
-  saveState(savedState)
-}, 1000))
+const storePromise = loadState()
+  .catch(_error => undefined)
+  .then(state => {
+    const store = createStore(
+      rootReducer,
+      state || initialState,
+      enhancedMiddleware
+    )
+    
+    // Save state at most once every 1s
+    store.subscribe(throttle(() => {
+      const state = store.getState()
+      const savedState = pick(state, serializePaths)
+      
+      saveState(savedState)
+    }, 1000))
 
-export default store
+    return store
+  })
+
+export default storePromise

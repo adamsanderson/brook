@@ -1,4 +1,4 @@
-import store from './redux/store'
+import getStore from './redux/store'
 import { wrapStore } from 'react-chrome-redux'
 
 import { changeTab } from "./redux/modules/activeTab"
@@ -7,7 +7,8 @@ import { forgetFeeds } from "./redux/modules/discovery"
 
 const MINUTE = 60 * 1000
 
-wrapStore(store, {portName: 'Brook'})
+getStore.then(store => {
+  wrapStore(store, {portName: 'Brook'})
 
 // Track when tabs change
 browser.tabs.onActivated.addListener(tabInfo => store.dispatch(changeTab(tabInfo.tabId)))
@@ -20,3 +21,4 @@ setInterval(() => {
     store.dispatch(fetchAll())
   }
 }, 15 * MINUTE)
+})
