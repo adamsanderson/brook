@@ -29,6 +29,6 @@ wee hours of the night.
 
 ## Assets and Attribution
 
-- The Brook logo was "designed" by Adam Sanderson
-- Feed status icons were "designed" by Adam Sanderson
-- Interface icons are from Font Adequate, I mean Font Awesome
+- The Brook logo was scrawled by Adam Sanderson
+- Feed status icons were mangled by Adam Sanderson
+- Interface icons are from the [Feather](https://feathericons.com/) icon set.
