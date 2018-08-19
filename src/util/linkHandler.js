@@ -2,9 +2,12 @@
 // sidebar tabs in new windows.  So we need to manualy handle clicking links…
 export default function handleOnClick(event) {
   const target = event.target
-  if (target.nodeName === "A" && target.getAttribute('href')) {
-    openLink(target.getAttribute('href'), event.metaKey)
-    event.preventDefault()
+  if (target.nodeName === "A") {
+    const url = target.getAttribute('href')
+    if (url && url[0] !== "#") {
+      openLink(target.getAttribute('href'), event.metaKey)
+      event.preventDefault()
+    }
   }
 }
 
