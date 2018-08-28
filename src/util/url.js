@@ -58,6 +58,19 @@ export function resolveUrl(url, base=window.location) {
 }
 
 /**
+ * Translate feed protocol (and any others in the future) to URLs.
+ * See https://en.wikipedia.org/wiki/Feed_URI_scheme for more details.
+ * 
+ * @param {String} uri possibly with `feed:` protocol.
+ * @returns {String} url with http protocol
+ */
+export function normalizeProtocol(uri) {
+  return uri
+    .replace(/^feed:\/\//, "http://")
+    .replace(/^feed:/, "")
+}
+
+/**
   Tries to clean up messy URLs.  For instance:
   
       www.example.com => http://www.example.com

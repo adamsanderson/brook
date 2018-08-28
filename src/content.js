@@ -1,6 +1,6 @@
 import { Store } from 'react-chrome-redux'
 import { foundFeeds } from "./redux/modules/discovery"
-import { resolveUrl } from './util/url'
+import { resolveUrl, normalizeProtocol } from './util/url'
 import { discoverFeeds } from './discoveryStrategies'
 
 const store = new Store({
@@ -39,13 +39,7 @@ function removeDuplicates(feeds) {
 function normalizeFeeds(feeds) {
   return feeds.map(feed => {
     let url = feed.url
-
-    // Translate feed URI to URLs:
-    // https://en.wikipedia.org/wiki/Feed_URI_scheme
-    url = url.replace(/^feed:\/\//, "http://")
-    url = url.replace(/^feed:/, "")
-    
-    // Resolve relative URLs
+    url = normalizeProtocol(url)
     url = resolveUrl(url)
 
     return { ...feed, url }
