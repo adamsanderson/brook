@@ -28,22 +28,28 @@ function reportFeeds(feeds) {
 function removeDuplicates(feeds) {
   const urls = new Set()
   return feeds.filter(f => {
-    const u = f.url
-    if (urls.has(u)) { return false }
+    const url = f.url
+    if (urls.has(url)) { return false }
 
-    urls.add(u)
+    urls.add(url)
     return true
   })
 }
 
 function normalizeFeeds(feeds) {
-  // Note: this mutates the feeds in place.
-  feeds.forEach((f) => {
-    // Make paths fully qualified:
-    f.url = resolveUrl(f.url)
-  })
+  return feeds.map(feed => {
+    let url = feed.url
 
-  return feeds
+    // Translate feed URI to URLs:
+    // https://en.wikipedia.org/wiki/Feed_URI_scheme
+    url = url.replace(/^feed:\/\//, "http://")
+    url = url.replace(/^feed:/, "")
+    
+    // Resolve relative URLs
+    url = resolveUrl(url)
+
+    return { ...feed, url }
+  })
 }
 
 document.addEventListener("visibilitychange", findFeeds)
