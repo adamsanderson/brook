@@ -1,7 +1,7 @@
 import { Store } from 'react-chrome-redux'
 import { foundFeeds } from "./redux/modules/discovery"
-import { resolveUrl, normalizeProtocol } from './util/url'
 import { discoverFeeds } from './discoveryStrategies'
+import transformFeeds from './lib/discoveryPipeline'
 
 const store = new Store({
   portName: 'Brook'
@@ -19,31 +19,9 @@ function findFeeds() {
 }
 
 function reportFeeds(feeds) {
-  feeds = removeDuplicates(feeds)
-  feeds = normalizeFeeds(feeds)
+  feeds = transformFeeds(feeds)
 
   store.dispatch(foundFeeds(feeds))
-}
-
-function removeDuplicates(feeds) {
-  const urls = new Set()
-  return feeds.filter(f => {
-    const url = f.url
-    if (urls.has(url)) { return false }
-
-    urls.add(url)
-    return true
-  })
-}
-
-function normalizeFeeds(feeds) {
-  return feeds.map(feed => {
-    let url = feed.url
-    url = normalizeProtocol(url)
-    url = resolveUrl(url)
-
-    return { ...feed, url }
-  })
 }
 
 document.addEventListener("visibilitychange", findFeeds)
