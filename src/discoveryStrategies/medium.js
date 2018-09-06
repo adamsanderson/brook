@@ -1,3 +1,9 @@
+// Detect custom domains by looking for the following elements.
+const CUSTOM_DOMAIN_SELECTORS = `
+  meta[property="al:ios:app_name"][content=Medium],
+  meta[property="al:android:app_name"][content=Medium]
+`
+
 /**
  * Special handler for picking up Medium links.
  * Medium hosts plenty of great content, but does not consistently link it well.
@@ -10,22 +16,35 @@ function mediumLinks(document) {
   const location = document.location
   
   if (location.host === "medium.com") {
-    const authorPath = findAuthorPath(document)
-
-    if (authorPath) {
-      const url = new URL(location)
-      url.pathname = `/feed${authorPath}`
-
-      return [{ title: authorPath, url: url.toString() }]
-    }
+    return authorFeed(document)
+  } else if (document.querySelector(CUSTOM_DOMAIN_SELECTORS)) {
+    return customDomainFeed(document)
   }
   
   return []
 }
 
-function findAuthorPath(document) {
+function authorFeed(document) {
   const link = document.querySelector('link[rel=author]')
-  return link && link.href && new URL(link.href).pathname
+  if (link && link.href) {
+    const authorPath = new URL(link.href).pathname
+    const url = new URL(location)
+    url.pathname = `/feed${authorPath}`
+
+    return [
+      { title: authorPath, url: url.toString() }
+    ]
+  }
 }
+
+function customDomainFeed(document) {
+  const url = new URL(location)
+  url.pathname = `/feed`
+
+  return [
+    { title: document.title, url: url.toString() }
+  ]
+}
+
 
 export default mediumLinks
