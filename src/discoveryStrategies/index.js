@@ -1,11 +1,13 @@
 import documentLinks from './documentLinks'
 import feedBurner from './feedBurner'
 import feedHandler from './feedHandler'
+import medium from './medium'
 
 const strategies = [
   documentLinks,
   feedBurner,
   feedHandler,
+  medium,
 ]
 
 export function discoverFeeds(document) {
