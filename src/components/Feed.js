@@ -50,13 +50,18 @@ class Feed extends React.Component {
     const error = feed.error
 
     return (
-      <div className={`Feed ${readClass} ${className}`} style={style} onClick={this.handleClick} >
+      <a 
+        className={`Feed ${readClass} ${className}`} 
+        style={style} 
+        onClick={this.handleClick}
+        href={feed.url}
+      >
         { this.props.onDelete &&
           <DeleteIcon className="Feed-action Icon" onClick={this.handleDelete}/>
         }
         <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={feed.isLoading}/>
         {error ? this.renderError(feed) : this.renderFeed(feed)}
-      </div>
+      </a>
     )
   }
 
@@ -69,6 +74,7 @@ class Feed extends React.Component {
   }
 
   handleClick(event) {
+    event.preventDefault()
     this.props.onClick(this.props.feed)
   }
 
