@@ -49,6 +49,7 @@
   "jest": {
     "setupFiles": [
       "./test/setup.js"
-    ]
+    ],
+    "testURL": "http://example.com"
   }
 }
