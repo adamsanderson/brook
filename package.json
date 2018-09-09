@@ -4,12 +4,12 @@
   "description": "The Brook feed reeder",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -w --display-error-details --progress --colors",
+    "build": "webpack -w --display-error-details --progress --colors --mode=development",
     "start": "web-ext run -s extension/",
     "start-verbose": "web-ext run --verbose -s extension/",
     "lint": "eslint src",
     "lint-package": "web-ext lint -s extension/",
-    "package": "web-ext build -s extension/",
+    "package": "webpack --display-error-details --progress --colors --mode=production && web-ext build -s extension/",
     "test": "jest"
   },
   "author": "Adam Sanderson",
@@ -30,8 +30,9 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.6.1",
     "jest": "^22.3.0",
-    "web-ext": "2.4.0",
-    "webpack": "3.11.0"
+    "web-ext": "2.9.1",
+    "webpack": "4.17.2",
+    "webpack-cli": "^3.1.0"
   },
   "dependencies": {
     "feedme": "^1.0.1",

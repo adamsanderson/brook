@@ -45,16 +45,18 @@ module.exports = {
     Buffer: true
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'shared',
-      minChunks: Infinity,
-    }),
     // Since some NodeJS modules expect to be running in Node, it is helpful
     // to set this environment var to avoid reference errors.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || "development"),
     }),
   ],
+  optimization: {
+    splitChunks: {
+      name: "shared",
+      chunks: "all"
+    }
+  },
   // This will expose source map files so that errors will point to your
   // original source files instead of the transpiled files.
   devtool: 'sourcemap',
