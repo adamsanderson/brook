@@ -8,3 +8,4 @@ web-ext-artifacts
 # Ignore my junk drawer of ideas
 TODO
 scratch
+yarn-error.log
