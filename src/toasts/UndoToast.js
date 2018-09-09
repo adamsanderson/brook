@@ -14,9 +14,9 @@ class UndoToast extends React.Component {
     hideToast: PropTypes.func.isRequired,
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.hasCheckpoint) {
-      nextProps.hideToast()
+  componentDidUpdate(nextProps) {
+    if (!this.props.hasCheckpoint) {
+      this.props.hideToast()
     }
   }
 
