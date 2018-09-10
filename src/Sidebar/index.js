@@ -2,16 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 
-import {Store} from 'react-chrome-redux'
-
 import App from './App'
 import ModalRoot from "../modals"
 import ToastRoot from "../toasts"
 import linkHandler from "../util/linkHandler"
+import { createProxyStore } from '../redux/store'
 
-const store = new Store({
-  portName: 'Brook'
-})
+const store = createProxyStore()
 
 const mountNode = document.body
 

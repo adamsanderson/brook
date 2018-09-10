@@ -1,11 +1,9 @@
-import { Store } from 'react-chrome-redux'
+import { createProxyStore } from "./redux/store"
 import { foundFeeds } from "./redux/modules/discovery"
 import { discoverFeeds } from './discoveryStrategies'
 import transformFeeds from './lib/discoveryPipeline'
 
-const store = new Store({
-  portName: 'Brook'
-})
+const store = createProxyStore()
 
 /**
  * Detect feeds on current page.

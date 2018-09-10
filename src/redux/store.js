@@ -1,4 +1,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
+import { 
+  Store as ProxyStore,
+  applyMiddleware as applyProxyMiddleware 
+} from 'react-chrome-redux'
 import thunk from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import pick from 'lodash/pick'
@@ -25,7 +29,8 @@ import notifications from './middleware/notifications'
 
 const initialState = {}
 const reducers = {}
-const middleware = [notifications, backgroundActions, thunk, promise, timeoutScheduler]
+const sharedMiddleware = [thunk, promise, timeoutScheduler]
+const middleware = [notifications, backgroundActions, ...sharedMiddleware]
 const enhancers = []
 const serializePaths = []
 
@@ -86,5 +91,13 @@ const storePromise = loadState()
 
     return store
   })
+
+export function createProxyStore() {
+  const proxy = new ProxyStore({
+    portName: 'Brook'
+  })
+
+  return applyProxyMiddleware(proxy, ...sharedMiddleware)
+}
 
 export default storePromise
