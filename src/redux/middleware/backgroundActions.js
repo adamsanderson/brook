@@ -2,27 +2,15 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme'
 
-import feeds, { FEED, FETCH_FEED, FETCH_ALL, updateFeed, addFeed, removeFeed } from '../modules/feeds'
-import folders, { FOLDER, REMOVE_BRANCH, addFolder, removeFolder } from '../modules/folders'
-import { UI_SELECT_FEED, SELECT_FEED } from '../modules/ui'
-import { IMPORT_OPML } from '../modules/import'
-import { UI_SHOW, backendShowToast } from '../modules/toast'
+import feeds, { FETCH_FEED, FETCH_ALL, updateFeed, removeFeed, FEED } from '../modules/feeds'
+import folders, { FOLDER, REMOVE_BRANCH, removeFolder } from '../modules/folders'
 import { startBatch, endBatch } from '../checkpoint'
-import OpmlReader from '../../lib/OpmlReader'
 import { resolveUrl } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 
 const WORKER_COUNT = 4
 
 const aliases = {
-  [UI_SELECT_FEED]: (action) => {
-    const feed = action.payload.feed
-    return (dispatch, getState) => {
-      dispatch({type: FETCH_FEED, payload: { feed }})
-      dispatch({type: SELECT_FEED, payload: { feed }})
-    }
-  },
-
   [REMOVE_BRANCH]: (action) => {
     return (dispatch, getState) => {
       dispatch(startBatch("Deleted folder"))
@@ -40,7 +28,6 @@ const aliases = {
       }
     }
   },
-
   [FETCH_ALL]: (action) => {
     return (dispatch, getState) => {
       const state = getState()
@@ -63,24 +50,6 @@ const aliases = {
     const feed = action.payload.feed
     return (dispatch) => fetchFeed(feed, dispatch)
   },
-
-  [IMPORT_OPML]: (action) => {
-    const xml = action.payload.xml
-
-    return function(dispatch, getState) {
-      const reader = new OpmlReader({
-        onFeed: (feed, parentId) => dispatch(addFeed(feed, parentId)),
-        onFolder: (folder, parentId) => dispatch(addFolder(folder, parentId)),
-      })
-  
-      reader.read(xml)
-    }
-  },
-
-  [UI_SHOW]: (action) => {
-    return backendShowToast(action)
-  }
-
 }
 
 function fetchFeed(feed, dispatch) {

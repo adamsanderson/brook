@@ -1,6 +1,5 @@
 import { DELAYED_ACTION } from "../middleware/timeoutScheduler"
 
-export const UI_SHOW  = "Toast/UI_SHOW"
 export const SHOW  = "Toast/SHOW"
 export const HIDE  = "Toast/HIDE"
 export const HOLD  = "Toast/HOLD"
@@ -24,13 +23,16 @@ export function hideToast(delay=DEFAULT_DURATION) {
 }
 
 export function showToast(type, props={}, duration=DEFAULT_DURATION) {
-  return {
-    type: UI_SHOW,
-    payload: { 
-      type, 
-      props, 
-      duration 
-    }
+  return (dispatch, _getState) => {
+    dispatch({
+      type: SHOW, 
+      payload: {
+        type, 
+        props
+      }
+    })
+
+    dispatch(hideToast(duration))
   }
 }
 
@@ -46,21 +48,6 @@ export function releaseToast() {
     meta: {
       delay: RELEASE_TIMEOUT
     }
-  }
-}
-
-export function backendShowToast(action) {
-  return (dispatch, getState) => {
-    const {type, props, duration} = action.payload
-    dispatch({
-      type: SHOW, 
-      payload: {
-        type, 
-        props
-      }
-    })
-
-    dispatch(hideToast(duration))
   }
 }
 

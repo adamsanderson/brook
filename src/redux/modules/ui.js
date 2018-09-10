@@ -1,19 +1,16 @@
-import feeds, { REMOVE_FEED, FEED } from './feeds'
+import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER } from './folders'
 
 export const SELECT_FEED = "SELECT_FEED"
-export const UI_SELECT_FEED = "UI_SELECT_FEED"
-
 export const SELECT_FOLDER = "SELECT_FOLDER"
-
 export const SELECT_ITEM = "SELECT_ITEM"
 
 const name = "ui"
 
 export function selectFeed(feed) {
-  return {
-    type: UI_SELECT_FEED,
-    payload: { feed }
+  return (dispatch, _getState) => {
+    dispatch({type: FETCH_FEED, payload: { feed }})
+    dispatch({type: SELECT_FEED, payload: { feed }})
   }
 }
 
