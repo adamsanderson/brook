@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import isEqual from 'react-fast-compare'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
-import { XCircle as DeleteIcon } from 'react-feather'
+import DeleteIcon from 'react-feather/dist/icons/x-circle'
 
 class Feed extends React.Component {
 

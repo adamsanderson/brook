@@ -7,7 +7,7 @@ import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders
 import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
-import { Rss as EmptyImage} from 'react-feather'
+import EmptyImage from 'react-feather/dist/icons/rss'
 
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'

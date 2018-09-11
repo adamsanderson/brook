@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 
 import views, { markAllItemsViewed } from '../redux/modules/views'
 
-import { 
-  CheckCircle as MarkReadIcon,
- } from 'react-feather'
+import MarkReadIcon from 'react-feather/dist/icons/check-circle'
 
 class FeedDetailToolbar extends React.Component {
 

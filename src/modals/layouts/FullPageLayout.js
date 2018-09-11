@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { closeModal } from '../../redux/modules/modal'
-import { ArrowLeft as BackIcon } from 'react-feather'
+import BackIcon from 'react-feather/dist/icons/arrow-left'
 
 class FullPageLayout extends React.Component {
   static propTypes = {

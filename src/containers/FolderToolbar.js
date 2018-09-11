@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { openModalRightAlignedBelow } from '../redux/modules/modal'
 import { MODALS } from '../modals'
 
-import { MoreVertical as MenuIcon } from 'react-feather'
+import MenuIcon from 'react-feather/dist/icons/more-vertical'
 
 class FolderToolbar extends React.Component {
 
