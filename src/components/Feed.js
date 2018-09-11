@@ -50,37 +50,39 @@ class Feed extends React.Component {
     const error = feed.error
 
     return (
-      <a 
+      <div 
         className={`Feed ${readClass} ${className}`} 
         style={style} 
         onClick={this.handleClick}
-        href={feed.url}
       >
         { this.props.onDelete &&
           <DeleteIcon className="Feed-action Icon" onClick={this.handleDelete}/>
         }
         <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={feed.isLoading}/>
         {error ? this.renderError(feed) : this.renderFeed(feed)}
-      </a>
+      </div>
     )
   }
 
   renderError(feed) {
-    return <span title={feed.error} className="hasError"> {feed.title} </span>
+    return <a title={feed.error} className="hasError" href={feed.url} onClick={noopLinkHandler}> {feed.title} </a>
   }
 
   renderFeed(feed) {
-    return <a title={feed.title}> {feed.title} </a>
+    return <a title={feed.title} href={feed.url} onClick={noopLinkHandler}> {feed.title} </a>
   }
 
   handleClick(event) {
-    event.preventDefault()
     this.props.onClick(this.props.feed)
   }
 
   handleDelete(event) {
     this.props.onDelete(this.props.feed)
   }
+}
+
+function noopLinkHandler(event) {
+  event.preventDefault()
 }
 
 export default Feed

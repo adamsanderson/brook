@@ -18,11 +18,9 @@ const unsubscribe = store.subscribe(() => {
   // https://github.com/tshaddix/react-chrome-redux/wiki/Advanced-Usage#initializing-ui-components
   unsubscribe()
 
-  window.addEventListener("click", linkHandler)
-  
   ReactDOM.render(
     <Provider store={store}>
-      <div style={{height: "100%"}}>
+      <div style={{height: "100%"}} onClick={linkHandler}>
         <App/>
         <ToastRoot/>
         <ModalRoot/>
