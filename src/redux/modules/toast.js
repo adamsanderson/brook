@@ -22,6 +22,12 @@ export function hideToast(delay=DEFAULT_DURATION) {
   }
 }
 
+export function hideToastNow() {
+  return {
+    type: HIDE
+  }
+}
+
 export function showToast(type, props={}, duration=DEFAULT_DURATION) {
   return (dispatch, _getState) => {
     dispatch({
@@ -61,7 +67,7 @@ const reducer = (state = initialState, action) => {
     case SHOW:
       return {...state, toast: action.payload}
     case HIDE:
-      if (state.isHeld) {
+      if (state.isHeld && action.meta && action.meta.delay) {
         return state
       } else {
         return {...state, toast: NONE}

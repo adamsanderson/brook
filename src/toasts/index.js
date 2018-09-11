@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import toast, {hideToast, holdToast, releaseToast} from '../redux/modules/toast'
+import toast, {hideToastNow as hideToast, holdToast, releaseToast} from '../redux/modules/toast'
 import UndoToast from './UndoToast'
 /*
   Adapted From:
