@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Brook Feed Reader",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "Adam Sanderson <netghost@gmail.com>",
   
   "sidebar_action": {
