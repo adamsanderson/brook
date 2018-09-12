@@ -11,7 +11,7 @@
     "start-verbose": "web-ext run --verbose -s extension/",
     "lint": "eslint src",
     "lint-package": "web-ext lint -s extension/",
-    "package": "webpack --display-error-details --progress --colors --mode=production && web-ext build -s extension/",
+    "package": "webpack --mode=production && web-ext build -s extension/",
     "test": "jest"
   },
   "author": "Adam Sanderson",
