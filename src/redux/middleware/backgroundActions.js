@@ -2,32 +2,13 @@ import { alias } from 'react-chrome-redux'
 
 import FeedMe from 'feedme'
 
-import feeds, { FETCH_FEED, FETCH_ALL, updateFeed, removeFeed, FEED } from '../modules/feeds'
-import folders, { FOLDER, REMOVE_BRANCH, removeFolder } from '../modules/folders'
-import { startBatch, endBatch } from '../checkpoint'
+import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
 import { resolveUrl } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 
 const WORKER_COUNT = 4
 
 const aliases = {
-  [REMOVE_BRANCH]: (action) => {
-    return (dispatch, getState) => {
-      dispatch(startBatch("Deleted folder"))
-      const state = getState()
-      removeRecursively(action.payload.folder)
-      dispatch(endBatch())
-
-      function removeRecursively(node) {
-        if (node.type === FEED) {
-          dispatch(removeFeed(node))
-        } else if (node.type === FOLDER) {
-          dispatch(removeFolder(node))
-          folders.selectors.getChildren(state, node).forEach(n => removeRecursively(n))
-        }
-      }
-    }
-  },
   [FETCH_ALL]: (action) => {
     return (dispatch, getState) => {
       const state = getState()

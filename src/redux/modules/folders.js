@@ -1,7 +1,8 @@
 import { buildFolder } from "../factories"
-import feeds, { ADD_FEED, REMOVE_FEED, FEED } from './feeds'
+import feeds, { ADD_FEED, REMOVE_FEED, FEED, removeFeed } from './feeds'
 import {BEFORE, OVER} from '../../constants'
 import { SELECT_FOLDER } from './ui'
+import { startBatch, endBatch } from "../checkpoint"
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
 export const ADD_FOLDER = "ADD_FOLDER"
@@ -41,9 +42,20 @@ export function removeFolder(folder) {
 }
 
 export function removeBranch(folder) {
-  return {
-    type: REMOVE_BRANCH,
-    payload: { folder }
+  return (dispatch, getState) => {
+    dispatch(startBatch("Deleted folder"))
+    const state = getState()
+    removeRecursively(folder)
+    dispatch(endBatch())
+
+    function removeRecursively(node) {
+      if (node.type === FEED) {
+        dispatch(removeFeed(node))
+      } else if (node.type === FOLDER) {
+        dispatch(removeFolder(node))
+        selectors.getChildren(state, node).forEach(n => removeRecursively(n))
+      }
+    }
   }
 }
 
