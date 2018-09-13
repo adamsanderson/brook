@@ -276,29 +276,6 @@ const selectors = {
     const children = selectors.getChildren(state, parent)
     return children.some(child => selectors.containsNode(state, child, target))
   },
-  getNodeList: (state, items, list=[], depth=0) => {
-    if (!items) items = selectors.getTopLevelNodes(state)
-    
-    items.forEach((item) => {
-      const node = {
-        item,
-        depth,
-        id: item.id,
-        expanded: item.expanded,
-      }
-
-      list.push(node)
-      
-      if (node.expanded) {
-        const children = selectors.getChildren(state, item)
-        if (children) {
-          selectors.getNodeList(state, children, list, depth + 1)
-        }
-      }
-    })
-    
-    return list
-  },
 }
 
 export default {

@@ -4,8 +4,12 @@ import { REMOVE_FEED } from './feeds'
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
 // Ignore feeds that have languished unread for over 2 weeks.
-const WEEK = 7 * 24 * 60 * 60 * 1000
+const MINUTE = 60 * 1000
+const HOUR = 60 * MINUTE
+const DAY = 24 * HOUR
+const WEEK = 7 * DAY
 const FEED_AGE_LIMIT = 2 * WEEK
+const FEED_RECENT_VIEW_LIMIT = 30 * MINUTE
 
 const name = "views"
 
@@ -70,18 +74,26 @@ function markedAllItemsViewed(state, action) {
 }
 
 const selectors = {
+  // TODO: Return state, not function
   isFeedUnread: (state) => {
     return (feed) => {
       const viewedAt = state[name].feedsViewedAt[feed.id] || 0
       return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
     }
   },
+  // TODO: Return state, not function
   isItemUnread: (state) => {
     return (item) => {
       const viewedAt = state[name].itemsViewedAt[item.id] || 0
       return viewedAt < item.createdAt
     }
   },
+  isFeedRecent: (state, feed) => {
+    const viewedAt = state[name].feedsViewedAt[feed.id] || 0
+    const now = Date.now()
+    if (now - viewedAt < FEED_RECENT_VIEW_LIMIT) return true
+    return (viewedAt < feed.updatedAt) && (now - feed.updatedAt < FEED_AGE_LIMIT)
+  }
 }
 
 export default {

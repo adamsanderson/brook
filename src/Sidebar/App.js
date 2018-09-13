@@ -8,8 +8,9 @@ import FeedTreeToolbar from '../containers/FeedTreeToolbar'
 import FolderToolbar from '../containers/FolderToolbar'
 import FeedDetailToolbar from '../containers/FeedDetailToolbar'
 
-import folders from '../redux/modules/folders'
 import ui from '../redux/modules/ui'
+import { openModalLeftAlignedBelow } from '../redux/modules/modal'
+import { MODALS } from '../modals'
 
 class App extends React.Component {
 
@@ -17,6 +18,8 @@ class App extends React.Component {
     nodes: PropTypes.array.isRequired,
     currentFeed: PropTypes.object,
     currentFolder: PropTypes.object,
+    currentViewName: PropTypes.string.isRequired,
+    openModalLeftAlignedBelow: PropTypes.func.isRequired
   }
 
   render() {
@@ -26,7 +29,9 @@ class App extends React.Component {
     return (
       <div className="layout-vertical">
         <div className="Panel-header">
-          <span>Feeds</span>
+          <span className="isActionable" onClick={ this.handleViewMenu }>
+            {this.props.currentViewName}
+          </span>
           <FeedTreeToolbar />
         </div>
         <div className="Panel-body layout-2of3">
@@ -52,17 +57,24 @@ class App extends React.Component {
     )
   }
 
+  handleViewMenu = (event) => {
+    const el = event.target
+    const modalName = MODALS.TreeViewMenu
+    this.props.openModalLeftAlignedBelow(el, modalName)
+  }
+
   currentItem() {
     return this.props.currentFeed || this.props.currentFolder
   }
 }
 
 const mapStateToProps = (state) => ({
-  nodes: folders.selectors.getNodeList(state),
+  nodes: ui.selectors.currentNodeList(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentFolder: ui.selectors.currentFolder(state),
+  currentViewName: ui.selectors.currentViewName(state),
 })
 
 export default connect(mapStateToProps, {
-  // Actions
+  openModalLeftAlignedBelow
 })(App)

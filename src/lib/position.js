@@ -32,3 +32,7 @@ export function relativePosition(target, align, offsets = {}) {
 export function rightAlignedBelow(target) {
   return relativePosition(target, {"top": "bottom", "right": "right"}, {top: 5})
 }
+
+export function leftAlignedBelow(target) {
+  return relativePosition(target, {"top": "bottom", "left": "left"}, {top: 5})
+}

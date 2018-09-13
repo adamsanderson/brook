@@ -45,6 +45,14 @@ ul, ol {
   padding-left: 1em;
 }
 
+hr {
+  height: 1px;
+  border: 0 solid var(--color-lightest);
+  border-top-width: 1px;
+  padding: 0;
+  margin: 0.5em 0;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
@@ -302,7 +310,7 @@ a:hover {
 }
 
 /*
-  Component States
+  Component States / Traits
 */
 
 .isActive {
@@ -328,6 +336,11 @@ a:hover {
 
 .inverted .hasError {
   color: #ffbfca;
+}
+
+.isActionable:hover {
+  color: var(--color-active);
+  cursor: pointer;
 }
 
 /* 
