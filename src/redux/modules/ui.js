@@ -20,6 +20,11 @@ export const VIEWS = {
     longName: "Recent Feeds",
     filter: views.selectors.isFeedRecent
   },
+  dead: {
+    name: "Stale",
+    longName: "Stale Feeds",
+    filter: views.selectors.isFeedStale
+  },
 }
 
 const name = "ui"

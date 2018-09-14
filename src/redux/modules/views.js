@@ -8,7 +8,9 @@ const MINUTE = 60 * 1000
 const HOUR = 60 * MINUTE
 const DAY = 24 * HOUR
 const WEEK = 7 * DAY
+
 const FEED_AGE_LIMIT = 2 * WEEK
+const FEED_STALE_LIMIT = 8 * WEEK
 const FEED_RECENT_VIEW_LIMIT = 30 * MINUTE
 
 const name = "views"
@@ -88,11 +90,17 @@ const selectors = {
       return viewedAt < item.createdAt
     }
   },
+
   isFeedRecent: (state, feed) => {
     const viewedAt = state[name].feedsViewedAt[feed.id] || 0
     const now = Date.now()
     if (now - viewedAt < FEED_RECENT_VIEW_LIMIT) return true
     return (viewedAt < feed.updatedAt) && (now - feed.updatedAt < FEED_AGE_LIMIT)
+  },
+
+  isFeedStale: (state, feed) => {
+    const now = Date.now()
+    return (now - feed.updatedAt > FEED_STALE_LIMIT)
   }
 }
 
