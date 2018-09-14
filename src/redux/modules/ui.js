@@ -12,10 +12,12 @@ export const DEFAULT_VIEW = "all"
 export const VIEWS = {
   all: {
     name: "Feeds",
+    longName: "All Feeds",
     filter: undefined,
   },
   recent: {
     name: "Recent",
+    longName: "Recent Feeds",
     filter: views.selectors.isFeedRecent
   },
 }
@@ -53,7 +55,7 @@ export function changeView(view) {
 const initialState = {
   selectedId: undefined,
   selectedType: undefined,
-  currentView: DEFAULT_VIEW,
+  currentViewId: DEFAULT_VIEW,
 }
 
 const reducer = (state = initialState, action) => {  
@@ -67,7 +69,7 @@ const reducer = (state = initialState, action) => {
     case REMOVE_FOLDER: 
       return reduceRemoveItem(state, action.payload.folder)
     case CHANGE_VIEW:
-    return { ...state, currentView: action.payload.view }
+    return { ...state, currentViewId: action.payload.view }
     default:
       return state
   }
@@ -97,16 +99,18 @@ const selectors = {
     const feed = selectors.currentFeed(state)
     return (feed && feed.items) || []
   },
+  
+  currentViewId: (state) => {
+    return state[name].currentViewId || DEFAULT_VIEW
+  },
 
   currentNodeList: (state) => {
-    const view = state[name].currentView || DEFAULT_VIEW
-    const filter = VIEWS[view].filter
+    const filter = VIEWS[selectors.currentViewId(state)].filter
     return selectors.getNodeList(state, filter)
   },
 
   currentViewName: (state) => {
-    const view = state[name].currentView || DEFAULT_VIEW
-    const title = VIEWS[view].name
+    const title = VIEWS[selectors.currentViewId(state)].name
     return title
   },
 

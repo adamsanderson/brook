@@ -191,6 +191,30 @@ a:hover {
   padding: 0.25em;
 }
 
+.Menu a.isSelected {
+  font-weight: var(--weight-bold);
+}
+
+.MenuItemRadioButton {
+  display: inline-block;
+  margin-right: 0.4em;
+  margin-top: -0.1em;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 100%;
+  vertical-align: middle;
+  background: currentColor;
+  color: transparent;
+}
+
+.isSelected > .MenuItemRadioButton {
+  color: var(--color-active);
+}
+
+:not(.isSelected):hover > .MenuItemRadioButton {
+  color: var(--color-light);
+}
+
 .Modal {
   position: fixed;
   top: 0;
