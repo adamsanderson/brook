@@ -7,6 +7,7 @@ import { resolveUrl } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 
 const WORKER_COUNT = 4
+const FETCH_TIMEOUT = 5 * 1000
 
 const aliases = {
   [FETCH_ALL]: (action) => {
@@ -35,7 +36,15 @@ const aliases = {
 
 function fetchFeed(feed, dispatch) {
   const cache = feed.error ? "reload" : "default"
-  const promise = fetch(feed.url, { cache })
+
+  const promise = Promise.race([
+    // Fetch feed…
+    fetch(feed.url, { cache }),
+    // …with a timeout.
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Site did not respond')), FETCH_TIMEOUT)
+    )
+  ])
   .then(res => {
     if (res.ok) {
       return res.text()
@@ -69,7 +78,7 @@ function fetchFeed(feed, dispatch) {
     payload: { feed }, 
     promise
   })
-
+  
   return promise
 }
 
