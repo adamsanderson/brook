@@ -10,7 +10,7 @@ export const FEED = "FEED"
 
 const name = "feeds"
 
-export function addFeed(feed, parentId) {
+export function addFeed(feed, { parentId } = {}) {
   return {
     type: ADD_FEED, 
     payload: { feed: buildFeed(feed), parentId }

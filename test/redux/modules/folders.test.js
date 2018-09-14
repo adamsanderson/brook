@@ -55,7 +55,7 @@ describe('folder reducer', () => {
     it('should add feeds to folders', () => {
       const state = reduceEach(reducer, [
         addFolder(folder),
-        addFeed(feed, folder.id),
+        addFeed(feed, {parentId: folder.id}),
       ])
       
       expect(state[folder.id].children.some(c => c.id === feed.id))

@@ -18,7 +18,7 @@ const name = "folders"
 export const ROOT = "ROOT"
 export const FOLDER = "FOLDER"
 
-export function addFolder(folder, parentId) {
+export function addFolder(folder, { parentId } = {}) {
   return {
     type: ADD_FOLDER, 
     payload: { folder: buildFolder(folder), parentId }

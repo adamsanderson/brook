@@ -5,8 +5,8 @@ import OpmlReader from "../../lib/OpmlReader"
 export function importOpml(xml) {
   return function(dispatch, _getState) {
     const reader = new OpmlReader({
-      onFeed: (feed, parentId) => dispatch(addFeed(feed, parentId)),
-      onFolder: (folder, parentId) => dispatch(addFolder(folder, parentId)),
+      onFeed: (feed, parentId) => dispatch(addFeed(feed, { parentId })),
+      onFolder: (folder, parentId) => dispatch(addFolder(folder, { parentId })),
     })
 
     reader.read(xml)
