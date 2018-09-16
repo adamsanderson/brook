@@ -36,7 +36,7 @@ class SubscribeMenu extends React.Component {
 
   handleSubscription(feed) {
     this.props.closeModal()
-    this.props.addFeed(feed)
+    this.props.addFeed(feed, {fetch: true})
   }
 }
 

@@ -10,10 +10,21 @@ export const FEED = "FEED"
 
 const name = "feeds"
 
-export function addFeed(feed, { parentId } = {}) {
-  return {
-    type: ADD_FEED, 
-    payload: { feed: buildFeed(feed), parentId }
+export function addFeed(feed, { parentId, fetch } = {}) {
+  return (dispatch, _getState) => {
+    feed = buildFeed(feed)
+
+    dispatch({
+      type: ADD_FEED,
+      payload: {
+        feed,
+        parentId
+      }
+    })
+
+    if (fetch) {
+      dispatch(fetchFeed(feed))
+    }
   }
 }
 

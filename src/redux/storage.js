@@ -29,14 +29,14 @@ function loadStateFromLocalStorage() {
 }
 
 function loadStateFromExtensionStorage() {
-  if (!browser.storage && browser.storage.local) return
+  if (!browser || !browser.storage || !browser.storage.local) return Promise.resolve(undefined)
 
   return browser.storage.local.get(STATE_KEY)
     .then(payload => payload[STATE_KEY])
 }
 
 function saveStateToExtensionStorage(state) {
-  if (!browser.storage && browser.storage.local) return
+  if (!browser || !browser.storage || !browser.storage.local) return
   
   return browser.storage.local.set({
     [STATE_KEY]: state

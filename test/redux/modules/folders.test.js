@@ -1,4 +1,4 @@
-import { reduceEach } from "../../helpers"
+import { dispatchEach } from "../../helpers"
 import { buildFeed, buildFolder } from "../../../src/redux/factories"
 import { OVER, BEFORE, AFTER } from "../../../src/constants"
 import folders, {
@@ -27,84 +27,97 @@ describe('folder reducer', () => {
 
   describe('adding nodes', () => {
     it('should add feeds to root', () => {
-      const state = reducer(undefined, addFeed(feed))
-      const root = state[ROOT]
+      const state = dispatchEach(addFeed(feed))
+      const root = getEntry(state, ROOT)
 
-      expect(root.children.some(c => c.id === feed.id))
+      expect(root.children.map(c => c.id)).toEqual([feed.id])
     })
 
     it('should add feeds in order', () => {
-      const state = reduceEach(reducer, [
+      const state = dispatchEach([
         addFeed(feed1),
         addFeed(feed2),
       ])
       
-      const root = state[ROOT]
-      const ids = root.children.map(c => c.id)
-
+      const ids = getChildIds(state, ROOT)
       expect(ids).toEqual([feed1.id, feed2.id])
     })
 
     it('should add folders to root', () => {
-      const state = reducer(undefined, addFolder(folder))
-      const root = state[ROOT]
-
-      expect(root.children.some(c => c.id === folder.id))
+      const state = dispatchEach(addFolder(folder))
+      
+      const ids = getChildIds(state, ROOT)
+      expect(ids).toEqual([folder.id])
     })
 
     it('should add feeds to folders', () => {
-      const state = reduceEach(reducer, [
+      const state = dispatchEach([
         addFolder(folder),
         addFeed(feed, {parentId: folder.id}),
       ])
       
-      expect(state[folder.id].children.some(c => c.id === feed.id))
+      const ids = getChildIds(state, folder)
+      expect(ids).toEqual([feed.id])
     })
   })
 
   describe('moving nodes', () => {
     it('should move feeds between folders', () => {
-      const state = reduceEach(reducer, [
+      const state = dispatchEach([
         addFolder(folder),
         addFeed(feed),
         moveNode(feed, folder, OVER)
       ])
       
-      expect(state[folder.id].children.some(c => c.id === feed.id))
-      expect(!state[ROOT].children.some(c => c.id === feed.id))
+      const folderIds = getChildIds(state, folder)
+      const rootIds = getChildIds(state, ROOT)
+      
+      expect(folderIds).toEqual([feed.id])
+      expect(rootIds).toEqual([folder.id])
     })
 
     it('should move items before others', () => {
-      const state = reduceEach(reducer, [
+      const state = dispatchEach([
         addFolder(folder),
         addFeed(feed),
         moveNode(feed, folder, BEFORE)
       ])
       
-      const expectedIds = [feed.id, folder.id]
-      expect(state[ROOT].children.map(c => c.id)).toEqual(expectedIds)
+      const ids = getChildIds(state, ROOT)
+      expect(ids).toEqual([feed.id, folder.id])
     })
 
     it('should move items after others', () => {
-      const state = reduceEach(reducer, [
+      const state = dispatchEach([
         addFolder(folder),
         addFeed(feed),
         moveNode(folder, feed, AFTER)
       ])
       
-      const expectedIds = [feed.id, folder.id]
-      expect(state[ROOT].children.map(c => c.id)).toEqual(expectedIds)
+      const ids = getChildIds(state, ROOT)
+      expect(ids).toEqual([feed.id, folder.id])
     })
 
     it('should move feeds into open folders when position is AFTER', () => {
       let expanded = {...folder, expanded: true}
-      const state = reduceEach(reducer, [
+      
+      const state = dispatchEach([
         addFolder(expanded),
         addFeed(feed),
         moveNode(feed, expanded, AFTER)
       ])
       
-      expect(state[expanded.id].children.some(c => c.id === feed.id))
+      const ids = getChildIds(state, expanded)
+      expect(ids).toEqual([feed.id])
     })
   })
 })
+
+function getEntry(state, item) {
+  const id = item.id || item
+  return state[folders.name][id]
+}
+
+function getChildIds(state, item) {
+  return getEntry(state, item).children.map(c => c.id)
+}

@@ -27,11 +27,11 @@ import promise from './middleware/promise'
 import timeoutScheduler from './middleware/timeoutScheduler'
 import notifications from './middleware/notifications'
 
-const initialState = {}
-const reducers = {}
-const sharedMiddleware = [thunk, promise, timeoutScheduler]
-const middleware = [notifications, backgroundActions, ...sharedMiddleware]
-const enhancers = []
+export const initialState = {}
+export const reducers = {}
+export const sharedMiddleware = [thunk, promise, timeoutScheduler]
+export const middleware = [notifications, backgroundActions, ...sharedMiddleware]
+export const enhancers = []
 const serializePaths = []
 
 // Register Modules:
@@ -61,7 +61,7 @@ if (!ENV.production) {
 }
 
 // Create store
-const rootReducer = resetableReducer(
+export const rootReducer = resetableReducer(
   checkpointableReducer(
     combineReducers(reducers),
     {exclude: [modal.name, discovery.name, activeTab.name]}

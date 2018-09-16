@@ -72,7 +72,7 @@ class FeedTreeToolbar extends React.Component {
     if (!feeds.length) {
       return
     } else if (feeds.length === 1) {
-      this.props.addFeed(feeds[0])
+      this.props.addFeed(feeds[0], {fetch: true})
     } else {
       this.props.openModal(MODALS.SubscribeMenu, {feeds})
     }
