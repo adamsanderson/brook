@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { addFolder } from '../redux/modules/folders'
+import { exportOpml } from '../redux/modules/export'
 import { openModal } from '../redux/modules/modal'
 
 import { MODALS } from "./index"
@@ -14,7 +15,8 @@ class FeedTreeMenu extends React.Component {
     position: PropTypes.object.isRequired, 
     closeModal: PropTypes.func.isRequired, 
     openModal: PropTypes.func.isRequired, 
-    addFolder: PropTypes.func.isRequired, 
+    addFolder: PropTypes.func.isRequired,
+    exportOpml: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -22,6 +24,7 @@ class FeedTreeMenu extends React.Component {
 
     this.handleAddFolder = this.handleAddFolder.bind(this)
     this.handleImport = this.handleImport.bind(this)
+    this.handleExport = this.handleExport.bind(this)
   }
 
   render() {    
@@ -34,6 +37,9 @@ class FeedTreeMenu extends React.Component {
         </div>
         <div>
           <a onClick={ this.handleImport }>Import Feeds</a>
+        </div>
+        <div>
+          <a onClick={ this.handleExport }>Export Feeds</a>
         </div>
       </PopupLayout>
     )
@@ -53,6 +59,10 @@ class FeedTreeMenu extends React.Component {
     this.props.openModal(MODALS.ImportModal)
   }
 
+  handleExport() {
+    this.props.exportOpml()
+  }
+
 }
 
 const mapStateToProps = (state, props) => ({
@@ -62,4 +72,5 @@ const mapStateToProps = (state, props) => ({
 export default connect(mapStateToProps, {
   addFolder,
   openModal,
+  exportOpml,
 })(FeedTreeMenu)
