@@ -1,6 +1,6 @@
 {
   "name": "brook-feed-reader",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The Brook feed reeder",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "start-verbose": "web-ext run --verbose -s extension/",
     "lint": "eslint src",
     "lint-package": "web-ext lint -s extension/",
-    "package": "webpack --mode=production && web-ext build -s extension/",
+    "package": "webpack --mode=production && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "test": "jest"
   },
   "author": "Adam Sanderson",
