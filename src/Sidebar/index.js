@@ -5,6 +5,7 @@ import {Provider} from 'react-redux'
 import App from './App'
 import ModalRoot from "../modals"
 import ToastRoot from "../toasts"
+import linkHandler from "../util/linkHandler"
 import { createProxyStore } from '../redux/store'
 
 const store = createProxyStore()
@@ -19,7 +20,7 @@ const unsubscribe = store.subscribe(() => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <div style={{height: "100%"}}>
+      <div style={{height: "100%"}} onClick={linkHandler}>
         <App/>
         <ToastRoot/>
         <ModalRoot/>
