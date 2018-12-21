@@ -103,22 +103,21 @@ function translateFeedData(data, feedUrl) {
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
-  feed.error = undefined 
-
+  feed.error = undefined
   return feed
 }
 
 function translateItemData(data, feedUrl) {
   try {
-    let url = chooseItemUrl(data["feedburner:origlink"] || data["link"])
-    
-    url = resolveUrl(url, feedUrl)
+    const url = resolveUrl(chooseItemUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
+    const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
+    const title = (typeof data.title === "string") ? data.title : date.toLocaleDateString()
     
     return {
       id: data.id || url,
-      title: data.title,
+      title,
       url,
-      createdAt: +new Date(data.pubdate || data.published || data.updated || data["dc:date"]),
+      createdAt: +date,
     }
   } catch (error) {
     console.error("Error while parsing item from", feedUrl, error, data)
