@@ -278,6 +278,10 @@ a:hover {
   color: var(--color-lightest);
 }
 
+.ErrorState {
+  padding: 0.5em 1em;
+}
+
 /* 
   Layout Helpers 
 */

@@ -7,6 +7,7 @@ import FeedDetail from '../components/FeedDetail'
 import FeedTreeToolbar from '../containers/FeedTreeToolbar'
 import FolderToolbar from '../containers/FolderToolbar'
 import FeedDetailToolbar from '../containers/FeedDetailToolbar'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 import ui from '../redux/modules/ui'
 import { openModalLeftAlignedBelow } from '../redux/modules/modal'
@@ -27,33 +28,39 @@ class App extends React.Component {
     const currentItem = this.currentItem()
 
     return (
-      <div className="layout-vertical">
-        <div className="Panel-header">
-          <span className="isActionable" onClick={ this.handleViewMenu }>
-            {this.props.currentViewName}
-          </span>
-          <FeedTreeToolbar />
+      <ErrorBoundary message="An error ocurred while running Brook.">
+        <div className="layout-vertical">
+          <div className="Panel-header">
+            <span className="isActionable" onClick={ this.handleViewMenu }>
+              {this.props.currentViewName}
+            </span>
+            <FeedTreeToolbar />
+          </div>
+          <div className="Panel-body layout-2of3">
+            <ErrorBoundary message="An error ocurred while displaying your feeds.">
+              <FeedTree nodes={nodes} />
+            </ErrorBoundary>
+          </div>
+        
+          <div className="Panel-header">
+            <span>
+              {currentItem ? currentItem.title : "Articles"}
+            </span>
+              {
+                currentFeed 
+                ? <FeedDetailToolbar feed={currentFeed} />
+                : currentFolder
+                ? <FolderToolbar folder={currentFolder} />
+                : ""
+              }
+          </div>
+          <div className="Panel-body layout-1of3">
+            <ErrorBoundary message="An error ocurred while displaying this feed.">
+              <FeedDetail feed={currentFeed} />
+            </ErrorBoundary>
+          </div>
         </div>
-        <div className="Panel-body layout-2of3">
-          <FeedTree nodes={nodes} />
-        </div>
-      
-        <div className="Panel-header">
-          <span>
-            {currentItem ? currentItem.title : "Articles"}
-          </span>
-            {
-              currentFeed 
-              ? <FeedDetailToolbar feed={currentFeed} />
-              : currentFolder
-              ? <FolderToolbar folder={currentFolder} />
-              : ""
-            }
-        </div>
-        <div className="Panel-body layout-1of3">
-          <FeedDetail feed={currentFeed} />
-        </div>
-      </div>
+      </ErrorBoundary>
     )
   }
 
