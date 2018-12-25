@@ -6,7 +6,7 @@ import Item from '../components/Item'
 import { selectItem } from '../redux/modules/ui'
 import views from '../redux/modules/views'
 
-class ItemList extends React.Component {
+class ItemList extends React.PureComponent {
   static propTypes = {
     items: PropTypes.array.isRequired,
     onClickItem: PropTypes.func,

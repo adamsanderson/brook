@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import FolderIcon from '../components/icons/FolderIcon'
 import FolderEditor from './FolderEditor'
 
-class Folder extends React.Component {
+class Folder extends React.PureComponent {
 
   static propTypes = {
     folder: PropTypes.object.isRequired,

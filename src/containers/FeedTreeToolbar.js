@@ -13,7 +13,7 @@ import { MODALS } from '../modals'
 import MenuIcon from 'react-feather/dist/icons/more-vertical'
 import RefreshIcon from 'react-feather/dist/icons/refresh-cw'
 
-class FeedTreeToolbar extends React.Component {
+class FeedTreeToolbar extends React.PureComponent {
   static propTypes = {
     availableFeeds: PropTypes.array.isRequired,
     allFeedsByUrl: PropTypes.object.isRequired,

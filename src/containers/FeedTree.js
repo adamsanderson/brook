@@ -15,7 +15,7 @@ import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
-class FeedTree extends React.Component {
+class FeedTree extends React.PureComponent {
   static propTypes = {
     nodes: PropTypes.array.isRequired,
     indent: PropTypes.number,

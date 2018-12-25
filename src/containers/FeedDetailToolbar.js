@@ -6,7 +6,7 @@ import views, { markAllItemsViewed } from '../redux/modules/views'
 
 import MarkReadIcon from 'react-feather/dist/icons/check-circle'
 
-class FeedDetailToolbar extends React.Component {
+class FeedDetailToolbar extends React.PureComponent {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
