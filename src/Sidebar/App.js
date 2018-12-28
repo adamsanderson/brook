@@ -36,7 +36,7 @@ class App extends React.Component {
             </span>
             <FeedTreeToolbar />
           </div>
-          <div className="Panel-body layout-2of3">
+          <div className="Panel-body layout-flex-2">
             <ErrorBoundary message="An error ocurred while displaying your feeds.">
               <FeedTree nodes={nodes} />
             </ErrorBoundary>
@@ -54,7 +54,7 @@ class App extends React.Component {
                 : ""
               }
           </div>
-          <div className="Panel-body layout-1of3">
+          <div className="Panel-body layout-flex-1">
             <ErrorBoundary message="An error ocurred while displaying this feed.">
               <FeedDetail feed={currentFeed} />
             </ErrorBoundary>
