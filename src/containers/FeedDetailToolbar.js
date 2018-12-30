@@ -24,14 +24,21 @@ class FeedDetailToolbar extends React.PureComponent {
   }
 
   render() {
+    const {feed, isItemUnread} = this.props
+
     return (
-      <span>
-        {
-          this.props.feed.items &&  
-          this.props.feed.items.some(this.props.isItemUnread) && 
-          <MarkReadIcon className="Icon" onClick= { this.handleMarkAllRead } />
-        }
-      </span>
+      <div className="Panel-header">
+        <span>
+          {feed.title || "Articles"}
+        </span>
+        <span>
+          {
+            feed.items &&  
+            feed.items.some(isItemUnread) && 
+            <MarkReadIcon className="Icon" onClick= { this.handleMarkAllRead } />
+          }
+        </span>
+      </div>
     )
   }
 

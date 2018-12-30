@@ -20,10 +20,17 @@ class FolderToolbar extends React.PureComponent {
   }
 
   render() {
+    const {folder} = this.props
+
     return (
-      <span>
-        <MenuIcon className="Icon" onClick={ this.handleMenu } />
-      </span>
+      <div className="Panel-header">
+        <span>
+          {folder.title || "Folder"}
+        </span>
+        <span>
+          <MenuIcon className="Icon" onClick={ this.handleMenu } />
+        </span>
+      </div>
     )
   }
 
