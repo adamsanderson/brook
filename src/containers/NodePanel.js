@@ -2,10 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import FeedDetail from '../components/FeedDetail'
-import FolderToolbar from '../containers/FolderToolbar'
-import FeedDetailToolbar from '../containers/FeedDetailToolbar'
-import ErrorBoundary from '../components/ErrorBoundary'
+import ItemPanel from './ItemPanel'
+import FolderPanel from './FolderPanel'
 
 import ui from '../redux/modules/ui'
 
@@ -20,24 +18,9 @@ class NodePanel extends React.Component {
     const {currentFeed, currentFolder} = this.props
 
     if (currentFeed) {
-      return (
-        <ErrorBoundary message="An error ocurred while displaying this feed.">  
-          <div className="Panel">
-            <FeedDetailToolbar feed={currentFeed} />
-            <div className="Panel-body">
-              <FeedDetail feed={currentFeed} />
-            </div>
-          </div>
-        </ErrorBoundary>
-      )
+      return <ItemPanel feed={currentFeed} />
     } else if (currentFolder) {
-      return (
-        <ErrorBoundary message="An error ocurred while displaying this folder.">
-          <div className="Panel">
-            <FolderToolbar folder={currentFolder} />
-          </div>
-        </ErrorBoundary>
-      )
+      return <FolderPanel folder={currentFolder} />
     } else {
       return (
         <div className="Panel">
