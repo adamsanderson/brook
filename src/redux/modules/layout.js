@@ -1,8 +1,8 @@
 import throttle from 'lodash/throttle'
 
 export const UPDATE_WINDOW_DIMENSIONS = "UPDATE_WINDOW_DIMENSIONS"
-export const TWO_PANE = "two_pane"
-export const ONE_PANE = "one_pane"
+export const DUAL_PANE = "dual_pane"
+export const SINGLE_PANE = "single_pane"
 
 const name = "layout"
 
@@ -55,9 +55,9 @@ const selectors = {
   getLayout: (state) => {
     const height = state[name].height
     if (height <= 360) {
-      return ONE_PANE
+      return SINGLE_PANE
     } else {
-      return TWO_PANE
+      return DUAL_PANE
     }
     
   }
