@@ -17,7 +17,6 @@ import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 import toast from './modules/toast'
 import workers from './modules/workers'
-import layout from './modules/layout'
 import { resetableReducer } from './reset'
 import { checkpointableReducer } from './checkpoint'
 
@@ -33,7 +32,6 @@ export const reducers = {}
 export const sharedMiddleware = [thunk, promise, timeoutScheduler]
 export const middleware = [notifications, backgroundActions, ...sharedMiddleware]
 export const enhancers = []
-export const afterProxy = []
 const serializePaths = []
 
 // Register Modules:
@@ -44,7 +42,6 @@ function addModule(module) {
   if (module.middleware)  middleware.push(module.middleware)
   if (module.enhancer)    enhancers.push(module.enhancer)
   if (module.serialize)   serializePaths.push(module.name)
-  if (module.afterProxy)  afterProxy.push(module.afterProxy)
 }
 
 // Add our local modules
@@ -57,7 +54,6 @@ addModule(activeTab)
 addModule(modal)
 addModule(toast)
 addModule(workers)
-addModule(layout)
 
 // Add the logger last so that it can report on everything:
 if (!ENV.production) {
@@ -102,7 +98,6 @@ export function createProxyStore() {
   })
 
   const storeWithMiddleware = applyProxyMiddleware(proxy, ...sharedMiddleware)
-  afterProxy.forEach(callback => callback(storeWithMiddleware))
 
   return storeWithMiddleware
 }
