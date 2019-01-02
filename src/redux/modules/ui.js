@@ -4,6 +4,7 @@ import views from './views'
 
 export const SELECT_FEED = "SELECT_FEED"
 export const SELECT_FOLDER = "SELECT_FOLDER"
+export const CLEAR_SELECTION = "CLEAR_SELECTION"
 export const SELECT_ITEM = "SELECT_ITEM"
 export const CHANGE_VIEW = "CHANGE_VIEW"
 
@@ -43,6 +44,12 @@ export function selectFolder(folder) {
   }
 }
 
+export function clearSelection() {
+  return {
+    type: CLEAR_SELECTION
+  }
+}
+
 export function selectItem(item) {
   return {
     type: SELECT_ITEM,
@@ -69,6 +76,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, selectedId: action.payload.feed.id, selectedType: FEED }
     case SELECT_FOLDER:
       return { ...state, selectedId: action.payload.folder.id, selectedType: FOLDER }
+    case CLEAR_SELECTION:
+      return { ...state, selectedId: undefined, selectedType: undefined }
     case REMOVE_FEED: 
       return reduceRemoveItem(state, action.payload.feed)
     case REMOVE_FOLDER: 

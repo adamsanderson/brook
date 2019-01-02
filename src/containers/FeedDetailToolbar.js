@@ -3,14 +3,18 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import views, { markAllItemsViewed } from '../redux/modules/views'
+import { clearSelection } from '../redux/modules/ui'
 
 import MarkReadIcon from 'react-feather/dist/icons/check-circle'
+import BackIcon from 'react-feather/dist/icons/arrow-left-circle'
 
 class FeedDetailToolbar extends React.PureComponent {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
     markAllItemsViewed: PropTypes.func.isRequired,
+    clearSelection: PropTypes.func.isRequired,
+    showBackButton: PropTypes.boolean,
     isItemUnread: PropTypes.func
   }
 
@@ -21,21 +25,27 @@ class FeedDetailToolbar extends React.PureComponent {
   constructor(props) {
     super(props)
     this.handleMarkAllRead = this.handleMarkAllRead.bind(this)
+    this.handleBack = this.handleBack.bind(this)
   }
 
   render() {
-    const {feed, isItemUnread} = this.props
+    const {feed, isItemUnread, showBackButton} = this.props
 
     return (
       <div className="Panel-header">
         <span>
+          {
+            showBackButton && 
+            <BackIcon className="Icon" onClick={this.handleBack} />
+          }
+          {" "}
           {feed.title || "Articles"}
         </span>
         <span>
           {
             feed.items &&  
             feed.items.some(isItemUnread) && 
-            <MarkReadIcon className="Icon" onClick= { this.handleMarkAllRead } />
+            <MarkReadIcon className="Icon" onClick={this.handleMarkAllRead} />
           }
         </span>
       </div>
@@ -45,6 +55,10 @@ class FeedDetailToolbar extends React.PureComponent {
   handleMarkAllRead() {
     this.props.markAllItemsViewed(this.props.feed)
   }
+
+  handleBack() {
+    this.props.clearSelection()
+  }
 }
 
 const mapStateToProps = (state, props) => ({
@@ -52,5 +66,6 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  markAllItemsViewed
+  markAllItemsViewed,
+  clearSelection
 })(FeedDetailToolbar)

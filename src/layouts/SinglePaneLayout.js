@@ -19,7 +19,7 @@ class SinglePaneLayout extends React.Component {
       <div className="layout-vertical">
         {  
           currentFeed ?
-            <ItemPanel feed={currentFeed} /> :
+            <ItemPanel feed={currentFeed} showBackButton={true} /> :
             <FeedPanel />
         }
       </div>
