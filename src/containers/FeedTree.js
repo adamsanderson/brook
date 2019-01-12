@@ -15,7 +15,7 @@ import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
-class FeedTree extends React.Component {
+class FeedTree extends React.PureComponent {
   static propTypes = {
     nodes: PropTypes.array.isRequired,
     indent: PropTypes.number,
@@ -70,7 +70,7 @@ class FeedTree extends React.Component {
     return (
       <div className="EmptyState">
         <h2>No Feeds</h2>
-        <EmptyImage className="EmptyState-icon layout-fill-icon" />
+        <EmptyImage className="EmptyState-icon layout-hero" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
           or <a href="#" onClick={this.handleShowImport}>import</a> existing ones.
@@ -83,7 +83,7 @@ class FeedTree extends React.Component {
     return (
       <div className="EmptyState">
         <h2>Subscribe</h2>
-        <EmptyImage className="EmptyState-icon layout-fill-icon" />
+        <EmptyImage className="EmptyState-icon layout-hero" />
         <p>
           Click the <b>Subscribe</b> button
           to add this site to your feed list.

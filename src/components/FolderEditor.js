@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-class FolderEditor extends React.Component {
+class FolderEditor extends React.PureComponent {
   static propTypes = {
     folder: PropTypes.object.isRequired,
     onRename: PropTypes.func,

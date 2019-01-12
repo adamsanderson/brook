@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const DEFAULT_ERROR_MESSAGE = "An error has occurred"
 
-export default class ExampleBoundary extends React.Component {
+export default class ErrorBoundary extends React.Component {
 
   static propTypes = {
     message: PropTypes.string,

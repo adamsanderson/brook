@@ -97,7 +97,9 @@ export function createProxyStore() {
     portName: 'Brook'
   })
 
-  return applyProxyMiddleware(proxy, ...sharedMiddleware)
+  const storeWithMiddleware = applyProxyMiddleware(proxy, ...sharedMiddleware)
+
+  return storeWithMiddleware
 }
 
 export default storePromise

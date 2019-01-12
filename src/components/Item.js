@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
 
-class Item extends React.Component {
+class Item extends React.PureComponent {
 
   static propTypes = {
     item: PropTypes.object.isRequired,

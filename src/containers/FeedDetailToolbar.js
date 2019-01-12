@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import views, { markAllItemsViewed } from '../redux/modules/views'
+import { clearSelection } from '../redux/modules/ui'
 
 import MarkReadIcon from 'react-feather/dist/icons/check-circle'
 
-class FeedDetailToolbar extends React.Component {
+class FeedDetailToolbar extends React.PureComponent {
 
   static propTypes = {
     feed: PropTypes.object.isRequired,
     markAllItemsViewed: PropTypes.func.isRequired,
+    clearSelection: PropTypes.func.isRequired,
     isItemUnread: PropTypes.func
   }
 
@@ -21,22 +23,34 @@ class FeedDetailToolbar extends React.Component {
   constructor(props) {
     super(props)
     this.handleMarkAllRead = this.handleMarkAllRead.bind(this)
+    this.handleBack = this.handleBack.bind(this)
   }
 
   render() {
+    const {feed, isItemUnread} = this.props
+
     return (
-      <span>
-        {
-          this.props.feed.items &&  
-          this.props.feed.items.some(this.props.isItemUnread) && 
-          <MarkReadIcon className="Icon" onClick= { this.handleMarkAllRead } />
-        }
-      </span>
+      <div className="Panel-header">
+        <span>
+          {feed.title || "Articles"}
+        </span>
+        <span>
+          {
+            feed.items &&  
+            feed.items.some(isItemUnread) && 
+            <MarkReadIcon className="Icon" onClick={this.handleMarkAllRead} />
+          }
+        </span>
+      </div>
     )
   }
 
   handleMarkAllRead() {
     this.props.markAllItemsViewed(this.props.feed)
+  }
+
+  handleBack() {
+    this.props.clearSelection()
   }
 }
 
@@ -45,5 +59,6 @@ const mapStateToProps = (state, props) => ({
 })
 
 export default connect(mapStateToProps, {
-  markAllItemsViewed
+  markAllItemsViewed,
+  clearSelection
 })(FeedDetailToolbar)

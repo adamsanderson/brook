@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import ItemList from '../containers/ItemList'
 
-class FeedDetail extends React.Component {
+class FeedDetail extends React.PureComponent {
   static propTypes = {
     feed: PropTypes.object,
   }

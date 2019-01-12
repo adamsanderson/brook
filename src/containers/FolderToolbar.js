@@ -7,7 +7,7 @@ import { MODALS } from '../modals'
 
 import MenuIcon from 'react-feather/dist/icons/more-vertical'
 
-class FolderToolbar extends React.Component {
+class FolderToolbar extends React.PureComponent {
 
   static propTypes = {
     folder: PropTypes.object.isRequired,
@@ -20,10 +20,17 @@ class FolderToolbar extends React.Component {
   }
 
   render() {
+    const {folder} = this.props
+
     return (
-      <span>
-        <MenuIcon className="Icon" onClick={ this.handleMenu } />
-      </span>
+      <div className="Panel-header">
+        <span>
+          {folder.title || "Folder"}
+        </span>
+        <span>
+          <MenuIcon className="Icon" onClick={ this.handleMenu } />
+        </span>
+      </div>
     )
   }
 

@@ -62,10 +62,26 @@ a:hover {
   text-decoration: underline;
 }
 
+.Panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .Panel-header {
   font-weight: var(--weight-black);
   padding: 0.5em;
   border-bottom: 1px solid var(--color-lightest);
+  color: var(--color-dark);
+
+  display: flex;
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+.Panel-footer {
+  padding: 0.5em;
+  border-top: 1px solid var(--color-lightest);
   color: var(--color-dark);
 
   display: flex;
@@ -84,12 +100,14 @@ a:hover {
   font-weight: normal;
 }
 
-.Panel-header .Icon {
+.Panel-header .Icon,
+.Panel-footer .Icon {
   width: 1.2em;
   height: 1.2em;
 }
 
-.Panel-header .Icon:hover {
+.Panel-header .Icon:hover,
+.Panel-footer .Icon:hover {
   color: var(--color-active);
   cursor: pointer;
 }
@@ -289,29 +307,55 @@ a:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  align-content: stretch;
 }
 
-.layout-1of3 {
+/* 
+  All children should get a `min-height: 0` to trigger 
+  nested layout:
+  https://stackoverflow.com/questions/29430254/nested-flexbox-with-scrolling-area
+*/
+.layout-vertical > * {
+  min-height: 0;
+}
+
+.layout-flex-1 {
   flex: 1;
 }
 
-.layout-2of3 {
+.layout-flex-2 {
   flex: 2;
 }
 
-.layout-fill {
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.layout-fill-icon {
+.layout-hero {
   display: block;
   width: 80%;
   height: auto;
   margin: auto;
+}
+
+.layout-spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  column-gap: 0.5em;
+}
+
+.layout-spread > * {
+  text-align: center;
+  flex-grow: 1;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layout-spread > :last-child {
+  text-align: right;
+}
+
+.layout-spread > :first-child {
+  text-align: left;
 }
 
 .layout-visually-hidden {

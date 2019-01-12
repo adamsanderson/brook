@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import feeds, { addFeed, fetchAll } from '../redux/modules/feeds'
 import workers from '../redux/modules/workers'
-import { openModal, openModalRightAlignedBelow } from '../redux/modules/modal'
+import { openModal, openModalLeftAlignedBelow, openModalRightAlignedBelow } from '../redux/modules/modal'
+import ui from '../redux/modules/ui'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 
@@ -13,14 +14,16 @@ import { MODALS } from '../modals'
 import MenuIcon from 'react-feather/dist/icons/more-vertical'
 import RefreshIcon from 'react-feather/dist/icons/refresh-cw'
 
-class FeedTreeToolbar extends React.Component {
+class FeedTreeToolbar extends React.PureComponent {
   static propTypes = {
+    currentViewName: PropTypes.string.isRequired,
     availableFeeds: PropTypes.array.isRequired,
     allFeedsByUrl: PropTypes.object.isRequired,
     isFetching: PropTypes.bool,
     addFeed: PropTypes.func.isRequired,
     fetchAll: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
+    openModalLeftAlignedBelow: PropTypes.func.isRequired,
     openModalRightAlignedBelow: PropTypes.func.isRequired,
   }
 
@@ -35,11 +38,16 @@ class FeedTreeToolbar extends React.Component {
     const { fetchAll, isFetching } = this.props
     
     return (
-      <span>
-        { this.renderSubscribeButton() }
-        <RefreshIcon className={`Icon ${isFetching ? "isSpinning" : ""}`} title="Refresh Feeds" onClick={ fetchAll } />
-        <MenuIcon className="Icon" onClick={ this.handleMenu } />
-      </span>
+      <div className="Panel-header">
+        <span className="isActionable" onClick={ this.handleViewMenu }>
+          {this.props.currentViewName}
+        </span>
+        <span>
+          { this.renderSubscribeButton() }
+          <RefreshIcon className={`Icon ${isFetching ? "isSpinning" : ""}`} title="Refresh Feeds" onClick={ fetchAll } />
+          <MenuIcon className="Icon" onClick={ this.handleMenu } />
+        </span>
+      </div>
     )
   }
 
@@ -78,6 +86,12 @@ class FeedTreeToolbar extends React.Component {
     }
   }
 
+  handleViewMenu = (event) => {
+    const el = event.target
+    const modalName = MODALS.TreeViewMenu
+    this.props.openModalLeftAlignedBelow(el, modalName)
+  }
+
   handleMenu(event) {
     const el = event.target
     const modalName = event.shiftKey ? MODALS.DebugMenu : MODALS.FeedTreeMenu
@@ -86,6 +100,7 @@ class FeedTreeToolbar extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
+  currentViewName: ui.selectors.currentViewName(state),
   availableFeeds: discovery.selectors.availableFeeds(state, activeTab.selectors.getActiveTabId(state)),
   allFeedsByUrl: feeds.selectors.allFeedsByUrl(state),
   isFetching: workers.selectors.hasFeedWorkers(state),
@@ -95,5 +110,6 @@ export default connect(mapStateToProps, {
   addFeed,
   fetchAll,
   openModal,
+  openModalLeftAlignedBelow,
   openModalRightAlignedBelow,
 })(FeedTreeToolbar)
