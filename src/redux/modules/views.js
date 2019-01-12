@@ -1,5 +1,5 @@
-import { SELECT_FEED, SELECT_ITEM } from './ui'
-import { REMOVE_FEED } from './feeds'
+import ui, { SELECT_FEED, SELECT_ITEM } from './ui'
+import { REMOVE_FEED, FEED } from './feeds'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
@@ -96,6 +96,19 @@ const selectors = {
     const now = Date.now()
     if (now - viewedAt < FEED_RECENT_VIEW_LIMIT) return true
     return (viewedAt < feed.updatedAt) && (now - feed.updatedAt < FEED_AGE_LIMIT)
+  },
+
+  nextFeed: (state, currentFeed, filter=selectors.isFeedRecent) => {
+    const feedList = ui.selectors.getNodeList(state)
+      .filter(node => node.item.type === FEED)
+      .map(node => node.item)
+    const index = feedList.findIndex(feed => feed.id === currentFeed.id)
+
+    if (index === -1) return undefined
+
+    const candidates = feedList.slice(index + 1).concat(feedList.slice(0, index - 1))
+
+    return candidates.find(feed => filter(state, feed))
   },
 
   isFeedStale: (state, feed) => {

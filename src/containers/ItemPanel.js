@@ -6,16 +6,14 @@ import FeedDetailToolbar from '../containers/FeedDetailToolbar'
 import ErrorBoundary from '../components/ErrorBoundary'
 
 ItemPanel.propTypes = {
-  feed: PropTypes.object,
-  showBackButton: PropTypes.bool,
-  showNextFeed: PropTypes.bool,
+  feed: PropTypes.object
 }
 
-export default function ItemPanel({feed, showBackButton}){
+export default function ItemPanel({feed}){
   return (
     <ErrorBoundary message="An error ocurred while displaying this feed.">  
       <div className="Panel">
-        <FeedDetailToolbar feed={feed} showBackButton={showBackButton} />
+        <FeedDetailToolbar feed={feed} />
         <div className="Panel-body">
           <FeedDetail feed={feed} />
         </div>

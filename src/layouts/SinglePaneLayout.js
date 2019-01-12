@@ -6,6 +6,7 @@ import ui from '../redux/modules/ui'
 
 import FeedPanel from '../containers/FeedPanel'
 import ItemPanel from '../containers/ItemPanel'
+import FeedNavBar from '../containers/FeedNavBar'
 
 class SinglePaneLayout extends React.Component {
   static propTypes = {
@@ -17,13 +18,22 @@ class SinglePaneLayout extends React.Component {
 
     return (
       <div className="layout-vertical">
-        {  
-          currentFeed ?
-            <ItemPanel feed={currentFeed} showBackButton={true} /> :
-            <FeedPanel />
-        }
+        { currentFeed ? this.renderItems(currentFeed) : this.renderFeeds() }
       </div>
     )
+  }
+
+  renderItems(feed) {
+    return (
+      <React.Fragment>
+        <ItemPanel feed={feed} />
+        <FeedNavBar feed={feed} />
+      </React.Fragment>
+    )
+  }
+
+  renderFeeds() {
+    return <FeedPanel />
   }
 }
 

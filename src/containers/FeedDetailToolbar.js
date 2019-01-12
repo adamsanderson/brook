@@ -6,7 +6,6 @@ import views, { markAllItemsViewed } from '../redux/modules/views'
 import { clearSelection } from '../redux/modules/ui'
 
 import MarkReadIcon from 'react-feather/dist/icons/check-circle'
-import BackIcon from 'react-feather/dist/icons/arrow-left-circle'
 
 class FeedDetailToolbar extends React.PureComponent {
 
@@ -14,7 +13,6 @@ class FeedDetailToolbar extends React.PureComponent {
     feed: PropTypes.object.isRequired,
     markAllItemsViewed: PropTypes.func.isRequired,
     clearSelection: PropTypes.func.isRequired,
-    showBackButton: PropTypes.boolean,
     isItemUnread: PropTypes.func
   }
 
@@ -29,16 +27,11 @@ class FeedDetailToolbar extends React.PureComponent {
   }
 
   render() {
-    const {feed, isItemUnread, showBackButton} = this.props
+    const {feed, isItemUnread} = this.props
 
     return (
       <div className="Panel-header">
         <span>
-          {
-            showBackButton && 
-            <BackIcon className="Icon" onClick={this.handleBack} />
-          }
-          {" "}
           {feed.title || "Articles"}
         </span>
         <span>
