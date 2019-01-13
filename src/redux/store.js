@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { 
+  wrapStore,
   Store as ProxyStore,
   applyMiddleware as applyProxyMiddleware 
 } from 'react-chrome-redux'
@@ -20,6 +21,7 @@ import workers from './modules/workers'
 import { resetableReducer } from './reset'
 import { checkpointableReducer } from './checkpoint'
 
+import {connectStore as connectStoreToDispatchChannel} from './dispatchChannel'
 import backgroundActions from './middleware/backgroundActions'
 import { loadState, saveState } from './storage'
 import logger from './middleware/logger'
@@ -33,6 +35,8 @@ export const sharedMiddleware = [thunk, promise, timeoutScheduler]
 export const middleware = [notifications, backgroundActions, ...sharedMiddleware]
 export const enhancers = []
 const serializePaths = []
+
+const REDUX_PORT_NAME = "Brook"
 
 // Register Modules:
 function addModule(module) {
@@ -92,14 +96,25 @@ const storePromise = loadState()
     return store
   })
 
+export function createBackgroundStore() {
+  return storePromise.then(store => {
+    // Connect store to fire and forget dispatch channel
+    connectStoreToDispatchChannel(store)
+
+    // Wrap store with react-chrome-redux
+    wrapStore(store, {portName: REDUX_PORT_NAME})
+
+
+    return store
+  })
+}
+
 export function createProxyStore() {
   const proxy = new ProxyStore({
-    portName: 'Brook'
+    portName: REDUX_PORT_NAME
   })
 
-  const storeWithMiddleware = applyProxyMiddleware(proxy, ...sharedMiddleware)
-
-  return storeWithMiddleware
+  return applyProxyMiddleware(proxy, ...sharedMiddleware)
 }
 
 export default storePromise

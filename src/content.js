@@ -1,9 +1,7 @@
-import { createProxyStore } from "./redux/store"
-import { foundFeeds } from "./redux/modules/discovery"
+import { dispatch } from './redux/dispatchChannel'
+import { foundFeeds } from './redux/modules/discovery'
 import { discoverFeeds } from './discoveryStrategies'
 import transformFeeds from './lib/discoveryPipeline'
-
-const store = createProxyStore()
 
 /**
  * Detect feeds on current page.
@@ -19,7 +17,7 @@ function findFeeds() {
 function reportFeeds(feeds) {
   feeds = transformFeeds(feeds)
 
-  store.dispatch(foundFeeds(feeds))
+  dispatch(foundFeeds(feeds))
 }
 
 document.addEventListener("visibilitychange", findFeeds)
