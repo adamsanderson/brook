@@ -5,6 +5,7 @@ import FeedMe from 'feedme'
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
 import { resolveUrl } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
+import { FeedParseError, NetworkError } from '../../util/errors'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -42,14 +43,14 @@ function fetchFeed(feed, dispatch) {
     fetch(feed.url, { cache }),
     // …with a timeout.
     new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Site did not respond')), FETCH_TIMEOUT)
+      setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${feed.url}`)), FETCH_TIMEOUT)
     )
   ])
   .then(res => {
     if (res.ok) {
       return res.text()
     } else {
-      throw new Error(`${res.status}: Could not access ${feed.url}`)
+      throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
     }
   })
   .then(body => {
@@ -62,15 +63,25 @@ function fetchFeed(feed, dispatch) {
       dispatch(updateFeed(feed, attributes))
     })
 
+    parser.on('error', function(error) {
+      throw new FeedParseError("Could not parse feed", feed.url, body)
+    })
+
     parser.write(body)
     parser.end()
 
     return {feed}
   })
   .catch(error => {
-    console.error("Error while fetching feed from", feed.url, error)
     dispatch(updateFeed(feed, {error: error.toString()}))
-    throw error
+
+    if (error instanceof FeedParseError) {
+      console.warn(error, error.url, error.body)
+    } else if (error instanceof NetworkError) {
+      console.warn(error, error.url)
+    } else {
+      throw error
+    }
   })
 
   dispatch({
