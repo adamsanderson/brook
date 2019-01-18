@@ -5,7 +5,8 @@ import FeedMe from 'feedme'
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
 import { resolveUrl } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
-import { FeedParseError, NetworkError } from '../../util/errors'
+import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
+import { reportError } from '../../util/errorHandler'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -48,40 +49,48 @@ function fetchFeed(feed, dispatch) {
   ])
   .then(res => {
     if (res.ok) {
-      return res.text()
+      return res
     } else {
       throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
     }
   })
-  .then(body => {
-    const parser = new FeedMe(true)
+  .then((res) => {
+    return res.text().then(body => {
+      const parser = new FeedMe(true)
 
-    parser.on('end', function() {
-      const feedData = parser.done()
-      const attributes = translateFeedData(feedData, feed.url)
-      
-      dispatch(updateFeed(feed, attributes))
+      parser.on('end', function() {
+        const feedData = parser.done()
+        const attributes = translateFeedData(feedData, feed.url)
+        
+        dispatch(updateFeed(feed, attributes))
+      })
+
+      parser.on('error', function(error) {
+        const contentType = res.headers.get("content-type")
+
+        if (contentType && contentType.indexOf('text/html') === 0) {
+          // Eventually feeds die, that's just how the internet it.  In that 
+          // case the server may be set up to render an html landing page. 
+          //
+          // We need to handle this differently than a malformed feed.
+          throw new InvalidContentError("Invalid content", feed.url)
+        } else {
+          // The feed is malformed in some way, or we are handling it wrong.
+          throw new FeedParseError("Could not parse feed", feed.url)
+        }
+      })
+
+      parser.write(body)
+      parser.end()
+
+      return {feed}
     })
-
-    parser.on('error', function(error) {
-      throw new FeedParseError("Could not parse feed", feed.url, body)
-    })
-
-    parser.write(body)
-    parser.end()
-
-    return {feed}
   })
   .catch(error => {
     dispatch(updateFeed(feed, {error: error.toString()}))
 
-    if (error instanceof FeedParseError) {
-      console.warn(error, error.url, error.body)
-    } else if (error instanceof NetworkError) {
-      console.warn(error, error.url)
-    } else {
-      throw error
-    }
+    // For now, always warn in the console.
+    reportError(error)
   })
 
   dispatch({

@@ -2,6 +2,9 @@ import { dispatch } from './redux/dispatchChannel'
 import { foundFeeds } from './redux/modules/discovery'
 import { discoverFeeds } from './discoveryStrategies'
 import transformFeeds from './lib/discoveryPipeline'
+import { initErrorHandler } from './util/errorHandler'
+
+initErrorHandler()
 
 /**
  * Detect feeds on current page.
