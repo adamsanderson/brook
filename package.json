@@ -7,7 +7,7 @@
     "build": "webpack -w --display-error-details --progress --colors --mode=development",
     "build-prod": "webpack -w --display-error-details --progress --colors --mode=production",
     "analyze": "webpack --mode=production --profile --json > webpack-profile-data.json && webpack-bundle-analyzer webpack-profile-data.json extension/dist",
-    "start": "web-ext run -s extension/",
+    "start": "web-ext run -s extension/ --url about:debugging",
     "start-verbose": "web-ext run --verbose -s extension/",
     "lint": "eslint src",
     "lint-package": "web-ext lint -s extension/",
@@ -37,6 +37,7 @@
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
+    "@sentry/browser": "^4.5.1",
     "feedme": "^1.0.1",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",

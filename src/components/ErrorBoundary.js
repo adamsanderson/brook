@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { reportError } from '../util/errorHandler'
 
 const DEFAULT_ERROR_MESSAGE = "An error has occurred"
 
@@ -22,8 +23,9 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    console.warn("Error Boundary Invoked")
     this.setState({ hasError: true })
+
+    reportError(error, info)
   }
 
   render() {

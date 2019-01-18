@@ -7,6 +7,9 @@ import ModalRoot from "../modals"
 import ToastRoot from "../toasts"
 import linkHandler from "../util/linkHandler"
 import { createProxyStore } from '../redux/store'
+import { initErrorHandler } from '../util/errorHandler'
+
+initErrorHandler()
 
 const store = createProxyStore()
 

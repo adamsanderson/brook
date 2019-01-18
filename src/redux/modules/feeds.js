@@ -93,9 +93,13 @@ function reduceFeedUpdate(state, feed, attributes) {
   const currentFeed = state[feed.id]
   if (!currentFeed) return state
 
-  const newFeed = {...currentFeed, ...attributes}
-
-  return Object.assign({}, state, {[feed.id]: newFeed})
+  if (attributes.error) {
+    const newFeed = {...currentFeed, ...attributes, isLoading: false}
+    return Object.assign({}, state, {[feed.id]: newFeed})
+  } else {
+    const newFeed = {...currentFeed, ...attributes}
+    return Object.assign({}, state, {[feed.id]: newFeed})
+  }
 }
 
 const selectors = {
