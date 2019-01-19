@@ -5,7 +5,7 @@ export function initErrorHandler(){
   Sentry.init({
     dsn: "https://980bd0c5a7754cb4b0c9756ff723aa69@sentry.io/1361967",
     environment: ENV.environmentName,
-    release: browser.runtime.getManifest().version,
+    release: `brook@${browser.runtime.getManifest().version}`,
     integrations: [
       new Sentry.Integrations.RewriteFrames({
         iteratee: (frame => {
@@ -23,7 +23,7 @@ export function initErrorHandler(){
 
 export function reportError(error, info) {
   console.error(...arguments)
-  
+
   if (error.unreported) return
 
   Sentry.withScope(scope => {
