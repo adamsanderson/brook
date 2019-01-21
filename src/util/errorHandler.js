@@ -6,6 +6,9 @@ export function initErrorHandler(){
     dsn: "https://980bd0c5a7754cb4b0c9756ff723aa69@sentry.io/1361967",
     environment: ENV.environmentName,
     release: `brook@${browser.runtime.getManifest().version}`,
+    whitelistUrls: [
+      /^[\w]+-extension:\//
+    ],
     integrations: [
       new Sentry.Integrations.RewriteFrames({
         iteratee: (frame => {
