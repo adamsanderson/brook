@@ -12,6 +12,7 @@
     "lint": "eslint src",
     "lint-package": "web-ext lint -s extension/",
     "package": "webpack --mode=production && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
+    "postpackage": "cat ./docs/publishing.md",
     "test": "jest"
   },
   "author": "Adam Sanderson",

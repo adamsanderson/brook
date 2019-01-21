@@ -7,11 +7,13 @@ In order to publish Brook, you must build a zip file:
 yarn package
 ```
 
-Upload the zip file from the `web-ext-artifacts` directory to mozilla:
+Upload the versioned zip file from the `web-ext-artifacts` directory to mozilla:
 
 https://addons.mozilla.org/en-US/developers/addon/brook-feed-reader/versions/submit/
 
-After uploading the zip file, Brook will be available as an addon.
+The source if required is archived in `brook-src.zip`.
+
+After uploading the zip files, Brook will be available as an addon.
 
 Installing Self Hosted Versions
 -------------------------------
