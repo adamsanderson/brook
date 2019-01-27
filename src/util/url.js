@@ -2,6 +2,12 @@
  * Assorted functions for working with urls.
  */
 
+
+/**
+ * A leniant, but correct enough URL regular expression
+ */
+const URL_REGEXP = /https?:\/\/[^\s/$.?#].[^\s]*/
+
 /**
   Attempts to provide a reasonable "name" for a URL.
   Invalid urls will return an empty string.
@@ -83,4 +89,13 @@ function coerceToURL(path) {
   } catch (err) {
     return new window.URL("http://" + path)
   }
+}
+
+/**
+ * Find urls in an arbitrary string.
+ * 
+ * @param {string} text 
+ */
+export function findUrls(text) {
+  return text.match(URL_REGEXP)
 }

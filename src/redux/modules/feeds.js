@@ -28,6 +28,28 @@ export function addFeed(feed, { parentId, fetch } = {}) {
   }
 }
 
+export function useAlternateFeed(feed) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: UPDATE_FEED, 
+      payload: { 
+        feed, 
+        attributes: {
+          ...feed.alternate,
+          error: undefined,
+          alternate: undefined,
+        }
+      },
+      meta: {
+        checkpoint: "Updated feed"
+      }
+    })
+
+    // Fetch from the new feed to show updates to the user
+    dispatch(fetchFeed({...feed, ...feed.alternate}))
+  }
+}
+
 export function removeFeed(feed) {
   return {
     type: REMOVE_FEED, 
@@ -116,8 +138,8 @@ const selectors = {
 
     return feedsByUrl
   },
-  getFeedById: (state) => {
-    return (id) => state[name][id]
+  getFeedById: (state, id) => {
+    return state[name][id]
   }
 }
 

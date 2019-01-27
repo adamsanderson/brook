@@ -6,6 +6,13 @@ import ItemList from '../containers/ItemList'
 class FeedDetail extends React.PureComponent {
   static propTypes = {
     feed: PropTypes.object,
+    onUseAlternate: PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.handleUseAlternate = this.handleUseAlternate.bind(this)
   }
 
   render() {
@@ -13,6 +20,8 @@ class FeedDetail extends React.PureComponent {
 
     if (!feed) {
       return this.renderPendingState()
+    } else if (feed.error && feed.alternate && feed.alternate.url) {
+      return this.renderFixFeedState(feed)
     } else if (feed.error) {
       return this.renderErrorState(feed)
     } else if (!feed.items || feed.items.length === 0) {
@@ -31,6 +40,24 @@ class FeedDetail extends React.PureComponent {
         </p>
         <p>
           <code>{feed.error}</code>
+        </p>
+      </div>
+    )
+  }
+
+  renderFixFeedState(feed) {
+    const url = feed.alternate.url
+
+    return (
+      <div>
+        <p className="hasError">
+          Feed appears to have moved to 
+          {" "} <a href={url}>{url}</a>
+        </p>
+        <p>
+          <button className="Button isActive" onClick={this.handleUseAlternate}>
+            Update Url
+          </button>
         </p>
       </div>
     )
@@ -58,6 +85,10 @@ class FeedDetail extends React.PureComponent {
     return <ItemList items={items} />
   }
 
+  handleUseAlternate() {
+    const feed = this.props.feed
+    this.props.onUseAlternate(feed)
+  }
 }
 
 export default FeedDetail

@@ -3,7 +3,7 @@ import { alias } from 'react-chrome-redux'
 import FeedMe from 'feedme'
 
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
-import { resolveUrl } from '../../util/url'
+import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
@@ -57,8 +57,11 @@ function fetchFeed(feed, dispatch) {
   .then((res) => {
     return res.text().then(body => {
       const parser = new FeedMe(true)
+      let failed = false
 
       parser.on('end', function() {
+        if (failed) return
+
         const feedData = parser.done()
         const attributes = translateFeedData(feedData, feed.url)
         
@@ -66,6 +69,7 @@ function fetchFeed(feed, dispatch) {
       })
 
       parser.on('error', function(error) {
+        failed = true
         const contentType = res.headers.get("content-type")
 
         if (contentType && contentType.indexOf('text/html') === 0) {
@@ -75,8 +79,13 @@ function fetchFeed(feed, dispatch) {
           // We need to handle this differently than a malformed feed.
           throw new InvalidContentError("Invalid content", feed.url)
         } else {
+          const url = alternateUrl(feed, body)
           // The feed is malformed in some way, or we are handling it wrong.
-          throw new FeedParseError("Could not parse feed", feed.url)
+          if (url) {
+            dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
+          } else {
+            throw new FeedParseError("Could not parse feed", feed.url)
+          }
         }
       })
 
@@ -124,6 +133,7 @@ function translateFeedData(data, feedUrl) {
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
   feed.error = undefined
+  feed.alternate = undefined
   return feed
 }
 
@@ -159,6 +169,11 @@ function chooseItemUrl(link) {
   } else if (link.href) {
     return link.href
   }
+}
+
+function alternateUrl(feed, body) {
+  const urls = findUrls(body)
+  if (urls.length === 1 && urls[0] !== feed) return urls[0]
 }
 
 export default alias(aliases)

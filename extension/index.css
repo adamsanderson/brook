@@ -278,6 +278,7 @@ a:hover {
   border: 1px solid;
   border-radius: 2px;
   cursor: pointer;
+  background: transparent;
 
   transition: box-shadow ease-out var(--speed-fast);
 }
