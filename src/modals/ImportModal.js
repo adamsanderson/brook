@@ -33,7 +33,7 @@ class ImportModal extends React.Component {
         
         <form>
           <p>
-            <FileButton onChange={this.handleFile} accept=".opml,text/xml">
+            <FileButton onChange={this.handleFile} accept=".opml">
               Select OPML File
             </FileButton>
           </p>

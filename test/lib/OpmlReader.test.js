@@ -82,6 +82,18 @@ describe('Opml Reader', () => {
     })
   })
 
+  it("is empty when no valid root exists", (done) => {
+    const xml = `
+      <apple>
+        <outline type="rss" xmlUrl="child.com" />
+      </apple>
+    `
+    
+    readOpmlString(xml, ({feedFn}) => {
+      expect(feedFn).not.toBeCalled()
+      done()
+    })
+  })
 
 })
 

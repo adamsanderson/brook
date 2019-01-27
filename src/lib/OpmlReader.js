@@ -10,6 +10,11 @@ export default class OpmlReader {
     const doc = parser.parseFromString(xml, "application/xml")
     const root = doc.querySelector("body")
 
+    if (!root) {
+      this.handleFinish()
+      return
+    }
+
     this._readChildren(root)
     if (this.handleFinish) this.handleFinish()
   }
