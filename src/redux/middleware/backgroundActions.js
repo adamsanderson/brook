@@ -7,6 +7,7 @@ import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
+import { discoverFeedsFromString } from '../../discoveryStrategies';
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -71,19 +72,17 @@ function fetchFeed(feed, dispatch) {
       parser.on('error', function(error) {
         failed = true
         const contentType = res.headers.get("content-type")
-
-        if (contentType && contentType.indexOf('text/html') === 0) {
-          // Eventually feeds die, that's just how the internet it.  In that 
-          // case the server may be set up to render an html landing page. 
-          //
-          // We need to handle this differently than a malformed feed.
-          throw new InvalidContentError("Invalid content", feed.url)
+        const url = alternateUrl(feed, body, contentType)
+        
+        if (url) {
+          dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
         } else {
-          const url = alternateUrl(feed, body)
-          // The feed is malformed in some way, or we are handling it wrong.
-          if (url) {
-            dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
+          if (contentType.indexOf('text/html') === 0) {
+            // Eventually feeds die, that's just how the internet it.  In that 
+            // case the server may be rendering an html landing page.
+            throw new InvalidContentError("Invalid content", feed.url)
           } else {
+            // The feed is malformed in some way, or we are handling it wrong.
             throw new FeedParseError("Could not parse feed", feed.url)
           }
         }
@@ -170,7 +169,12 @@ function chooseItemUrl(link) {
   }
 }
 
-function alternateUrl(feed, body) {
+function alternateUrl(feed, body, contentType) {
+  if (contentType.indexOf("text/html" === 0)) {
+    const feeds = discoverFeedsFromString(body)
+    if (feeds.length === 1) return feeds[0].url
+  }
+
   const urls = findUrls(body)
   if (urls.length === 1 && urls[0] !== feed) return urls[0]
 }

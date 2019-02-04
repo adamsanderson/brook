@@ -18,3 +18,9 @@ export function discoverFeeds(document) {
 
   return []
 }
+
+export function discoverFeedsFromString(string) {
+  const parser = new DOMParser()
+  const document = parser.parseFromString(string, "text/html")
+  return discoverFeeds(document)
+}
