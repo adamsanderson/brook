@@ -161,13 +161,12 @@ function translateItemData(data, feedUrl) {
 }
 
 function chooseItemUrl(link) {
-  if (typeof link === "string") {
-    return link
-  } else if (Array.isArray(link)) {
-    const alternate = link.find(l => l.rel === "alternate" && l.type === "text/html")
-    return alternate.href
-  } else if (link.href) {
-    return link.href
+  if (typeof link === "string") return link
+  if (link.href) return link.href
+
+  if (Array.isArray(link)) {
+    const alternate = link.find(l => l.rel === "alternate" && l.type === "text/html") || link[0]
+    return chooseItemUrl(alternate)
   }
 }
 
