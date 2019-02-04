@@ -27,7 +27,7 @@ export function initErrorHandler(){
 export function reportError(error, info) {
   console.error(...arguments)
 
-  if (error.unreported) return
+  if (!isReportable(error)) return
 
   Sentry.withScope(scope => {
     if (info) {
@@ -37,4 +37,33 @@ export function reportError(error, info) {
     }
     Sentry.captureException(error)
   })
+}
+
+/**
+ * Determines whether a given error should be reported.  We are not interested in issues
+ * outside the control of Brook such as HTTP timeouts.
+ * 
+ * @param {Error} error 
+ * @returns {Boolean}
+ */
+function isReportable(error) {
+  // Internal errors may flag themselves as unreported:
+  if (error.unreported) return false
+  
+  // Some common DOMExceptions should not be reported because there is nothing we can
+  // do about them.
+  if (error instanceof DOMException) {
+    switch (error.name) {
+      case "NotFoundError":
+      case "TimeoutError":
+      case "NetworkError":
+      case "AbortError":
+      case "QuotaExceededError":
+        return false
+      default:
+        return true
+    }
+  }
+
+  return true
 }
