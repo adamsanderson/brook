@@ -74,7 +74,7 @@ function fetchFeed(feed, dispatch) {
         const contentType = res.headers.get("content-type")
         const url = alternateUrl(feed, body, contentType)
         
-        if (url) {
+        if (url && url !== feed.url) {
           dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
         } else {
           if (contentType.indexOf('text/html') === 0) {
@@ -172,7 +172,9 @@ function chooseItemUrl(link) {
 function alternateUrl(feed, body, contentType) {
   if (contentType.indexOf("text/html" === 0)) {
     const feeds = discoverFeedsFromString(body)
-    if (feeds.length === 1) return feeds[0].url
+    // If there is one feed that has been detected, offer it.
+    // Otherwise bail out this is probably not the original author's site anymore.
+    return feeds.length === 1 ? feeds[0].url : undefined
   }
 
   const urls = findUrls(body)
