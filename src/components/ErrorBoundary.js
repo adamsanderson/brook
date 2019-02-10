@@ -22,6 +22,12 @@ export default class ErrorBoundary extends React.Component {
       this.state = { error: null }
   }
 
+  componentDidUpdate() {
+    if (this.state.hasError) {
+      this.setState({hasError: false})
+    }
+  }
+
   componentDidCatch(error, info) {
     this.setState({ hasError: true })
 
