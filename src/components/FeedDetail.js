@@ -51,7 +51,7 @@ class FeedDetail extends React.PureComponent {
     return (
       <div>
         <p className="hasError">
-          Feed appears to have moved to 
+          Feed may have moved to 
           {" "} <a href={url}>{url}</a>
         </p>
         <p>
