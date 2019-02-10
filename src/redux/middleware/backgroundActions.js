@@ -7,7 +7,7 @@ import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
-import { discoverFeedsFromString } from '../../discoveryStrategies';
+import { discoverFeedsFromString } from '../../discoveryStrategies'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
