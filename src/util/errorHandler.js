@@ -25,9 +25,16 @@ export function initErrorHandler(){
 }
 
 export function reportError(error, info) {
-  console.error(...arguments)
+  const reportable = isReportable(error)
+  
+  // Treat errors outside the control of Brook as warnings and 
+  // do not report them.
+  if (!reportable) {
+    console.warn(...arguments)
+    return false  
+  }
 
-  if (!isReportable(error)) return
+  console.error(...arguments, `Reported:`, reportable)
 
   Sentry.withScope(scope => {
     if (info) {
@@ -63,6 +70,13 @@ function isReportable(error) {
       default:
         return true
     }
+  }
+
+  // The fetch API returns a TypeError when there is a network related error. This is ridiculous
+  // because it's not a TypeError, it's a network error, but so it goes…
+  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful
+  if (error instanceof TypeError) {
+    return !error.message.match(/\b(NetworkError|fetch)\b/i)
   }
 
   return true
