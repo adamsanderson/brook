@@ -24,18 +24,18 @@
     "@babel/preset-react": "^7.0.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "babel-loader": "8.0.4",
+    "babel-jest": "^24.3.0",
+    "babel-loader": "8.0.5",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^5.5.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.6.1",
-    "jest": "^23.6.0",
-    "web-ext": "2.9.1",
-    "webpack": "4.27.1",
+    "jest": "^24.3.0",
+    "web-ext": "3.0.0",
+    "webpack": "4.29.6",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "@sentry/browser": "^4.5.1",
@@ -43,14 +43,14 @@
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
     "react": "16.8.4",
-    "react-chrome-redux": "^2.0.0-alpha.3",
     "react-dom": "16.8.4",
     "react-fast-compare": "^2.0.1",
     "react-feather": "^1.1.1",
     "react-redux": "^6.0.1",
     "react-transition-group": "^2.2.1",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "webext-redux": "^2.0.1"
   },
   "jest": {
     "setupFiles": [

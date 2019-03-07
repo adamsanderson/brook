@@ -3,7 +3,7 @@ import {
   wrapStore,
   Store as ProxyStore,
   applyMiddleware as applyProxyMiddleware 
-} from 'react-chrome-redux'
+} from 'webext-redux'
 import thunk from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import pick from 'lodash/pick'
@@ -101,7 +101,7 @@ export function createBackgroundStore() {
     // Connect store to fire and forget dispatch channel
     connectStoreToDispatchChannel(store)
 
-    // Wrap store with react-chrome-redux
+    // Wrap store with webext-redux
     wrapStore(store, {portName: REDUX_PORT_NAME})
 
 

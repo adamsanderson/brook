@@ -1,4 +1,4 @@
-import { alias } from 'react-chrome-redux'
+import { alias } from 'webext-redux'
 
 import FeedMe from 'feedme'
 
