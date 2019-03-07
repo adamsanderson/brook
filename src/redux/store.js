@@ -4,6 +4,8 @@ import {
   Store as ProxyStore,
   applyMiddleware as applyProxyMiddleware 
 } from 'webext-redux'
+import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff'
+import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch'
 import thunk from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import pick from 'lodash/pick'
@@ -102,7 +104,10 @@ export function createBackgroundStore() {
     connectStoreToDispatchChannel(store)
 
     // Wrap store with webext-redux
-    wrapStore(store, {portName: REDUX_PORT_NAME})
+    wrapStore(store, {
+      portName: REDUX_PORT_NAME,
+      diffStrategy: deepDiff,
+    })
 
 
     return store
@@ -111,7 +116,8 @@ export function createBackgroundStore() {
 
 export function createProxyStore() {
   const proxy = new ProxyStore({
-    portName: REDUX_PORT_NAME
+    portName: REDUX_PORT_NAME,
+    patchStrategy: patchDeepDiff,
   })
 
   return applyProxyMiddleware(proxy, ...sharedMiddleware)
