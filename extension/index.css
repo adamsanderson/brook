@@ -62,6 +62,15 @@ a:hover {
   text-decoration: underline;
 }
 
+.Root-popup {
+  height: 800px;
+  width: 320px;
+}
+
+.Root-sidebar {
+
+}
+
 .Panel {
   height: 100%;
   display: flex;
