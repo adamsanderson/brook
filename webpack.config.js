@@ -5,11 +5,9 @@ const webpack = require('webpack')
 const process = require('process')
 
 module.exports = {
+  mode: pickMode(process.env["NODE_ENV"]),
   entry: {
-    // Each entry in here would declare a file that needs to be transpiled
-    // and included in the extension source.
-    // For example, you could add a background script like:
-    // background: './src/background.js',
+    // Each entry declares an entrypoint to be built.
     sidebar: './src/Sidebar/index.js',
     background: './src/background.js',
     content: './src/content.js'
@@ -21,7 +19,7 @@ module.exports = {
     filename: '[name].js',
   },
   module: {
-    // This transpiles all code (except for third party modules) using Babel.
+    // Transpiles all code (except for third party modules)
     rules: [{
       exclude: /node_modules/,
       test: /\.js$/,
@@ -32,7 +30,6 @@ module.exports = {
     }],
   },
   resolve: {
-    // This allows you to import modules just like you would in a NodeJS app.
     extensions: ['.js', '.jsx'],
     modules: [
       path.join(__dirname, "src"),
@@ -40,18 +37,23 @@ module.exports = {
     ],
   },
   node: {
-    Buffer: true
+    Buffer: true // Include Buffer polyfill for feed parsing (feedme)
   },
-  plugins: [
-    
-  ],
+  plugins: [],
   optimization: {
     splitChunks: {
       name: "shared",
       chunks: "all"
     }
   },
-  // This will expose source map files so that errors will point to your
-  // original source files instead of the transpiled files.
+  // Expose source maps
   devtool: 'sourcemap',
+}
+
+// Enforces building in either development or production mode.
+function pickMode(nodeEnv) {
+  if (!nodeEnv) return "development"
+  if (nodeEnv === "production") return "production"
+  if (nodeEnv === "development") return "development"
+  throw `Unknown NODE_ENV: ${nodeEnv}`;
 }
