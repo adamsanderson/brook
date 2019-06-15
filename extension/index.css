@@ -64,7 +64,8 @@ a:hover {
 
 .Root-popup {
   height: 800px;
-  width: 320px;
+  min-width: 320px;
+  max-width: 400px;
 }
 
 .Root-sidebar {
@@ -334,6 +335,10 @@ a:hover {
 
 .layout-flex-2 {
   flex: 2;
+}
+
+.layout-flex-3 {
+  flex: 3;
 }
 
 .layout-hero {

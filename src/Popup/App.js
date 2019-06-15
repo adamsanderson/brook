@@ -1,14 +1,13 @@
 import React from 'react'
 
 import ErrorBoundary from '../components/ErrorBoundary'
-
-import SinglePaneLayout from '../layouts/SinglePaneLayout'
+import PopupPaneLayout from '../layouts/PopupPaneLayout'
 
 class App extends React.Component {
   render() {
     return (
       <ErrorBoundary message="An error ocurred while running Brook.">
-        <SinglePaneLayout/>
+        <PopupPaneLayout/>
       </ErrorBoundary>
     )
   }
