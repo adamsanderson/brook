@@ -1,5 +1,5 @@
 import ui, { SELECT_FEED, SELECT_ITEM } from './ui'
-import { REMOVE_FEED, FEED } from './feeds'
+import { REMOVE_FEED } from './feeds'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
@@ -28,6 +28,8 @@ export function markAllItemsViewed(feed) {
 const initialState = {
   feedsViewedAt: {},
   itemsViewedAt: {},
+  feedLastViewedAt: 0,
+  itemLastViewedAt: 0,
 }
 
 const reducer = (state = initialState, action) => {
@@ -48,16 +50,18 @@ const reducer = (state = initialState, action) => {
 function selectedFeed(state, action) {
   const feed = action.payload.feed
   const feedsViewedAt = Object.assign({}, state.feedsViewedAt)
-  feedsViewedAt[feed.id] = Date.now()
-  
-  return {...state, feedsViewedAt}
+  const now = Date.now()
+  feedsViewedAt[feed.id] = now
+
+  return {...state, feedsViewedAt, feedLastViewedAt: now}
 }
 
 function selectedItem(state, action) {
   const item = action.payload.item
   const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
-  itemsViewedAt[item.id] = Date.now()
-  return {...state, itemsViewedAt}
+  const now = Date.now()
+  itemsViewedAt[item.id] = now
+  return {...state, itemsViewedAt, itemLastViewedAt: now}
 }
 
 function removedFeed(state, action) {
@@ -71,7 +75,7 @@ function markedAllItemsViewed(state, action) {
   const feed = action.payload.feed
   const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
   feed.items.forEach(item => itemsViewedAt[item.id] = Date.now())
-  
+
   return {...state, itemsViewedAt}
 }
 
@@ -101,7 +105,11 @@ const selectors = {
   isFeedStale: (state, feed) => {
     const now = Date.now()
     return (now - feed.updatedAt > FEED_STALE_LIMIT)
-  }
+  },
+
+  itemLastViewedAt: (state, item) => {
+    return state[name].itemLastViewedAt
+  },
 }
 
 export default {
