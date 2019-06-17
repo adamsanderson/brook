@@ -63,7 +63,11 @@ a:hover {
 }
 
 .Root-popup {
-  height: 800px;
+  /* 
+    We do not want the popup to resize, so the following dimensions ensure a consistent layout:
+    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups
+  */
+  height: 600px;
   min-width: 320px;
   max-width: 400px;
 }
