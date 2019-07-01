@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import feeds, { addFeed, fetchAll } from '../redux/modules/feeds'
+import { addFeed, fetchAll } from '../redux/modules/feeds'
 import workers from '../redux/modules/workers'
 import { openModal, openModalLeftAlignedBelow, openModalRightAlignedBelow } from '../redux/modules/modal'
 import ui from '../redux/modules/ui'
@@ -17,8 +17,7 @@ import RefreshIcon from 'react-feather/dist/icons/refresh-cw'
 class FeedTreeToolbar extends React.PureComponent {
   static propTypes = {
     currentViewName: PropTypes.string.isRequired,
-    availableFeeds: PropTypes.array.isRequired,
-    allFeedsByUrl: PropTypes.object.isRequired,
+    unsubscribedFeeds: PropTypes.array.isRequired,
     isFetching: PropTypes.bool,
     addFeed: PropTypes.func.isRequired,
     fetchAll: PropTypes.func.isRequired,
@@ -52,30 +51,18 @@ class FeedTreeToolbar extends React.PureComponent {
   }
 
   renderSubscribeButton() {
-    const {availableFeeds, allFeedsByUrl} = this.props
-    const hasFeeds = availableFeeds.length > 0
-    const allSubscribed = availableFeeds.every(feed => allFeedsByUrl[feed.url])
+    const {unsubscribedFeeds} = this.props
+    if (unsubscribedFeeds.length === 0) { return }
 
-    if (!hasFeeds) { return }
-    
-    if (allSubscribed) {
-      return (
-        <span className="secondary">
-          Subscribed 
-          {" "}
-        </span>
-      )
-    } else {
-      return (
-        <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
-          Subscribe{availableFeeds.length > 1 ? "… " : " "}
-        </a>
-      )
-    }
+    return (
+      <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
+        Subscribe{unsubscribedFeeds.length > 1 ? "… " : " "}
+      </a>
+    )
   }
 
   handleNewSubscription() {
-    const feeds = this.props.availableFeeds
+    const feeds = this.props.unsubscribedFeeds
 
     if (!feeds.length) {
       return
@@ -101,8 +88,7 @@ class FeedTreeToolbar extends React.PureComponent {
 
 const mapStateToProps = (state, props) => ({
   currentViewName: ui.selectors.currentViewName(state),
-  availableFeeds: discovery.selectors.availableFeeds(state, activeTab.selectors.getActiveTabId(state)),
-  allFeedsByUrl: feeds.selectors.allFeedsByUrl(state),
+  unsubscribedFeeds: discovery.selectors.unsubscribedFeeds(state, activeTab.selectors.getActiveTabId(state)),
   isFetching: workers.selectors.hasFeedWorkers(state),
 })
 
