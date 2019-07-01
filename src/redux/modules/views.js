@@ -1,4 +1,4 @@
-import ui, { SELECT_FEED, SELECT_ITEM } from './ui'
+import { SELECT_FEED, SELECT_ITEM } from './ui'
 import { REMOVE_FEED } from './feeds'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
@@ -61,6 +61,7 @@ function selectedItem(state, action) {
   const itemsViewedAt = Object.assign({}, state.itemsViewedAt)
   const now = Date.now()
   itemsViewedAt[item.id] = now
+  
   return {...state, itemsViewedAt, itemLastViewedAt: now}
 }
 
@@ -68,6 +69,7 @@ function removedFeed(state, action) {
   const feed = action.payload.feed
   const feedsViewedAt = Object.assign({}, state.feedsViewedAt)
   delete feedsViewedAt[feed.id]
+
   return {...state, feedsViewedAt}
 }
 
@@ -87,6 +89,7 @@ const selectors = {
       return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
     }
   },
+
   // TODO: Return state, not function
   isItemUnread: (state) => {
     return (item) => {
@@ -99,6 +102,7 @@ const selectors = {
     const viewedAt = state[name].feedsViewedAt[feed.id] || 0
     const now = Date.now()
     if (now - viewedAt < FEED_RECENT_VIEW_LIMIT) return true
+
     return (viewedAt < feed.updatedAt) && (now - feed.updatedAt < FEED_AGE_LIMIT)
   },
 
