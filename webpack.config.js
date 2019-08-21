@@ -37,9 +37,15 @@ module.exports = {
     ],
   },
   node: {
-    Buffer: true // Include Buffer polyfill for feed parsing (feedme)
+    // Include Buffer polyfill for feed parsing (feedme)
+    Buffer: true 
   },
-  plugins: [],
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      // use 'development' unless process.env.NODE_ENV is defined
+      NODE_ENV: 'development',
+    })
+  ],
   optimization: {
     splitChunks: {
       name: "shared",

@@ -8,6 +8,7 @@ import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/worke
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
+import ENV from '../../util/env';
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -77,6 +78,11 @@ function fetchFeed(feed, dispatch) {
         if (url && url !== feed.url) {
           dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
         } else {
+          if (ENV.development) {
+            // In development mode, log any invalid content for debugging.
+            // eslint-disable-next-line no-console
+            console.info(body)
+          }
           if (contentType.indexOf('text/html') === 0) {
             // Eventually feeds die, that's just how the internet it.  In that 
             // case the server may be rendering an html landing page.
