@@ -9,6 +9,7 @@ import linkHandler from "../util/linkHandler"
 import createAutoCloseHandler from '../util/autoCloseHandler'
 import { createProxyStore } from '../redux/store'
 import { initErrorHandler } from '../util/errorHandler'
+import { openPopup, closePopup } from '../redux/modules/popup'
 
 initErrorHandler()
 
@@ -22,6 +23,10 @@ const unsubscribe = store.subscribe(() => {
   // and handle the rest of the message lifecyle normally.
   // https://github.com/tshaddix/webext-redux/wiki/Advanced-Usage#initializing-ui-components
   unsubscribe()
+
+  // Track popup visibility
+  store.dispatch(openPopup())
+  window.addEventListener("unload", (ev) => store.dispatch(closePopup()), { once: true, passive: true})
 
   ReactDOM.render(
     <Provider store={store}>
