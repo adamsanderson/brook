@@ -11,6 +11,16 @@ const MINUTE = 60 * 1000
 initErrorHandler()
 
 createBackgroundStore().then(store => {
+  // Close the sidebar when the popup is triggered.
+  // In order to receive events here, you need to not have a popup, and you need to trigger
+  // open/close events on sidebarAction and browserAction from a direct user event.
+  browser.browserAction.onClicked.addListener(() => {
+    browser.sidebarAction.close()
+    browser.browserAction.setPopup({popup: "popup.html"})
+    browser.browserAction.openPopup()
+    browser.browserAction.setPopup({popup: ""})
+  })
+
   // Track when tabs change
   browser.tabs.onActivated.addListener(tabInfo => store.dispatch(changeTab(tabInfo.tabId)))
   browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
