@@ -11,6 +11,7 @@ module.exports = {
     sidebar: './src/Sidebar/index.js',
     background: './src/background.js',
     popup: './src/Popup/index.js',
+    options: './src/Options/index.js',
     content: './src/content.js'
   },
   output: {

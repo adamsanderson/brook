@@ -21,6 +21,7 @@ import modal from './modules/modal'
 import toast from './modules/toast'
 import workers from './modules/workers'
 import popup from './modules/popup'
+import options from './modules/options'
 import { resetableReducer } from './reset'
 import { checkpointableReducer } from './checkpoint'
 
@@ -62,6 +63,7 @@ addModule(modal)
 addModule(toast)
 addModule(workers)
 addModule(popup)
+addModule(options)
 
 // Add the logger last so that it can report on everything:
 if (!ENV.production) {

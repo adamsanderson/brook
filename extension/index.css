@@ -34,6 +34,13 @@ body {
   color: var(--color-text);
 }
 
+
+
+body.Options {
+  height: auto;
+  padding: 1em 0.5em;
+}
+
 /* Normalize margins on block elements */
 h1, h2, h3, h4, h5, h6,
 p, ul, ol, table {
@@ -324,6 +331,11 @@ a:hover {
   flex-direction: column;
 }
 
+.layout-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
 /* 
   All children should get a `min-height: 0` to trigger 
   nested layout:
@@ -375,6 +387,21 @@ a:hover {
 
 .layout-spread > :first-child {
   text-align: left;
+}
+
+/* Useful for laying out a column oriented form where the fields align along the gap */
+.layout-column-aligned {
+  display: flex;
+}
+
+.layout-column-aligned > * {
+  flex: 2;
+}
+
+.layout-column-aligned > :first-child {
+  flex: 1;
+  text-align: right;
+  margin-right: 0.25em;
 }
 
 .layout-visually-hidden {
