@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 
 import App from './App'
-import ModalRoot from "../modals"
-import ToastRoot from "../toasts"
 import { createProxyStore } from '../redux/store'
 import { initErrorHandler } from '../util/errorHandler'
 
@@ -24,8 +22,6 @@ const unsubscribe = store.subscribe(() => {
     <Provider store={store}>
       <div>
         <App/>
-        <ToastRoot/>
-        <ModalRoot/>
       </div>
     </Provider>,
     mountNode
