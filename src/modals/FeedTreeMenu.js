@@ -36,7 +36,7 @@ class FeedTreeMenu extends React.Component {
           <a onClick={ this.handleAddFolder }>Add Folder</a>
         </div>
         <div>
-          <a onClick={ this.handleImport }>Import Feeds</a>
+          <a href={browser.runtime.getURL('import.html')}>Import Feeds</a>
         </div>
         <div>
           <a onClick={ this.handleExport }>Export Feeds</a>

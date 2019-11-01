@@ -73,7 +73,7 @@ class FeedTree extends React.PureComponent {
         <EmptyImage className="EmptyState-icon layout-hero" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
-          or <a href="#" onClick={this.handleShowImport}>import</a> existing ones.
+          or <a href={browser.runtime.getURL('import.html')}>import</a> existing ones.
         </p>
       </div>
     )

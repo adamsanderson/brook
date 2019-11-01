@@ -12,6 +12,7 @@ module.exports = {
     background: './src/background.js',
     popup: './src/Popup/index.js',
     options: './src/Options/index.js',
+    import: './src/Import/index.js',
     content: './src/content.js'
   },
   output: {

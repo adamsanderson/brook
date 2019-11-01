@@ -32,13 +32,17 @@ html, body {
 body {
   padding: 0;
   color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-
-
-body.Options {
+body.Options, body.Import {
   height: auto;
   padding: 1em 0.5em;
+}
+
+body.Import {
+  max-width: 40em;
+  margin: 1em auto;
 }
 
 /* Normalize margins on block elements */
@@ -228,6 +232,7 @@ a:hover {
 .Menu a {
   display: inline-block;
   padding: 0.25em;
+  color: var(--color-text);
 }
 
 .Menu a.isSelected {
@@ -305,7 +310,7 @@ a:hover {
 }
 
 .Button:hover {
-  box-shadow: 0 0 8px;
+  box-shadow: 2px 2px 4px currentColor;
   text-decoration: none;
 }
 
@@ -433,6 +438,10 @@ a:hover {
 
 .isActive {
   color: var(--color-active);
+}
+
+.isSuccess {
+  color: var(--color-success);
 }
 
 .hasError,
