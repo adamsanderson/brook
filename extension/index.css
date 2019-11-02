@@ -327,6 +327,15 @@ a:hover {
   padding: 0.5em 1em;
 }
 
+.Form-control {
+  padding-bottom: 0.5em;
+}
+
+.Form-hint {
+  color: var(--color-grey);
+  padding-bottom: 0.5em;
+}
+
 /* 
   Layout Helpers 
 */

@@ -4,6 +4,11 @@ import { connect } from 'react-redux'
 
 import options, { setViewMode } from '../redux/modules/options'
 
+const VIEW_MODE_HINTS = {
+  sidebar: 'Clicking the Brook toolbar icon will show your feeds in the sidebar.',
+  popup: 'Feeds will appear in a popup when you click the Brook toolbar icon.',
+}
+
 class OptionsForm extends React.Component {
 
   static propTypes = {
@@ -17,13 +22,18 @@ class OptionsForm extends React.Component {
     return (
       <React.Fragment>
         <h4>View Options</h4>
-        <div className='layout-column-aligned'>
+        <div className='layout-column-aligned Form'>
           <label htmlFor='brook-view-option'>View feeds in</label>
           <div>
-            <select id='brook-view-option' onChange={this.handleViewMode}>
-              <option value='sidebar' selected={viewMode === 'sidebar'}>Sidebar</option>
-              <option value='popup' selected={viewMode === 'popup'}>Popup</option>
-            </select>
+            <div className='Form-control'>
+              <select id='brook-view-option' onChange={this.handleViewMode} value={viewMode}>
+                <option value='sidebar'>Sidebar</option>
+                <option value='popup'>Popup</option>
+              </select>
+            </div>
+            <div className='Form-hint'>
+              {VIEW_MODE_HINTS[viewMode]}
+            </div>
           </div>
         </div>
       </React.Fragment>
