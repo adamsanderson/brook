@@ -32,6 +32,17 @@ html, body {
 body {
   padding: 0;
   color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body.Options, body.Import {
+  height: auto;
+  padding: 1em 0.5em;
+}
+
+body.Import {
+  max-width: 40em;
+  margin: 1em auto;
 }
 
 /* Normalize margins on block elements */
@@ -60,6 +71,20 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.Root-popup {
+  /* 
+    We do not want the popup to resize, so the following dimensions ensure a consistent layout:
+    https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups
+  */
+  height: 600px;
+  min-width: 320px;
+  max-width: 400px;
+}
+
+.Root-sidebar {
+
 }
 
 .Panel {
@@ -207,6 +232,7 @@ a:hover {
 .Menu a {
   display: inline-block;
   padding: 0.25em;
+  color: var(--color-text);
 }
 
 .Menu a.isSelected {
@@ -284,7 +310,7 @@ a:hover {
 }
 
 .Button:hover {
-  box-shadow: 0 0 8px;
+  box-shadow: 2px 2px 4px currentColor;
   text-decoration: none;
 }
 
@@ -301,6 +327,15 @@ a:hover {
   padding: 0.5em 1em;
 }
 
+.Form-control {
+  padding-bottom: 0.5em;
+}
+
+.Form-hint {
+  color: var(--color-grey);
+  padding-bottom: 0.5em;
+}
+
 /* 
   Layout Helpers 
 */
@@ -308,6 +343,11 @@ a:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.layout-horizontal {
+  display: flex;
+  flex-direction: row;
 }
 
 /* 
@@ -325,6 +365,10 @@ a:hover {
 
 .layout-flex-2 {
   flex: 2;
+}
+
+.layout-flex-3 {
+  flex: 3;
 }
 
 .layout-hero {
@@ -359,6 +403,21 @@ a:hover {
   text-align: left;
 }
 
+/* Useful for laying out a column oriented form where the fields align along the gap */
+.layout-column-aligned {
+  display: flex;
+}
+
+.layout-column-aligned > * {
+  flex: 2;
+}
+
+.layout-column-aligned > :first-child {
+  flex: 1;
+  text-align: right;
+  margin-right: 0.25em;
+}
+
 .layout-visually-hidden {
   position: fixed;
   right: -100%;
@@ -388,6 +447,10 @@ a:hover {
 
 .isActive {
   color: var(--color-active);
+}
+
+.isSuccess {
+  color: var(--color-success);
 }
 
 .hasError,

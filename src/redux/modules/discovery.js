@@ -1,3 +1,5 @@
+import feeds from "./feeds"
+
 export const FOUND_FEEDS = "FOUND_FEEDS"
 export const FORGET_FEEDS = "FORGET_FEEDS"
 
@@ -54,7 +56,14 @@ const selectors = {
   },
   hasAvailableFeeds: (state, tabId) => {
     return selectors.availableFeeds(state, tabId).length > 0
-  }
+  },
+  unsubscribedFeeds: (state, tabId) => {
+    const availableFeeds = selectors.availableFeeds(state, tabId)
+    if (availableFeeds.length === 0) return []
+
+    const allFeedsByUrl = feeds.selectors.allFeedsByUrl(state)
+    return availableFeeds.filter(feed => !allFeedsByUrl[feed.url])
+  },
 }
 
 export default {

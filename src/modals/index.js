@@ -5,7 +5,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
-import ImportModal from './ImportModal'
 import FeedTreeMenu from './FeedTreeMenu'
 import TreeViewMenu from './TreeViewMenu'
 import FolderMenu from "./FolderMenu"
@@ -21,7 +20,6 @@ const MODALS_COMPONENTS = {
   FeedTreeMenu,
   TreeViewMenu,
   FolderMenu,
-  ImportModal,
   DebugMenu,
 }
 

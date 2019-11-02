@@ -18,7 +18,6 @@ class Feed extends React.Component {
 
   static defaultProps = {
     isUnread: false,
-    onClick: (event) => true,
     className: "",
   }
 
@@ -65,15 +64,26 @@ class Feed extends React.Component {
   }
 
   renderError(feed) {
-    return <a title={feed.error} className="hasError" href={feed.url} onClick={noopLinkHandler}> {feed.title} </a>
+    return this.renderFeedElement({title: feed.error, className: "hasError", href: feed.url, children: feed.title})
   }
 
   renderFeed(feed) {
-    return <a title={feed.title} href={feed.url} onClick={noopLinkHandler}> {feed.title} </a>
+    return this.renderFeedElement({title: feed.title, href: feed.url, children: feed.title})
+  }
+
+  // renderFeedElement allows us to switch the element easily based on whether there's a onClick handler.
+  renderFeedElement(attrs) {
+    if (this.props.onClick) {
+      return <a {...attrs} onClick={noopLinkHandler} />
+    } else {
+      return <span {...attrs} />
+    }
   }
 
   handleClick(event) {
-    this.props.onClick(this.props.feed)
+    if (this.props.onClick) {
+      this.props.onClick(this.props.feed)
+    }
   }
 
   handleDelete(event) {

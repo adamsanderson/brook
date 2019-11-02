@@ -14,8 +14,21 @@
     "default_panel": "sidebar.html"
   },
 
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "96": "images/Brook.svg",
+      "48": "images/Brook.svg"
+    },
+    "default_title": "Brook"
+  },
+
   "background": {
     "page": "background.html"
+  },
+
+  "options_ui": {
+    "page": "options.html"
   },
 
   "content_scripts": [

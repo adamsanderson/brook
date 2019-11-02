@@ -10,6 +10,9 @@ module.exports = {
     // Each entry declares an entrypoint to be built.
     sidebar: './src/Sidebar/index.js',
     background: './src/background.js',
+    popup: './src/Popup/index.js',
+    options: './src/Options/index.js',
+    import: './src/Import/index.js',
     content: './src/content.js'
   },
   output: {
