@@ -9110,9 +9110,9 @@ web-ext@3.0.0:
     zip-dir "1.0.2"
 
 webext-redux@^2.0.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/webext-redux/-/webext-redux-2.1.2.tgz#7d1b72b20e8cc4172f164773008c4914c56ece24"
-  integrity sha512-LtSg8Eb1eGcxho8tF5pEc8iQupUdiMdKC/W4lliK1G5MLaI/9gcQDD/CK3WRh+J7AeX8C4zPih+xxayTIZ3CzQ==
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/webext-redux/-/webext-redux-2.1.4.tgz#356fb0b6acad9bb8f04fcb317bb7856d9e7f2820"
+  integrity sha512-YNs8Q38jxcf4ANVxlbpMIo+fa2U4uQYuOIZePVNCi4Y01nOKTMR+DC7T2zaozkFALq5tkmkHcOmklMJwPMh3mg==
   dependencies:
     lodash.assignin "^4.2.0"
     lodash.clonedeep "^4.5.0"
