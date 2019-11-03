@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/browser'
 import ENV from './env'
 
+const extensionUrlRegexp = /^[\w]+-extension:\//
+
 export function initErrorHandler(){
   try {
     Sentry.init({
@@ -8,7 +10,7 @@ export function initErrorHandler(){
       environment: ENV.environmentName,
       release: `brook@${browser.runtime.getManifest().version}`,
       whitelistUrls: [
-        /^[\w]+-extension:\//
+        extensionUrlRegexp
       ],
       integrations: [
         new Sentry.Integrations.RewriteFrames({
@@ -18,10 +20,32 @@ export function initErrorHandler(){
               // moz-extension://d1eee302-f36c-7641-9595-cb9e11334238/background.html
               frame.filename = frame.filename.replace(/\/\/[a-f0-9-]+/,"")
             }
+
             return frame
           })
         })
-      ]
+      ],
+      beforeSend: (event, hint) => {
+        // Filter out exceptions that have nothing to do with Brook.
+        // This could be etxracted out into an integration later if we need more functionality.
+        // Based on `Sentry.Integrations.RewriteFrames`
+        try {
+          const exception = event.exception
+          let frames = undefined
+
+          // TODO replace with safe prop accessor in babel when available…
+          if (exception.values && exception.values[0] && exception.values[0].frames) {
+            frames = exception.values[0].frames
+          } else if (event.stacktrace && event.stacktrace.frames) {
+            frames = event.stacktrace.frames
+          }
+
+          return frames.some(frame => frame.filename.match(extensionUrlRegexp)) ? event : null
+        } catch (error) {
+          return event
+        }
+      }
+
     })
   } catch (error) {
     console.error("Could not initialize Sentry", error)
