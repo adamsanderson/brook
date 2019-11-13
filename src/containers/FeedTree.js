@@ -68,8 +68,8 @@ class FeedTree extends React.PureComponent {
 
   renderEmptyState() {
     return (
-      <div className="EmptyState">
-        <h2>No Feeds</h2>
+      <div className="EmptyState layout-vertical">
+        <h2>Getting Started</h2>
         <EmptyImage className="EmptyState-icon layout-hero" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 

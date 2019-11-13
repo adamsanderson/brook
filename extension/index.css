@@ -140,6 +140,7 @@ a:hover {
 .Panel-body {
   padding-top: 0.25em;
   overflow-y: auto;
+  flex-grow: 1;
 }
 
 .Panel-body p {
@@ -315,7 +316,7 @@ a:hover {
 }
 
 .EmptyState {
-  padding: 0.5em 1em;
+  padding: 0.5em;
   color: var(--color-grey);
 }
 
@@ -376,6 +377,7 @@ a:hover {
   width: 80%;
   height: auto;
   margin: auto;
+  max-width: 180px;
 }
 
 .layout-spread {
