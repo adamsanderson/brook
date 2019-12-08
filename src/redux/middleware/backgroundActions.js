@@ -10,6 +10,7 @@ import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
 import { uniqBy } from 'lodash'
+import decodeHtmlEntities from '../../util/decodeHtmlEntities'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -133,7 +134,7 @@ function fetchFromQueue(feedQueue, dispatch) {
 
 function translateFeedData(data, feedUrl) {
   const feed = {}
-  
+
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
@@ -149,8 +150,8 @@ function translateItemData(data, feedUrl) {
   try {
     const url = resolveUrl(chooseItemUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
     const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
-    const title = (typeof data.title === "string") ? data.title : date.toLocaleDateString()
-    
+    const title = decodeHtmlEntities((typeof data.title === "string") ? data.title : date.toLocaleDateString())
+
     return {
       id: data.id || url,
       title,
