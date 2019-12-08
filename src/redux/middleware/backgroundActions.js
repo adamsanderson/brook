@@ -9,6 +9,7 @@ import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } fr
 import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
+import { uniqBy } from 'lodash'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -136,6 +137,8 @@ function translateFeedData(data, feedUrl) {
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
+  // If the same URL is referenced multiple times, only include the first instance
+  if (feed.items) feed.items = uniqBy(feed.items, (item => item.url))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
   feed.error = undefined
   feed.alternate = undefined
