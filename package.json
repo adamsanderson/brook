@@ -7,7 +7,7 @@
     "build": "webpack -w --display-error-details --progress --colors",
     "clean": "rm -rf ./node_modules; rm -rf ./extensions/dist",
     "start": "yarn firefox",
-    "firefox": "web-ext run -s extension/ --url about:debugging",
+    "firefox": "web-ext run -s extension/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src && web-ext lint -s extension/",
     "test": "jest",
     "analyze": "NODE_ENV=production webpack --profile --json > webpack-profile-data.json && webpack-bundle-analyzer webpack-profile-data.json extension/dist",
