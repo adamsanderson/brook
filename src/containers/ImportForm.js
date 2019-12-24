@@ -8,6 +8,7 @@ import { addFolder } from '../redux/modules/folders'
 import OpmlReader from '../lib/OpmlReader'
 import FileButton from '../components/FileButton'
 import Feed from '../components/Feed'
+import { ImportImage } from '../components/images'
 
 class ImportModal extends React.Component {
   static propTypes = {
@@ -64,6 +65,8 @@ class ImportModal extends React.Component {
             ))}
           </div>
         </form>
+
+        <ImportImage className='layout-trailing' />
       </div>
     )
   }

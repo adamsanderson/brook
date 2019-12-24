@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import options, { setViewMode } from '../redux/modules/options'
+import { OptionsImage } from '../components/images'
 
 const VIEW_MODE_HINTS = {
   sidebar: 'Clicking the Brook toolbar icon will show your feeds in the sidebar.',
@@ -36,6 +37,7 @@ class OptionsForm extends React.Component {
             </div>
           </div>
         </div>
+        <OptionsImage className='layout-trailing'/>
       </React.Fragment>
     )
   }

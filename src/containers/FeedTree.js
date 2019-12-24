@@ -7,13 +7,13 @@ import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders
 import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
-import EmptyImage from 'react-feather/dist/icons/rss'
-
 import FeedNode from '../components/dnd/DnDFeed'
 import FolderNode from '../components/dnd/DnDFolder'
 import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
+import { ReadImage } from '../components/images'
+
 
 class FeedTree extends React.PureComponent {
   static propTypes = {
@@ -70,7 +70,7 @@ class FeedTree extends React.PureComponent {
     return (
       <div className="EmptyState layout-vertical">
         <h2>Getting Started</h2>
-        <EmptyImage className="EmptyState-icon layout-hero" />
+        <ReadImage className="layout-hero" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
           or <a href={browser.runtime.getURL('import.html')}>import</a> existing ones.
@@ -81,9 +81,9 @@ class FeedTree extends React.PureComponent {
 
   renderSubscribeEmptyState() {
     return (
-      <div className="EmptyState">
+      <div className="EmptyState layout-vertical">
         <h2>Subscribe</h2>
-        <EmptyImage className="EmptyState-icon layout-hero" />
+        <ReadImage className="layout-hero" />
         <p>
           Click the <b>Subscribe</b> button
           to add this site to your feed list.

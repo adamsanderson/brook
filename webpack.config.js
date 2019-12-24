@@ -23,14 +23,22 @@ module.exports = {
   },
   module: {
     // Transpiles all code (except for third party modules)
-    rules: [{
-      exclude: /node_modules/,
-      test: /\.js$/,
-      // Babel options are in .babelrc
-      use: {
-        loader: "babel-loader"
+    rules: [
+      {
+        exclude: /node_modules/,
+        test: /\.js$/,
+        // Babel options are in .babelrc
+        use: {
+          loader: "babel-loader"
+        },
       },
-    }],
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader',
+        ],
+      },
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
