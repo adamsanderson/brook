@@ -41,6 +41,7 @@
   "permissions": [
     "<all_urls>",
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "tabs"
   ]
 }

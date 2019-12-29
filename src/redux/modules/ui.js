@@ -1,8 +1,10 @@
 import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER } from './folders'
 import views from './views'
+import watches, { WATCH } from './watches'
 
 export const SELECT_FEED = "SELECT_FEED"
+export const SELECT_WATCH = "SELECT_WATCH"
 export const SELECT_FOLDER = "SELECT_FOLDER"
 export const CLEAR_SELECTION = "CLEAR_SELECTION"
 export const SELECT_ITEM = "SELECT_ITEM"
@@ -34,6 +36,13 @@ export function selectFeed(feed) {
   return (dispatch, _getState) => {
     dispatch({type: FETCH_FEED, payload: { feed }})
     dispatch({type: SELECT_FEED, payload: { feed }})
+  }
+}
+
+export function selectWatch(watch) {
+  return {
+    type: SELECT_WATCH,
+    payload: { watch }
   }
 }
 
@@ -76,6 +85,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, selectedId: action.payload.feed.id, selectedType: FEED }
     case SELECT_FOLDER:
       return { ...state, selectedId: action.payload.folder.id, selectedType: FOLDER }
+    case SELECT_WATCH:
+      return { ...state, selectedId: action.payload.watch.id, selectedType: WATCH }
     case CLEAR_SELECTION:
       return { ...state, selectedId: undefined, selectedType: undefined }
     case REMOVE_FEED: 
@@ -109,6 +120,12 @@ const selectors = {
     return state[folders.name][id]
   },
 
+  currentWatch: (state) => {
+    if (state[name].selectedType !== WATCH) return undefined
+    const id = state[name].selectedId
+    return state[watches.name][id]
+  },
+
   currentItems: (state) => {
     const feed = selectors.currentFeed(state)
     return (feed && feed.items) || []
@@ -137,11 +154,18 @@ const selectors = {
     if (node.type === FEED) {
       const include = !filter || filter(state, node)
       return include ? [createTreeNode(node)] : []
+
+    } else if (node.type === WATCH) {
+      const include = !filter || filter(state, node)
+      return include ? [createTreeNode(node)] : []
+
     } else if (node.type === FOLDER && !filter && !node.expanded) {
       // Shortcut, skip evaluating children for collapsed nodes if
       // we don't need to see if they have any active children
       return [createTreeNode(node)]
+
     } else {
+      // Expanded folders or filter present
       let children = folders.selectors
         .getChildren(state, node)
         .flatMap(c => selectors.getNodeList(state, filter, c, depth + 1))

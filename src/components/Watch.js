@@ -5,10 +5,10 @@ import isEqual from 'react-fast-compare'
 import StatusIndicator from '../components/icons/StatusIndicator'
 import DeleteIcon from 'react-feather/dist/icons/x-circle'
 
-class Feed extends React.Component {
+class Watch extends React.Component {
 
   static propTypes = {
-    feed: PropTypes.object.isRequired,
+    watch: PropTypes.object.isRequired,
     isUnread: PropTypes.bool,
     onClick: PropTypes.func,
     onDelete: PropTypes.func,
@@ -21,7 +21,7 @@ class Feed extends React.Component {
     className: "",
   }
 
-  // Feeds are evaluated and rendered any time that the user interacts
+  // Watches are evaluated and rendered any time that the user interacts
   // with the feed tree.  Unfortunately not all props can be easily compared 
   // since the drag an drop wrapper's `allowDrop` is regenerated on each render.
   //
@@ -34,7 +34,7 @@ class Feed extends React.Component {
       (this.props.onDelete !== nextProps.onDelete) ||
       (this.props.onClick !== nextProps.onClick) ||
       (this.props.isUnread !== nextProps.isUnread) ||
-      (!isEqual(this.props.feed, nextProps.feed))
+      (!isEqual(this.props.watch, nextProps.watch))
   }
 
   constructor(props) {
@@ -44,9 +44,9 @@ class Feed extends React.Component {
   }
 
   render() {
-    const {feed, isUnread, style, className} = this.props
+    const {watch, isUnread, style, className} = this.props
     const readClass = isUnread ? "isUnread" : "isRead"
-    const error = feed.error
+    const error = watch.error
 
     return (
       <div 
@@ -57,42 +57,37 @@ class Feed extends React.Component {
         { this.props.onDelete &&
           <DeleteIcon className="Feed-action Icon" onClick={this.handleDelete}/>
         }
-        <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={feed.isLoading}/>
-        {error ? this.renderError(feed) : this.renderFeed(feed)}
+        <StatusIndicator isUnread={isUnread} hasError={!!error} isLoading={watch.isLoading}/>
+        {error ? this.renderError(watch) : this.renderWatch(watch)}
       </div>
     )
   }
 
-  renderError(feed) {
-    return this.renderFeedElement({title: feed.error, className: "hasError", href: feed.url, children: feed.title})
+  renderWatch(watch) {
+    return (
+      <a href={watch.url} title={watch.title}>
+        {watch.title}
+      </a>
+    )
   }
 
-  renderFeed(feed) {
-    return this.renderFeedElement({title: feed.title, href: feed.url, children: feed.title})
-  }
-
-  // renderFeedElement allows us to switch the element easily based on whether there's a onClick handler.
-  renderFeedElement(attrs) {
-    if (this.props.onClick) {
-      return <a {...attrs} onClick={noopLinkHandler} />
-    } else {
-      return <span {...attrs} />
-    }
+  renderError(watch) {
+    return (
+      <a href={watch.url} title={watch.title} className="hasError">
+        {watch.title}
+      </a>
+    )
   }
 
   handleClick(event) {
     if (this.props.onClick) {
-      this.props.onClick(this.props.feed)
+      this.props.onClick(this.props.watch)
     }
   }
 
   handleDelete(event) {
-    this.props.onDelete(this.props.feed)
+    this.props.onDelete(this.props.watch)
   }
 }
 
-function noopLinkHandler(event) {
-  event.preventDefault()
-}
-
-export default Feed
+export default Watch

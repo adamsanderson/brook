@@ -3,6 +3,7 @@ import feeds, { ADD_FEED, REMOVE_FEED, FEED, removeFeed } from './feeds'
 import {BEFORE, OVER} from '../../constants'
 import { SELECT_FOLDER } from './ui'
 import { startBatch, endBatch } from "../checkpoint"
+import watches, { ADD_WATCH, REMOVE_WATCH, WATCH } from "./watches"
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER"
 export const ADD_FOLDER = "ADD_FOLDER"
@@ -10,6 +11,7 @@ export const REMOVE_FOLDER = "REMOVE_FOLDER"
 export const REMOVE_BRANCH = "REMOVE_BRANCH"
 export const MOVE_FOLDER = "MOVE_FOLDER"
 export const MOVE_FEED = "MOVE_FEED"
+export const MOVE_WATCH = "MOVE_WATCH"
 export const EDIT_FOLDER = "EDIT_FOLDER"
 export const RENAME_FOLDER = "RENAME_FOLDER"
 
@@ -87,9 +89,15 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_FEED:
       return feedAdded(state, action)
-
+    
     case REMOVE_FEED:
       return feedRemoved(state, action)
+    
+    case ADD_WATCH:
+      return watchAdded(state, action)
+
+    case REMOVE_WATCH:
+      return watchRemoved(state, action)
 
     case ADD_FOLDER:
       return folderAdded(state, action)
@@ -105,6 +113,9 @@ const reducer = (state = initialState, action) => {
 
     case MOVE_FEED:
       return feedMoved(state, action)
+
+    case MOVE_WATCH:
+      return watchMoved(state, action)
     
     case MOVE_FOLDER:
       return folderMoved(state, action)
@@ -122,6 +133,13 @@ function feedAdded(state, action) {
   const parentId = action.payload.parentId
 
   return nodeAdded(state, feed, parentId)
+}
+
+function watchAdded(state, action) {
+  const watch = action.payload.watch
+  const parentId = action.payload.parentId
+
+  return nodeAdded(state, watch, parentId)
 }
 
 function folderAdded(state, action) {
@@ -197,6 +215,11 @@ function feedRemoved(state, action) {
   return nodeRemoved(state, feed)
 }
 
+function watchRemoved(state, action) {
+  const watch = action.payload.watch
+  return nodeRemoved(state, watch)
+}
+
 function folderRemoved(state, action) {
   const folder = action.payload.folder
 
@@ -234,6 +257,12 @@ function feedMoved(state, action) {
   return nodeMoved(state, source, target, position)
 }
 
+function watchMoved(state, action) {
+  const {source, target, position} = action.payload
+  
+  return nodeMoved(state, source, target, position)
+}
+
 function folderMoved(state, action) {
   const {source, target, position} = action.payload
 
@@ -266,7 +295,12 @@ const selectors = {
   },
   getChildren: (state, node) => {
     return node.children.map(c => {
-      return c.type === FOLDER ? state[name][c.id] : state[feeds.name][c.id]
+      switch (c.type) {
+        case FEED: return state[feeds.name][c.id]
+        case WATCH: return state[watches.name][c.id]
+        case FOLDER: return state[name][c.id]
+        default: throw new Error("Unknown type", c.type)
+      }
     })
   },
   containsNode: (state, parent, target) => {

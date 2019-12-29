@@ -1,16 +1,17 @@
 import { alias } from 'webext-redux'
 
 import FeedMe from 'feedme'
+import { uniqBy } from 'lodash'
 
-import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
+import feeds, { FETCH_FEED, FETCH_ALL, updateFeed, FEED } from '../modules/feeds'
 import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
-import { uniqBy } from 'lodash'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
+import watches, { WATCH, FETCH_WATCH, updateWatch } from '../modules/watches'
 
 const WORKER_COUNT = 4
 const FETCH_TIMEOUT = 5 * 1000
@@ -20,13 +21,15 @@ const aliases = {
     return (dispatch, getState) => {
       const state = getState()
       const allFeeds = feeds.selectors.allFeeds(state)
+      const allWatches = watches.selectors.allWatches(state)
+      const allSources = allFeeds.concat(allWatches)
 
       if (workers.selectors.hasFeedWorkers(state)) return
 
       // TODO: Make WORKER_COUNT configurable
       for (let i = 0; i < WORKER_COUNT; i++) {
         dispatch(startedFeedWorker())
-        fetchFromQueue(allFeeds, dispatch)
+        fetchFromQueue(allSources, dispatch)
       }
     }
   },
@@ -38,6 +41,14 @@ const aliases = {
     const feed = action.payload.feed
     return (dispatch) => fetchFeed(feed, dispatch)
   },
+
+  [FETCH_WATCH]: (action) => {
+    // If there's a promise, the action has already been kicked off by the background.
+    if (action.promise) return action
+
+    const watch = action.payload.watch
+    return (dispatch) => fetchWatch(watch, dispatch)
+  }
 }
 
 function fetchFeed(feed, dispatch) {
@@ -118,17 +129,96 @@ function fetchFeed(feed, dispatch) {
   return promise
 }
 
-function fetchFromQueue(feedQueue, dispatch) {
+function fetchWatch(watch, dispatch) {
+  const cache = watch.error ? "reload" : "default"
+  
+  const headers = {}
+
+  if (watch.etag) {
+    headers['If-None-Match'] = watch.etag
+  }
+
+  if (watch.updatedAt) {
+    headers['If-Modified-Since'] = new Date(watch.updatedAt).toUTCString()
+  }
+
+  const promise = Promise.race([
+    // Fetch watched site…
+    fetch(watch.url, { cache, headers }),
+    // …with a timeout.
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${watch.url}`)), FETCH_TIMEOUT)
+    )
+  ])
+  .then(res => {
+    if (res.ok || res.status === 304) {
+      return res
+    } else {
+      throw new NetworkError(`HTTP ${res.status}: Could not access ${watch.url}`)
+    }
+  })
+  .then((res) => {
+    if (res.status === 304) {
+      dispatch(updateWatch(watch, {
+        error: undefined
+      }))
+      return { watch}
+    }
+
+    return res.arrayBuffer().then(buffer => crypto.subtle.digest('SHA-256', buffer)).then(digestBuffer => {
+      const bytes = Array.from(new Uint8Array(digestBuffer))
+      const digest = bytes.map(b => b.toString(16).padStart(2, '0')).join('')
+
+      const headers = res.headers
+      const attributes = {
+        url: res.url,
+        etag: headers.get('etag'),
+        error: undefined,
+        digest,
+      }
+      
+      if (watch.digest && digest !== watch.digest) {
+        attributes.updatedAt = Date.now()
+      }
+
+      dispatch(updateWatch(watch, attributes))
+      return { watch }
+    })
+  })
+  .catch(error => {
+    dispatch(updateWatch(watch, {error: error.toString()}))
+
+    // For now, always warn in the console.
+    reportError(error)
+  })
+
+  dispatch({
+    type: FETCH_WATCH, 
+    payload: { watch }, 
+    promise
+  })
+  
+  return promise
+}
+
+function fetchFromQueue(queue, dispatch) {
   window.requestAnimationFrame(() => {
-    const feed = feedQueue.shift()
+    const feed = queue.shift()
     if (!feed) {
       dispatch(finishedFeedWorker())
       return
     }
 
-    const next = () => fetchFromQueue(feedQueue, dispatch)
+    const next = () => fetchFromQueue(queue, dispatch)
 
-    fetchFeed(feed, dispatch).finally(next)
+    switch (feed.type) {
+      case FEED: 
+        return fetchFeed(feed, dispatch).finally(next)
+      case WATCH:
+        return fetchWatch(feed, dispatch).finally(next)
+      default:
+        throw new Error(`Unknown node type: ${feed.type}`)
+    }
   })
 }
 

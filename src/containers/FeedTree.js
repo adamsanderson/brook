@@ -5,14 +5,16 @@ import { connect } from 'react-redux'
 import { FEED, removeFeed } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
 import views from '../redux/modules/views'
-import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
+import ui, { selectFeed, selectFolder, selectWatch } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
 import FeedNode from '../components/dnd/DnDFeed'
+import WatchNode from '../components/dnd/DnDWatch'
 import FolderNode from '../components/dnd/DnDFolder'
 import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 import { ReadImage } from '../components/images'
+import { WATCH, removeWatch } from '../redux/modules/watches'
 
 
 class FeedTree extends React.PureComponent {
@@ -22,15 +24,19 @@ class FeedTree extends React.PureComponent {
     indentUnits: PropTypes.string, 
     currentFeed: PropTypes.object, 
     currentFolder: PropTypes.object,
+    currentWatch: PropTypes.object,
     hasAvailableFeeds: PropTypes.bool.isRequired,
     selectFolder: PropTypes.func.isRequired,
-    renameFolder: PropTypes.func.isRequired,
     selectFeed: PropTypes.func.isRequired,
+    selectWatch: PropTypes.func.isRequired,
+    renameFolder: PropTypes.func.isRequired,
     moveNode: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
     isFeedUnread: PropTypes.func.isRequired,
-    removeFeed: PropTypes.func.isRequired
+    isWatchUnread: PropTypes.func.isRequired,
+    removeFeed: PropTypes.func.isRequired,
+    removeWatch: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -101,9 +107,9 @@ class FeedTree extends React.PureComponent {
   }
 
   renderNode(node) {
-    const {currentFeed, currentFolder} = this.props
+    const {currentFeed, currentFolder, currentWatch} = this.props
     const {item} = node
-    const isSelected = item === currentFeed || item === currentFolder
+    const isSelected = item === currentFeed || item === currentFolder || item === currentWatch
     const childProps = {
       style: this.getDepthStyle(node.depth),
       className: `List-item ${isSelected ? "isSelected" : ""}`,
@@ -121,6 +127,18 @@ class FeedTree extends React.PureComponent {
             onClick={this.props.selectFeed} 
             onDelete={isSelected ? this.props.removeFeed : undefined}
             isUnread={this.props.isFeedUnread(item)} 
+          />
+        )
+      case WATCH:
+        return (
+          <WatchNode 
+            {...childProps} 
+            watch={item} 
+            onDrop={this.props.moveNode}
+            allowDrop={this.props.allowDrop}
+            onClick={this.props.selectWatch} 
+            onDelete={isSelected ? this.props.removeWatch : undefined}
+            isUnread={this.props.isWatchUnread(item)} 
           />
         )
       case FOLDER:
@@ -148,8 +166,10 @@ class FeedTree extends React.PureComponent {
 
 const mapStateToProps = (state, props) => ({
   isFeedUnread: views.selectors.isFeedUnread(state),
+  isWatchUnread: views.selectors.isWatchUnread(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentFolder: ui.selectors.currentFolder(state),
+  currentWatch: ui.selectors.currentWatch(state),
   hasAvailableFeeds: discovery.selectors.hasAvailableFeeds(state, activeTab.selectors.getActiveTabId(state)),
   allowDrop: (draggable, dropTarget) => {
     return !folder.selectors.containsNode(state, draggable, dropTarget)
@@ -159,8 +179,10 @@ const mapStateToProps = (state, props) => ({
 export default connect(mapStateToProps, {
   selectFolder,
   selectFeed,
+  selectWatch,
   moveNode,
   openModal,
   renameFolder,
   removeFeed,
+  removeWatch,
 })(FeedTree)

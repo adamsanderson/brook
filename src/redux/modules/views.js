@@ -1,5 +1,6 @@
-import { SELECT_FEED, SELECT_ITEM } from './ui'
+import { SELECT_FEED, SELECT_ITEM, SELECT_WATCH } from './ui'
 import { REMOVE_FEED } from './feeds'
+import { ADD_WATCH } from './watches'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED"
 
@@ -27,6 +28,7 @@ export function markAllItemsViewed(feed) {
 
 const initialState = {
   feedsViewedAt: {},
+  watchesViewedAt: {},
   itemsViewedAt: {},
   feedLastViewedAt: 0,
   itemLastViewedAt: 0,
@@ -36,12 +38,20 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SELECT_FEED:
       return selectedFeed(state, action)
+
+    case SELECT_WATCH:
+    case ADD_WATCH:
+      return selectedWatch(state, action)
+
     case SELECT_ITEM:
       return selectedItem(state, action)
+
     case REMOVE_FEED:
       return removedFeed(state, action)
+
     case MARK_ALL_ITEMS_VIEWED:
       return markedAllItemsViewed(state, action)
+      
     default:
       return state
   }
@@ -54,6 +64,15 @@ function selectedFeed(state, action) {
   feedsViewedAt[feed.id] = now
 
   return {...state, feedsViewedAt, feedLastViewedAt: now}
+}
+
+function selectedWatch(state, action) {
+  const watch = action.payload.watch
+  const watchesViewedAt = Object.assign({}, state.watchesViewedAt)
+  const now = Date.now()
+  watchesViewedAt[watch.id] = now
+
+  return {...state, watchesViewedAt, watchLastViewedAt: now}
 }
 
 function selectedItem(state, action) {
@@ -87,6 +106,16 @@ const selectors = {
     return (feed) => {
       const viewedAt = state[name].feedsViewedAt[feed.id] || 0
       return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
+    }
+  },
+
+  // TODO: Return state, not function
+  isWatchUnread: (state) => {
+    return (watch) => {
+      // TODO: Need to migrate data
+      if (!state[name].watchesViewedAt) return true
+      const viewedAt = state[name].watchesViewedAt[watch.id] || 0
+      return (viewedAt < watch.updatedAt) && (Date.now() - watch.updatedAt < FEED_AGE_LIMIT)
     }
   },
 

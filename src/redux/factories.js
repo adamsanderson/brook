@@ -1,4 +1,5 @@
 import { FEED } from './modules/feeds'
+import { WATCH } from './modules/watches'
 import { FOLDER } from './modules/folders'
 
 import { humanizeURL } from '../util/url'
@@ -20,6 +21,25 @@ export function buildFeed(feed) {
     title: feed.title || humanizeURL(feed.url),
     items: feed.items || [],
     updatedAt: feed.updatedAt || 0
+  })
+}
+
+/**
+ * Builds a watch from whatever data is available.
+ * 
+ * @param {Object} watch - stored watch data
+ * @param {string} watch.url - the watched site's URL.  This is the only required attribute.
+ */
+export function buildWatch(watch) {
+  if (!watch.url) throw new Error("Watched sites must have a URL")
+  
+  return ({
+    id: watch.id || randomId(),
+    type: WATCH,
+    isLoading: !!watch.isLoading,
+    url: new URL(watch.url).toString(),
+    title: watch.title || humanizeURL(watch.url),
+    updatedAt: watch.updatedAt || 0
   })
 }
 

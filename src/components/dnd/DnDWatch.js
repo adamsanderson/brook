@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Feed from '../Feed'
+import Watch from '../Watch'
 import { HOVER_CLASSES, getDragItem, draggablePosition } from "./position"
 
-class DnDFeed extends React.Component {
+class DnDWatch extends React.Component {
   static propTypes = {
     onDrop: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
-    feed: PropTypes.object.isRequired,
+    watch: PropTypes.object.isRequired,
     className: PropTypes.string,
   }
 
@@ -39,7 +39,7 @@ class DnDFeed extends React.Component {
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
       >
-        <Feed 
+        <Watch 
           { ...props } 
           className={ [className, hoverClassName].join(" ") }   
         />
@@ -49,15 +49,15 @@ class DnDFeed extends React.Component {
 
   handleDragStart(event) {
     event.dataTransfer.setData("text/html", event.currentTarget)
-    event.dataTransfer.setData("application/brook", JSON.stringify(this.props.feed))
+    event.dataTransfer.setData("application/brook", JSON.stringify(this.props.watch))
     event.dataTransfer.effectAllowed = "move"
   }
 
   handleDrop(event) {
     const item = getDragItem(event)
     const position = this.state.position
-    const feed = this.props.feed
-    this.props.onDrop(item, feed, position, event)
+    const watch = this.props.watch
+    this.props.onDrop(item, watch, position, event)
 
     this.setState({position: undefined})
   }
@@ -68,11 +68,11 @@ class DnDFeed extends React.Component {
 
   handleDragOver(event) {
     const item = getDragItem(event)
-    if (item && this.props.allowDrop(item, this.props.feed)) {
+    if (item && this.props.allowDrop(item, this.props.watch)) {
       this.setState({position: draggablePosition(event, 0.5)})
       event.preventDefault()
     }
   }
 }
 
-export default DnDFeed
+export default DnDWatch

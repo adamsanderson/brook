@@ -6,6 +6,7 @@ import { resetData } from '../redux/reset'
 
 import PopupLayout from "./layouts/PopupLayout"
 import { addFeed } from '../redux/modules/feeds'
+import { addWatch } from '../redux/modules/watches'
 
 class DebugMenu extends React.Component {
   static propTypes = {
@@ -13,6 +14,7 @@ class DebugMenu extends React.Component {
     closeModal: PropTypes.func.isRequired,
     resetData: PropTypes.func.isRequired,
     addFeed: PropTypes.func.isRequired,
+    addWatch: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -20,6 +22,7 @@ class DebugMenu extends React.Component {
 
     this.handleReset = this.handleReset.bind(this)
     this.handleAddByUrl = this.handleAddByUrl.bind(this)
+    this.handleAddWatch = this.handleAddWatch.bind(this)
   }
 
   render() {    
@@ -32,7 +35,10 @@ class DebugMenu extends React.Component {
           <a href="#">Open in Browser</a>
         </div>
         <div>
-          <a onClick={ this.handleAddByUrl }>Add by URL</a>
+          <a onClick={ this.handleAddByUrl }>Add Feed by URL</a>
+        </div>
+        <div>
+          <a onClick={ this.handleAddWatch }>Watch Page</a>
         </div>
         <hr/>
         <div className="isWarning">
@@ -51,6 +57,16 @@ class DebugMenu extends React.Component {
     const url = prompt("Add feed by url")
     this.props.addFeed({url})
   }
+
+  handleAddWatch() {
+    browser.tabs.query({currentWindow: true, active: true})
+    .then(([tab]) => {
+      this.props.addWatch({
+        url: tab.url,
+        title: tab.title,
+      })
+    })
+  }
 }
 
 const mapStateToProps = (state, props) => ({
@@ -60,4 +76,5 @@ const mapStateToProps = (state, props) => ({
 export default connect(mapStateToProps, {
   resetData,
   addFeed,
+  addWatch,
 })(DebugMenu)

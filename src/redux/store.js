@@ -19,6 +19,7 @@ import discovery from './modules/discovery'
 import activeTab from './modules/activeTab'
 import modal from './modules/modal'
 import toast from './modules/toast'
+import watches from './modules/watches'
 import workers from './modules/workers'
 import popup from './modules/popup'
 import options from './modules/options'
@@ -61,6 +62,7 @@ addModule(discovery)
 addModule(activeTab)
 addModule(modal)
 addModule(toast)
+addModule(watches)
 addModule(workers)
 addModule(popup)
 addModule(options)
