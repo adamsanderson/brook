@@ -65,16 +65,9 @@ function fetchFeed(feed, dispatch) {
     )
   ])
   .then(res => {
-    if (res.ok || res.status === 304) {
-      return res
-    } else {
-      throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
-    }
-  })
-  .then((res) => {
-    if (res.status === 304) {
-      return { feed }
-    }
+    if (res.status === 304) return { feed }
+    if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
+    
     return res.text().then(body => {
       const parser = new FeedMe(true)
       let failed = false
