@@ -12,7 +12,7 @@ import ENV from '../../util/env'
 import { uniqBy } from 'lodash'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
 
-const WORKER_COUNT = 4
+const WORKER_COUNT = 8
 const FETCH_TIMEOUT = 5 * 1000
 
 const aliases = {
