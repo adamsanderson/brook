@@ -42,34 +42,59 @@ const aliases = {
 
 function fetchFeed(feed, dispatch) {
   const cache = feed.error ? "reload" : "default"
+  const headers = {}
+
+  // When possible avoid getting a resource that has been cached by matching
+  // the last know etag or modification date.
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
+  if (feed.etag) {
+    headers['If-None-Match'] = feed.etag
+  } 
+
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
+  if (feed.lastFetched) {
+    headers['If-Modified-Since'] = new Date(feed.lastFetched).toUTCString()
+  }
 
   const promise = Promise.race([
     // Fetch feed…
-    fetch(feed.url, { cache }),
+    fetch(feed.url, { cache, headers }),
     // …with a timeout.
     new Promise((_, reject) =>
       setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${feed.url}`)), FETCH_TIMEOUT)
     )
   ])
   .then(res => {
-    if (res.ok) {
+    if (res.ok || res.status === 304) {
       return res
     } else {
       throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
     }
   })
   .then((res) => {
+    if (res.status === 304) {
+      return { feed }
+    }
     return res.text().then(body => {
       const parser = new FeedMe(true)
       let failed = false
+
+      const attributes = {
+        etag: res.headers.get("etag"),
+        lastFetched: Date.now(),
+      }
+
+      if (res.redirected) {
+        attributes.url = res.url
+      }
 
       parser.on('end', function() {
         if (failed) return
 
         const feedData = parser.done()
-        const attributes = translateFeedData(feedData, feed.url)
+        const feedAttributes = translateFeedData(feedData, feed.url)
         
-        dispatch(updateFeed(feed, attributes))
+        dispatch(updateFeed(feed, {...attributes, ...feedAttributes} ))
       })
 
       parser.on('error', function(error) {
@@ -78,7 +103,7 @@ function fetchFeed(feed, dispatch) {
         const url = alternateUrl(feed, body, contentType)
         
         if (url && url !== feed.url) {
-          dispatch(updateFeed(feed, {alternate: {url}, error: "Could not parse feed"}))
+          dispatch(updateFeed(feed, {...attributes, alternate: {url}, error: "Could not parse feed"}))
         } else {
           if (ENV.development) {
             // In development mode, log any invalid content for debugging.
