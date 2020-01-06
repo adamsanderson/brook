@@ -6,10 +6,10 @@ export function resetData() {
   }
 }
 
-export function resetableReducer(reducer) {
+export function resetableReducer(reducer, initialState={}) {
   return (state, action) => {  
     if (action.type === RESET_DATA) {
-      state = undefined
+      state = initialState
     }
     
     return reducer(state, action)
