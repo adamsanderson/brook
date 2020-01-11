@@ -42,5 +42,10 @@
     "<all_urls>",
     "storage",
     "unlimitedStorage"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{e22ef003-e424-45f0-9da1-b0b93617ce49}"
+    }
+  }
 }
