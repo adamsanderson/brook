@@ -7,8 +7,6 @@ import {
 import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff'
 import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch'
 import thunk from 'redux-thunk'
-import throttle from 'lodash/throttle'
-import pick from 'lodash/pick'
 
 import ENV from '../util/env'
 import feeds from './modules/feeds'
@@ -27,7 +25,7 @@ import { checkpointableReducer } from './checkpoint'
 
 import {connectStore as connectStoreToDispatchChannel} from './dispatchChannel'
 import backgroundActions from './middleware/backgroundActions'
-import { loadState, saveState } from './storage'
+import { persistedReducer, connectStoretoStorage } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
 import timeoutScheduler from './middleware/timeoutScheduler'
@@ -71,51 +69,43 @@ if (!ENV.production) {
 }
 
 // Create store
+const combinedReducers = combineReducers(reducers)
 export const rootReducer = resetableReducer(
   checkpointableReducer(
-    combineReducers(reducers),
+    persistedReducer(
+      combinedReducers
+    ),
     {exclude: [modal.name, discovery.name, activeTab.name]}
-  )
+  ),
+  initialState
 )
+
 const enhancedMiddleware = compose(
   applyMiddleware(...middleware),
   ...enhancers
 )
 
-const storePromise = loadState()
-  .catch(_error => undefined)
-  .then(state => {
-    const store = createStore(
-      rootReducer,
-      state || initialState,
-      enhancedMiddleware
-    )
-    
-    // Save state at most once every 1s
-    store.subscribe(throttle(() => {
-      const state = store.getState()
-      const savedState = pick(state, serializePaths)
-      
-      saveState(savedState)
-    }, 1000))
-
-    return store
-  })
-
 export function createBackgroundStore() {
-  return storePromise.then(store => {
-    // Connect store to fire and forget dispatch channel
-    connectStoreToDispatchChannel(store)
+  const store = createStore(
+    rootReducer,
+    initialState,
+    enhancedMiddleware
+  )
+  
+  // Connect store to storage
+  connectStoretoStorage(store, serializePaths)
 
-    // Wrap store with webext-redux
-    wrapStore(store, {
-      portName: REDUX_PORT_NAME,
-      diffStrategy: deepDiff,
-    })
+  // Connect store to fire and forget dispatch channel
+  connectStoreToDispatchChannel(store)
 
-
-    return store
+  // Wrap store with webext-redux
+  wrapStore(store, {
+    portName: REDUX_PORT_NAME,
+    diffStrategy: deepDiff,
   })
+
+
+  return store
 }
 
 export function createProxyStore() {
@@ -126,5 +116,3 @@ export function createProxyStore() {
 
   return applyProxyMiddleware(proxy, ...sharedMiddleware)
 }
-
-export default storePromise
