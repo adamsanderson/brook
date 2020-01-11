@@ -1,10 +1,52 @@
+import { reportError } from "../util/errorHandler"
+import throttle from "lodash/throttle"
+import pick from "lodash/pick"
+
 const STATE_KEY = "brook"
+
+const UPDATE_PERSISTANT_STATE = "UPDATE_PERSISTANT_STATE"
+
+function updatePersistedState(data) {
+  return {
+    type: UPDATE_PERSISTANT_STATE,
+    payload: data,
+  }
+}
+
+export function persistedReducer(reducer) {
+  return (state, action) => {  
+    if (action.type === UPDATE_PERSISTANT_STATE) {
+      state = {state, ...action.payload}
+    }
+    
+    return reducer(state, action)
+  }
+}
+
+export function connectStoretoStorage(store, serializePaths) {
+  // Set up store persistence
+  loadState()
+    .then(state => {
+      store.dispatch(updatePersistedState(state))
+    })
+    .catch(error => {
+      reportError(error)
+    })
+    .then(() => {
+      store.subscribe(throttle(() => {
+        const state = store.getState()
+        const savedState = pick(state, serializePaths)
+        
+        saveState(savedState)
+      }, 1000))
+    })
+}
 
 // Load state from the browser's plugin storage with a fallback to
 // localStorage for any plugins in a transitional state.
 // 
 // Returns a promise.
-export function loadState() {
+function loadState() {
   return loadStateFromExtensionStorage()
     .then(value => {
       return value || loadStateFromLocalStorage()
@@ -18,7 +60,7 @@ export function loadState() {
 // Saves state to the browser's plugin storage.
 // Currently we don't try to save state to localstorage
 // since it's not reliable across restarts.
-export function saveState(state) {
+function saveState(state) {
   return saveStateToExtensionStorage(state)
     .catch(error => console.error("Could not save state", error))
 }
