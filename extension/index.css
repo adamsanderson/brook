@@ -65,11 +65,14 @@ hr {
 }
 
 a {
-  cursor: pointer;
   text-decoration: none;
 }
 
-a:hover {
+a[href] {
+  cursor: pointer;
+}
+
+a[href]:hover {
   text-decoration: underline;
 }
 
@@ -123,6 +126,7 @@ a:hover {
 .Panel-header a,
 .Panel-header .secondary {
   font-weight: normal;
+  color: var(--color-text);
 }
 
 .Panel-header .Icon,

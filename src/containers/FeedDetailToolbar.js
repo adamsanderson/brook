@@ -32,7 +32,7 @@ class FeedDetailToolbar extends React.PureComponent {
     return (
       <div className="Panel-header">
         <span>
-          {feed.title || "Articles"}
+          {this.renderTitle(feed)}
         </span>
         <span>
           {
@@ -43,6 +43,12 @@ class FeedDetailToolbar extends React.PureComponent {
         </span>
       </div>
     )
+  }
+
+  renderTitle(feed) {
+    if (!feed.title) return "Articles"
+
+    return <a href={feed.linkUrl}>{feed.title}</a>
   }
 
   handleMarkAllRead() {

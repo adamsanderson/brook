@@ -155,6 +155,7 @@ function translateFeedData(data, feedUrl) {
 
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
+  if (data.link || data['atom:link']) feed.linkUrl = chooseUrl(data.link || data['atom:link'])
   if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
   // If the same URL is referenced multiple times, only include the first instance
   if (feed.items) feed.items = uniqBy(feed.items, (item => item.url))
@@ -166,7 +167,7 @@ function translateFeedData(data, feedUrl) {
 
 function translateItemData(data, feedUrl) {
   try {
-    const url = resolveUrl(chooseItemUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
+    const url = resolveUrl(chooseUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
     const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
     const title = decodeHtmlEntities((typeof data.title === "string") ? data.title : date.toLocaleDateString())
 
@@ -187,13 +188,13 @@ function translateItemData(data, feedUrl) {
   }
 }
 
-function chooseItemUrl(link) {
+function chooseUrl(link) {
   if (typeof link === "string") return link
   if (link.href) return link.href
 
   if (Array.isArray(link)) {
     const alternate = link.find(l => l.rel === "alternate" && l.type === "text/html") || link[0]
-    return chooseItemUrl(alternate)
+    return chooseUrl(alternate)
   }
 }
 
