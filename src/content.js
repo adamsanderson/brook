@@ -4,7 +4,10 @@ import { discoverFeeds } from './discoveryStrategies'
 import transformFeeds from './lib/discoveryPipeline'
 import { initErrorHandler, reportError } from './util/errorHandler'
 
-initErrorHandler()
+initErrorHandler({
+  // Explicitly try/catch for errors.  We are ONLY interested in errors coming from Brook.
+  globalHandlers: false,
+})
 
 /**
  * Detect feeds on current page.
@@ -14,7 +17,6 @@ initErrorHandler()
 function findFeeds() {
   try {
     if (document.hidden) { return }
-
     reportFeeds(discoverFeeds(document))
   } catch (error) {
     reportError(error)
@@ -22,9 +24,12 @@ function findFeeds() {
 }
 
 function reportFeeds(feeds) {
-  feeds = transformFeeds(feeds)
-
-  dispatch(foundFeeds(feeds))
+  try {
+    feeds = transformFeeds(feeds)
+    dispatch(foundFeeds(feeds))
+  } catch (error) {
+    reportError(error)
+  }
 }
 
 document.addEventListener("visibilitychange", findFeeds)

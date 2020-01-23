@@ -3,7 +3,9 @@ import ENV from './env'
 
 const extensionUrlRegexp = /^[\w]+-extension:\//
 
-export function initErrorHandler(){
+export function initErrorHandler(options = {}){
+  const globalHandlers = options.globalHandlers
+
   try {
     Sentry.init({
       dsn: "https://980bd0c5a7754cb4b0c9756ff723aa69@sentry.io/1361967",
@@ -12,44 +14,36 @@ export function initErrorHandler(){
       whitelistUrls: [
         extensionUrlRegexp
       ],
-      integrations: [
-        new Sentry.Integrations.RewriteFrames({
-          iteratee: (frame => {
-            if (frame.filename) {
-              // Clean URLs that include the extension id such as:
-              // moz-extension://d1eee302-f36c-7641-9595-cb9e11334238/background.html
-              frame.filename = frame.filename.replace(/\/\/[a-f0-9-]+/,"")
-            }
-
-            return frame
-          })
-        })
-      ],
-      beforeSend: (event, hint) => {
-        // Filter out exceptions that have nothing to do with Brook.
-        // This could be etxracted out into an integration later if we need more functionality.
-        // Based on `Sentry.Integrations.RewriteFrames`
-        try {
-          const exception = event.exception
-          let frames = undefined
-
-          // TODO replace with safe prop accessor in babel when available…
-          if (exception.values && exception.values[0] && exception.values[0].frames) {
-            frames = exception.values[0].frames
-          } else if (event.stacktrace && event.stacktrace.frames) {
-            frames = event.stacktrace.frames
-          }
-
-          return frames.some(frame => frame.filename.match(extensionUrlRegexp)) ? event : null
-        } catch (error) {
-          return event
+      integrations: (integrations) => {
+        if (globalHandlers === false) {
+          // remove `GlobalHandlers` and limit `ReportingObserver` to Crash reporting
+          integrations = integrations
+            .filter(i => i.name !== 'GlobalHandlers')
+            .concat(new Sentry.Integrations.ReportingObserver({
+              types: ['crash'],
+            }))
         }
-      }
 
+        return integrations.concat(createUrlCleaner())
+      },
     })
   } catch (error) {
     console.error("Could not initialize Sentry", error)
   }
+}
+
+function createUrlCleaner() {
+  return new Sentry.Integrations.RewriteFrames({
+    iteratee: (frame => {
+      if (frame.filename) {
+        // Clean URLs that include the extension id such as:
+        // moz-extension://d1eee302-f36c-7641-9595-cb9e11334238/background.html
+        frame.filename = frame.filename.replace(/\/\/[a-f0-9-]+/,"")
+      }
+
+      return frame
+    })
+  })
 }
 
 export function reportError(error, info) {
