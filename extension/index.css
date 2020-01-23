@@ -442,7 +442,8 @@ a[href]:hover {
 
 .inverted > * {
   --color-active: #FFFFFF;
-  --color-dark: #FFFFFF;
+  --color-dark: #FFFFFFCC;
+  --color-text: #FFFFFFCC;
 }
 
 .secondary {
@@ -453,7 +454,9 @@ a[href]:hover {
   Component States / Traits
 */
 
-.isActive {
+.isActive,
+a.isActive,
+a.isActive:visited {
   color: var(--color-active);
 }
 
