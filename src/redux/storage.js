@@ -16,7 +16,7 @@ function updatePersistedState(data) {
 export function persistedReducer(reducer) {
   return (state, action) => {  
     if (action.type === UPDATE_PERSISTANT_STATE) {
-      state = {state, ...action.payload}
+      state = {...state, ...action.payload}
     }
     
     return reducer(state, action)
