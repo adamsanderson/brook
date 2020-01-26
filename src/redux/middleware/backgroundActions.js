@@ -44,16 +44,19 @@ function fetchFeed(feed, dispatch) {
   const cache = feed.error ? "reload" : "default"
   const headers = {}
 
-  // When possible avoid getting a resource that has been cached by matching
-  // the last know etag or modification date.
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
-  if (feed.etag) {
-    headers['If-None-Match'] = feed.etag
-  } 
+  // Always refetch feeds that errored out last time.
+  if (!feed.error) {
+    // When possible avoid getting a resource that has been cached by matching
+    // the last know etag or modification date.
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
+    if (feed.etag) {
+      headers['If-None-Match'] = feed.etag
+    } 
 
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
-  if (feed.lastFetched) {
-    headers['If-Modified-Since'] = new Date(feed.lastFetched).toUTCString()
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
+    if (feed.lastFetched) {
+      headers['If-Modified-Since'] = new Date(feed.lastFetched).toUTCString()
+    }
   }
 
   const promise = Promise.race([
