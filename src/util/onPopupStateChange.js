@@ -1,6 +1,7 @@
 import discovery from "../redux/modules/discovery"
 import activeTab from "../redux/modules/activeTab"
 import popup from "../redux/modules/popup"
+import options from "../redux/modules/options"
 
 export function onPopupStateChange(store, callback) {
   let lastState = {}
@@ -13,6 +14,7 @@ export function onPopupStateChange(store, callback) {
     const nextState = {
       canSubscribe: unsubscribedFeeds.length > 0,
       isUnread: popup.selectors.isUnread(state),
+      viewMode: options.selectors.getViewMode(state),
     }
 
     return nextState
@@ -22,7 +24,8 @@ export function onPopupStateChange(store, callback) {
     const nextState = getNotificationState(store)
     if (
       nextState.canSubscribe !== lastState.canSubscribe ||
-      nextState.isUnread !== lastState.isUnread
+      nextState.isUnread !== lastState.isUnread ||
+      nextState.viewMode !== lastState.viewMode
     ) {
       lastState = nextState
       callback(nextState)

@@ -34,10 +34,10 @@ browser.tabs.onActivated.addListener(tabInfo => store.dispatch(changeTab(tabInfo
 browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
 browser.tabs.onRemoved.addListener(tabId => store.dispatch(forgetFeeds(tabId)))
 
-onPopupStateChange(store, (state => {
-  if (state.isUnread) {
+onPopupStateChange(store, (popupState => {
+  if (popupState.isUnread && popupState.viewMode !== 'sidebar') {
     browser.browserAction.setIcon({path: "images/Brook-Notifications.svg"})
-  } else if (state.canSubscribe) {
+  } else if (popupState.canSubscribe) {
     browser.browserAction.setIcon({path: "images/Brook-Subscribe.svg"})
   } else {
     browser.browserAction.setIcon({path: "images/Brook.svg"})
