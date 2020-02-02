@@ -34,13 +34,16 @@ browser.tabs.onActivated.addListener(tabInfo => store.dispatch(changeTab(tabInfo
 browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
 browser.tabs.onRemoved.addListener(tabId => store.dispatch(forgetFeeds(tabId)))
 
+// Set up browser action to display status
+browser.browserAction.setBadgeTextColor({color: "#FFFFFF"})
+browser.browserAction.setBadgeBackgroundColor({color: "#617CBA"})
 onPopupStateChange(store, (popupState => {
   if (popupState.isUnread && popupState.viewMode !== 'sidebar') {
-    browser.browserAction.setIcon({path: "images/Brook-Notifications.svg"})
+    browser.browserAction.setBadgeText({text: "★"})
   } else if (popupState.canSubscribe) {
-    browser.browserAction.setIcon({path: "images/Brook-Subscribe.svg"})
+    browser.browserAction.setBadgeText({text: "✚"})
   } else {
-    browser.browserAction.setIcon({path: "images/Brook.svg"})
+    browser.browserAction.setBadgeText({text: ""})
   }
 }))
 
