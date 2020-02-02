@@ -15,7 +15,7 @@ const store = createProxyStore()
 
 ReactDOM.render( 
   <ProxyStoreProvider store={store}>
-    <div style={{height: "100%"}} onClick={linkHandler}>
+    <div className="Root" onClick={linkHandler}>
       <App/>
       <ToastRoot/>
       <ModalRoot/>

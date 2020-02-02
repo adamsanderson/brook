@@ -22,7 +22,7 @@ window.addEventListener("unload", (ev) => store.dispatch(closePopup()), { once: 
 
 ReactDOM.render(
   <ProxyStoreProvider store={store}>
-    <div className="Root-popup" onClick={linkHandler} onMouseLeave={autoCloseHandler}>
+    <div className="Root" onClick={linkHandler} onMouseLeave={autoCloseHandler}>
       <App/>
       <ToastRoot/>
       <ModalRoot/>
