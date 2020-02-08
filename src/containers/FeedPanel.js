@@ -9,9 +9,21 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import ui from '../redux/modules/ui'
 
 class FeedPanel extends React.Component {
-
   static propTypes = {
     nodes: PropTypes.array.isRequired,
+  }
+
+  componentDidMount() {
+    if (this.scrollingElement) {
+      const selectedEl = this.scrollingElement.querySelector('.isSelected')
+      if (selectedEl) {
+        selectedEl.scrollIntoView(true)
+      }
+    }
+  }
+
+  setScrollingElement = (el) => {
+    this.scrollingElement = el
   }
 
   render() {
@@ -21,7 +33,7 @@ class FeedPanel extends React.Component {
       <ErrorBoundary message="An error ocurred while displaying your feeds.">
         <div className="Panel">
           <FeedTreeToolbar />
-          <div className="Panel-body">
+          <div className="Panel-body" ref={this.setScrollingElement}>
             <FeedTree nodes={nodes} />
           </div>
         </div>
