@@ -33,7 +33,7 @@
     "jest": "^25.1.0",
     "web-ext": "4.0.0",
     "webpack": "4.41.6",
-    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
