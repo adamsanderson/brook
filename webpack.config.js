@@ -11,6 +11,7 @@ module.exports = {
     sidebar: './src/Sidebar/index.js',
     background: './src/background.js',
     popup: './src/Popup/index.js',
+    subscribePopup: './src/SubscribePopup/index.js',
     options: './src/Options/index.js',
     import: './src/Import/index.js',
     content: './src/content.js'

@@ -6,22 +6,9 @@ import options from "../redux/modules/options"
 export function onPopupStateChange(store, callback) {
   let lastState = {}
 
-  function getNotificationState(store) {
+  store.subscribe(() => {
     const state = store.getState()
-    const tabId = activeTab.selectors.getActiveTabId(state)
-    const unsubscribedFeeds = discovery.selectors.unsubscribedFeeds(state, tabId)
-
-    const nextState = {
-      canSubscribe: unsubscribedFeeds.length > 0,
-      isUnread: popup.selectors.isUnread(state),
-      viewMode: options.selectors.getViewMode(state),
-    }
-
-    return nextState
-  }
-
-  store.subscribe((event) => {
-    const nextState = getNotificationState(store)
+    const nextState = getNotificationState(state)
     if (
       nextState.canSubscribe !== lastState.canSubscribe ||
       nextState.isUnread !== lastState.isUnread ||
@@ -31,4 +18,17 @@ export function onPopupStateChange(store, callback) {
       callback(nextState)
     }
   })
+}
+
+export function getNotificationState(state) {
+  const tabId = activeTab.selectors.getActiveTabId(state)
+  const unsubscribedFeeds = discovery.selectors.unsubscribedFeeds(state, tabId)
+
+  const nextState = {
+    canSubscribe: unsubscribedFeeds.length > 0,
+    isUnread: popup.selectors.isUnread(state),
+    viewMode: options.selectors.getViewMode(state),
+  }
+
+  return nextState
 }

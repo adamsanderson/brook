@@ -5,7 +5,7 @@ import { changeTab } from "./redux/modules/activeTab"
 import { fetchAll } from "./redux/modules/feeds"
 import { forgetFeeds } from "./redux/modules/discovery"
 import options from "./redux/modules/options"
-import { onPopupStateChange } from './util/onPopupStateChange'
+import { onPopupStateChange, getNotificationState } from './util/onPopupStateChange'
 
 const MINUTE = 60 * 1000
 
@@ -20,7 +20,14 @@ browser.browserAction.onClicked.addListener(() => {
   const viewMode = options.selectors.getViewMode(state)
 
   if (viewMode === 'sidebar') {
-    browser.sidebarAction.open()
+    const popupState = getNotificationState(state)
+    if (popupState.canSubscribe) {
+      browser.browserAction.setPopup({popup: "subscribePopup.html"})
+      browser.browserAction.openPopup()
+      browser.browserAction.setPopup({popup: ""})
+    } else {
+      browser.sidebarAction.open()
+    }
   } else {
     browser.sidebarAction.close()
     browser.browserAction.setPopup({popup: "popup.html"})
