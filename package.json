@@ -30,6 +30,7 @@
     "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.6.1",
+    "file-loader": "^5.0.2",
     "jest": "^25.1.0",
     "web-ext": "4.0.0",
     "webpack": "4.41.6",
@@ -39,7 +40,6 @@
   "dependencies": {
     "@sentry/browser": "^4.5.1",
     "feedme": "^1.0.1",
-    "file-loader": "^5.0.2",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
     "react": "16.12.0",
