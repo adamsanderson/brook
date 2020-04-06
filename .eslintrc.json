@@ -16,6 +16,9 @@
     "plugin:import/errors",
     "plugin:import/warnings"
   ],
+  "plugins": [
+    "react-hooks"
+  ],
   "rules": {
     "no-console": ["error", {
       "allow": ["warn", "error"] 
@@ -33,6 +36,11 @@
     "es6": true,
     "amd": true,
     "webextensions": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "overrides": [
     {
