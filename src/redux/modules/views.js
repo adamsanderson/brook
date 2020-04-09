@@ -82,12 +82,9 @@ function markedAllItemsViewed(state, action) {
 }
 
 const selectors = {
-  // TODO: Return state, not function
-  isFeedUnread: (state) => {
-    return (feed) => {
-      const viewedAt = state[name].feedsViewedAt[feed.id] || 0
-      return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
-    }
+  isFeedUnread: (state, feed) => {
+    const viewedAt = state[name].feedsViewedAt[feed.id] || 0
+    return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
   },
 
   // TODO: Return state, not function

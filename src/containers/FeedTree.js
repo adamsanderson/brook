@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import { FEED, removeFeed } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
-import views from '../redux/modules/views'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
 import FeedNode from '../components/dnd/DnDFeed'
@@ -29,7 +28,6 @@ class FeedTree extends React.PureComponent {
     moveNode: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
     allowDrop: PropTypes.func.isRequired,
-    isFeedUnread: PropTypes.func.isRequired,
     removeFeed: PropTypes.func.isRequired
   }
 
@@ -120,7 +118,7 @@ class FeedTree extends React.PureComponent {
             allowDrop={this.props.allowDrop}
             onClick={this.props.selectFeed} 
             onDelete={isSelected ? this.props.removeFeed : undefined}
-            isUnread={this.props.isFeedUnread(item)} 
+            isUnread={node.isUnread} 
           />
         )
       case FOLDER:
@@ -147,7 +145,6 @@ class FeedTree extends React.PureComponent {
 }
 
 const mapStateToProps = (state, props) => ({
-  isFeedUnread: views.selectors.isFeedUnread(state),
   currentFeed: ui.selectors.currentFeed(state),
   currentFolder: ui.selectors.currentFolder(state),
   hasAvailableFeeds: discovery.selectors.hasAvailableFeeds(state, activeTab.selectors.getActiveTabId(state)),

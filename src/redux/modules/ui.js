@@ -159,10 +159,12 @@ const selectors = {
     }
 
     function createTreeNode(node) {
+      const isUnread = node.type === FEED ? views.selectors.isFeedUnread(state, node) : undefined
       return {
         depth,
         id: node.id,
         item: node,
+        isUnread,
         expanded: node.expanded,
       }
     }
