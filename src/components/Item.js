@@ -14,7 +14,6 @@ class Item extends React.PureComponent {
   }
 
   static defaultProps = {
-    isUnread: false,
     onClick: (event) => true,
     className: "",
   }

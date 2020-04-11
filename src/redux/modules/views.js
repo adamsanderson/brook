@@ -87,12 +87,9 @@ const selectors = {
     return (viewedAt < feed.updatedAt) && (Date.now() - feed.updatedAt < FEED_AGE_LIMIT)
   },
 
-  // TODO: Return state, not function
-  isItemUnread: (state) => {
-    return (item) => {
-      const viewedAt = state[name].itemsViewedAt[item.id] || 0
-      return viewedAt < item.createdAt
-    }
+  isItemUnread: (state, item) => {
+    const viewedAt = state[name].itemsViewedAt[item.id] || 0
+    return viewedAt < item.createdAt
   },
 
   isFeedRecent: (state, feed) => {

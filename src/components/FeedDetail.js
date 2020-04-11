@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ItemList from '../containers/ItemList'
+import ItemList from '../components/ItemList'
 
 class FeedDetail extends React.PureComponent {
   static propTypes = {
     feed: PropTypes.object,
     onUseAlternate: PropTypes.func.isRequired,
+    onClickItem: PropTypes.func.isRequired,
+    itemNodes: PropTypes.array.isRequired,
   }
 
   constructor(props) {
@@ -16,7 +18,7 @@ class FeedDetail extends React.PureComponent {
   }
 
   render() {
-    const feed = this.props.feed
+    const {feed, itemNodes} = this.props
 
     if (!feed) {
       return this.renderPendingState()
@@ -24,10 +26,10 @@ class FeedDetail extends React.PureComponent {
       return this.renderFixFeedState(feed)
     } else if (feed.error) {
       return this.renderErrorState(feed)
-    } else if (!feed.items || feed.items.length === 0) {
+    } else if (itemNodes.length === 0) {
       return this.renderEmptyState(feed)
     } else {
-      return this.renderContent(feed)
+      return this.renderContent(itemNodes)
     }
   }
 
@@ -79,10 +81,8 @@ class FeedDetail extends React.PureComponent {
     )
   }
 
-  renderContent(feed) {
-    const items = feed.items
-
-    return <ItemList items={items} />
+  renderContent(itemNodes) {
+    return <ItemList itemNodes={itemNodes} onClickItem={this.props.onClickItem} />
   }
 
   handleUseAlternate() {
