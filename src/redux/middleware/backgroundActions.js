@@ -11,6 +11,7 @@ import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
 import { uniqBy } from 'lodash'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
+import { WP_API } from '../../constants'
 
 const WORKER_COUNT = 8
 const FETCH_TIMEOUT = 5 * 1000
@@ -51,7 +52,7 @@ function fetchFeed(feed, dispatch) {
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
     if (feed.etag) {
       headers['If-None-Match'] = feed.etag
-    } 
+    }
 
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
     if (feed.lastFetched) {
@@ -67,75 +68,29 @@ function fetchFeed(feed, dispatch) {
       setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${feed.url}`)), FETCH_TIMEOUT)
     )
   ])
-  .then(res => {
-    if (res.status === 304) return { feed }
-    if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
-    
-    return res.text().then(body => {
-      const parser = new FeedMe(true)
-      let failed = false
+    .then(res => {
+      if (res.status === 304) return { feed }
+      if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
 
-      const attributes = {
-        etag: res.headers.get("etag"),
-        lastFetched: Date.now(),
+      if (feed.format === WP_API) {
+        return handleWordpressApi(feed, res, dispatch)
+      } else {
+        return handleFeed(feed, res, dispatch)
       }
-
-      if (res.redirected) {
-        attributes.url = res.url
-      }
-
-      parser.on('end', function() {
-        if (failed) return
-
-        const feedData = parser.done()
-        const feedAttributes = translateFeedData(feedData, feed.url)
-        
-        dispatch(updateFeed(feed, {...attributes, ...feedAttributes} ))
-      })
-
-      parser.on('error', function(error) {
-        failed = true
-        const contentType = res.headers.get("content-type")
-        const url = alternateUrl(feed, body, contentType)
-        
-        if (url && url !== feed.url) {
-          dispatch(updateFeed(feed, {...attributes, alternate: {url}, error: "Could not parse feed"}))
-        } else {
-          if (ENV.development) {
-            // In development mode, log any invalid content for debugging.
-            // eslint-disable-next-line no-console
-            console.info(body)
-          }
-          if (contentType.indexOf('text/html') === 0) {
-            // Eventually feeds die, that's just how the internet it.  In that 
-            // case the server may be rendering an html landing page.
-            throw new InvalidContentError("Invalid content", feed.url)
-          } else {
-            // The feed is malformed in some way, or we are handling it wrong.
-            throw new FeedParseError("Could not parse feed", feed.url)
-          }
-        }
-      })
-
-      parser.write(body)
-      parser.end()
-
-      return {feed}
     })
-  })
-  .catch(error => {
-    dispatch(updateFeed(feed, {error: error.toString()}))
+    .catch(error => {
+      dispatch(updateFeed(feed, { error: error.toString() }))
 
-    // For now, always warn in the console.
-    reportError(error)
-  })
+      // For now, always warn in the console.
+      reportError(error)
+    })
 
   dispatch({
-    type: FETCH_FEED, 
-    payload: { feed }, 
+    type: FETCH_FEED,
+    payload: { feed },
     promise
   })
-  
+
   return promise
 }
 
@@ -153,13 +108,91 @@ function fetchFromQueue(feedQueue, dispatch) {
   })
 }
 
+function handleFeed(feed, res, dispatch) {
+  return res.text().then(body => {
+    const parser = new FeedMe(true)
+    let failed = false
+
+    const attributes = {
+      etag: res.headers.get("etag"),
+      lastFetched: Date.now(),
+    }
+
+    if (res.redirected) {
+      attributes.url = res.url
+    }
+
+    parser.on('end', function () {
+      if (failed) return
+
+      const feedData = parser.done()
+      const feedAttributes = translateFeedData(feedData, feed.url)
+
+      dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
+    })
+
+    parser.on('error', function (error) {
+      failed = true
+      const contentType = res.headers.get("content-type")
+      const url = alternateUrl(feed, body, contentType)
+
+      if (url && url !== feed.url) {
+        dispatch(updateFeed(feed, { ...attributes, alternate: { url }, error: "Could not parse feed" }))
+      } else {
+        if (ENV.development) {
+          // In development mode, log any invalid content for debugging.
+          // eslint-disable-next-line no-console
+          console.info(body)
+        }
+        if (contentType.indexOf('text/html') === 0) {
+          // Eventually feeds die, that's just how the internet it.  In that 
+          // case the server may be rendering an html landing page.
+          throw new InvalidContentError("Invalid content", feed.url)
+        } else {
+          // The feed is malformed in some way, or we are handling it wrong.
+          throw new FeedParseError("Could not parse feed", feed.url)
+        }
+      }
+    })
+
+    parser.write(body)
+    parser.end()
+
+    return { feed }
+  })
+}
+
+function handleWordpressApi(feed, res, dispatch) {
+  return res.json().then(json => {
+    try {
+      const attributes = {
+        etag: res.headers.get("etag"),
+        lastFetched: Date.now(),
+      }
+
+      if (res.redirected) {
+        attributes.url = res.url
+      }
+
+      const feedAttributes = translateWorpressData(json)
+
+      dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
+    } catch (error) {
+      throw new FeedParseError("Could not parse feed", feed.url)
+    }
+
+    return { feed }
+  })
+}
+
 function translateFeedData(data, feedUrl) {
   const feed = {}
 
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
   if (data.link || data['atom:link']) feed.linkUrl = chooseUrl(data.link || data['atom:link'])
-  if (data.items) feed.items = data.items.map((item) => translateItemData(item, feedUrl))
+  if (data.items) feed.items = data.items.map((item) => translateFeedItemData(item, feedUrl))
+
   // If the same URL is referenced multiple times, only include the first instance
   if (feed.items) feed.items = uniqBy(feed.items, (item => item.url))
   if (feed.items) feed.updatedAt = Math.max(...feed.items.map(f => f.createdAt))
@@ -168,7 +201,7 @@ function translateFeedData(data, feedUrl) {
   return feed
 }
 
-function translateItemData(data, feedUrl) {
+function translateFeedItemData(data, feedUrl) {
   try {
     const url = resolveUrl(chooseUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
     const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
@@ -189,6 +222,19 @@ function translateItemData(data, feedUrl) {
       data
     }
   }
+}
+
+function translateWorpressData(data) {
+  return ({
+    error: undefined,
+    alternate: undefined,
+    items: data.map(post => ({
+      id: post.guid.rendered,
+      title: post.title.rendered,
+      url: post.link,
+      createdAt: + new Date(post.date),
+    }))
+  })
 }
 
 function chooseUrl(link) {

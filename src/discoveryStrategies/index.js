@@ -2,12 +2,18 @@ import documentLinks from './documentLinks'
 import feedBurner from './feedBurner'
 import feedHandler from './feedHandler'
 import medium from './medium'
+import wordpressApi from './wordpressApi'
+import wordpressAssets from './wordpressAssets'
+
+const NONE = []
 
 const strategies = [
   documentLinks,
   feedBurner,
   feedHandler,
   medium,
+  wordpressApi,
+  wordpressAssets,
 ]
 
 export function discoverFeeds(document) {
@@ -16,7 +22,7 @@ export function discoverFeeds(document) {
     if (feeds && feeds.length > 0) return feeds
   }
 
-  return []
+  return NONE
 }
 
 export function discoverFeedsFromString(string) {

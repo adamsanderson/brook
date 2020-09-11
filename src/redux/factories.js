@@ -15,6 +15,7 @@ export function buildFeed(feed) {
   return ({
     id: feed.id || randomId(),
     type: FEED,
+    format: feed.format,
     isLoading: !!feed.isLoading,
     url: new URL(feed.url).toString(),
     title: feed.title || humanizeURL(feed.url),
