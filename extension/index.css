@@ -1,13 +1,16 @@
 :root {
-  --color-active:   #617cba;
-  --color-danger:   #dc3545;
-  --color-success:  #28a745;
-  --color-text:     #66666e;
   --color-dark:     #33333c;
+  --color-text:     #66666e;
   --color-grey:     #99999a;
   --color-light:    #ccccce;
   --color-lightest: #eeeeef;
   --color-white:    #ffffff;
+
+  --color-active:   #617cba;
+  --color-danger:   #dc3545;
+  --color-success:  #28a745;
+  
+  --color-background: var(--color-white);
 
   --weight-bold: 600;
   --weight-black: 700;
@@ -16,6 +19,7 @@
   --speed-medium: 500ms;
   --speed-slow: 1000ms;
   --speed-very-slow: 2000ms;
+
 }
 
 * {
@@ -31,6 +35,7 @@ body {
   padding: 0;
   color: var(--color-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: var(--color-background);
 }
 
 .Page body {
@@ -610,3 +615,39 @@ a.isActive:visited {
               transform 150ms ease-in;
 }
 
+/*
+  This is a mediocre dark mode.
+  To do this right we shouldn't remap colors, but semantic colors.
+  That said, this works, and it looks mostly reasonable.
+*/
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-dark:     #ffffff;
+    --color-text:     #efefff;
+    --color-grey:     #ccccce;
+    --color-light:    #99999a;
+    --color-lightest: #66666e;
+    --color-white:    #33333c;
+    --color-background: #33333c;
+  }
+
+  img {
+    filter: invert();
+    mix-blend-mode: screen;
+  }
+
+  a {
+    color: var(--color-active);
+  }
+
+  .inverted {
+    background: var(--color-active);
+    color: var(--color-text);
+  }
+  
+  .inverted > * {
+    --color-active: #FFFFFF;
+    --color-dark: #FFFFFFCC;
+    --color-text: #FFFFFFCC;
+  }
+}
