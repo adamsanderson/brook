@@ -1,12 +1,12 @@
 /**
- * Detects firefox's feed handler HTML.
- * 
- * This is sub-optimal, but I'm not sure how to:
- * 1. Hook into the existing feed handler.
- * 2. Detect a feed before it gets rewritten.
+ * Detects when the user is viewing a raw XML feed.
  */
 export default function findFeedHandler(document) {
-  if (document.querySelector('html#feedHandler') && document.querySelector('script[src^="chrome://"]')) {
+  if (document.contentType !== 'text/xml') return []
+
+  const rootNode = document.children[0]
+
+  if (rootNode && (rootNode.nodeName === 'feed' || rootNode.nodeName === 'rss')){
     return [
       {
         title: document.title,
