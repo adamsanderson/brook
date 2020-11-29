@@ -5,6 +5,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import modal, {closeModal} from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
+import AddByUrlMenu from './AddByUrlMenu'
 import FeedTreeMenu from './FeedTreeMenu'
 import TreeViewMenu from './TreeViewMenu'
 import FolderMenu from "./FolderMenu"
@@ -17,6 +18,7 @@ import DebugMenu from "./DebugMenu"
 
 const MODALS_COMPONENTS = {
   SubscribeMenu,
+  AddByUrlMenu,
   FeedTreeMenu,
   TreeViewMenu,
   FolderMenu,
@@ -44,6 +46,7 @@ function ModalRoot({type, props, closeModal}) {
   if (type) {
     const SpecificModal = MODALS_COMPONENTS[type]
     if (!SpecificModal) {
+      console.error('Unknown modal type',type)
       throw new Error("Unknown modal type: "+type)
     }
     modal = (

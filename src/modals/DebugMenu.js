@@ -5,14 +5,12 @@ import { connect } from 'react-redux'
 import { resetData } from '../redux/reset'
 
 import PopupLayout from "./layouts/PopupLayout"
-import { addFeed } from '../redux/modules/feeds'
 
 class DebugMenu extends React.Component {
   static propTypes = {
     position: PropTypes.object.isRequired,
     closeModal: PropTypes.func.isRequired,
     resetData: PropTypes.func.isRequired,
-    addFeed: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -31,9 +29,6 @@ class DebugMenu extends React.Component {
         <div>
           <a href="#">Open in Browser</a>
         </div>
-        <div>
-          <a onClick={ this.handleAddByUrl }>Add by URL</a>
-        </div>
         <hr/>
         <div className="isWarning">
           <a onClick={ this.handleReset }>Reset Data</a>
@@ -46,11 +41,6 @@ class DebugMenu extends React.Component {
   handleReset() {
     this.props.resetData()
   }
-
-  handleAddByUrl() {
-    const url = prompt("Add feed by url")
-    this.props.addFeed({url})
-  }
 }
 
 const mapStateToProps = (state, props) => ({
@@ -59,5 +49,4 @@ const mapStateToProps = (state, props) => ({
 
 export default connect(mapStateToProps, {
   resetData,
-  addFeed,
 })(DebugMenu)

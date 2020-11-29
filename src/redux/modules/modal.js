@@ -13,7 +13,7 @@ export function closeModal() {
 export function openModal(type, props={}) {
   return {
     type: OPEN,
-    payload: {type: type, props: props}
+    payload: {type, props}
   }
 }
 
@@ -22,7 +22,7 @@ export function openModalRightAlignedBelow(element, type, props={}) {
 
   return {
     type: OPEN,
-    payload: {type: type, props: {...props, position}}
+    payload: {type, props: {...props, position}}
   }
 }
 
@@ -31,7 +31,7 @@ export function openModalLeftAlignedBelow(element, type, props={}) {
 
   return {
     type: OPEN,
-    payload: {type: type, props: {...props, position}}
+    payload: {type, props: {...props, position}}
   }
 }
 

@@ -7,6 +7,7 @@ import { exportOpml } from '../redux/modules/export'
 import { openModal } from '../redux/modules/modal'
 
 import PopupLayout from "./layouts/PopupLayout"
+import { MODALS } from '../modals/index'
 
 class FeedTreeMenu extends React.Component {
 
@@ -31,6 +32,9 @@ class FeedTreeMenu extends React.Component {
           <a onClick={ this.handleAddFolder }>Add Folder</a>
         </div>
         <div>
+          <a onClick={ this.handleAddFeedByUrl }>Add Feed By URL</a>
+        </div>
+        <div>
           <a href={ browser.runtime.getURL('import.html') }>Import Feeds</a>
         </div>
         <div>
@@ -52,6 +56,10 @@ class FeedTreeMenu extends React.Component {
       isEditing: true
     }
     this.props.addFolder(newFolder)
+  }
+
+  handleAddFeedByUrl = () => {
+    this.props.openModal(MODALS.AddByUrlMenu)
   }
 
   handleExport = () => {
