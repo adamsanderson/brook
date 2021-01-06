@@ -1,6 +1,6 @@
 {
   "name": "brook-feed-reader",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "The Brook feed reeder",
   "main": "index.js",
   "scripts": {
