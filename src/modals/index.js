@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import modal, {closeModal} from '../redux/modules/modal'
+import modal, { closeModal } from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
 import AddByUrlMenu from './AddByUrlMenu'
 import FeedTreeMenu from './FeedTreeMenu'
 import TreeViewMenu from './TreeViewMenu'
 import FolderMenu from "./FolderMenu"
+import FeedMenu from "./FeedMenu"
 import DebugMenu from "./DebugMenu"
 
 /*
@@ -22,6 +23,7 @@ const MODALS_COMPONENTS = {
   FeedTreeMenu,
   TreeViewMenu,
   FolderMenu,
+  FeedMenu,
   DebugMenu,
 }
 
@@ -40,14 +42,14 @@ ModalRoot.propTypes = {
 /**
  * ModalRoot displays the current modal.
  */
-function ModalRoot({type, props, closeModal}) {
+function ModalRoot({ type, props, closeModal }) {
   let modal = null
 
   if (type) {
     const SpecificModal = MODALS_COMPONENTS[type]
     if (!SpecificModal) {
-      console.error('Unknown modal type',type)
-      throw new Error("Unknown modal type: "+type)
+      console.error('Unknown modal type', type)
+      throw new Error("Unknown modal type: " + type)
     }
     modal = (
       <CSSTransition classNames="Modal" addEndListener={(node, done) => {
@@ -57,7 +59,7 @@ function ModalRoot({type, props, closeModal}) {
       </CSSTransition>
     )
   }
-  
+
   return (
     <TransitionGroup>
       {modal}

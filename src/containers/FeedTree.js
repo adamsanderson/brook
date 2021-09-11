@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { FEED, removeFeed } from '../redux/modules/feeds'
+import { FEED, removeFeed, renameFeed } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
 import ui, { selectFeed, selectFolder } from '../redux/modules/ui'
 import { openModal } from '../redux/modules/modal'
@@ -18,12 +18,13 @@ class FeedTree extends React.PureComponent {
   static propTypes = {
     nodes: PropTypes.array.isRequired,
     indent: PropTypes.number,
-    indentUnits: PropTypes.string, 
-    currentFeed: PropTypes.object, 
+    indentUnits: PropTypes.string,
+    currentFeed: PropTypes.object,
     currentFolder: PropTypes.object,
     hasAvailableFeeds: PropTypes.bool.isRequired,
     selectFolder: PropTypes.func.isRequired,
     renameFolder: PropTypes.func.isRequired,
+    renameFeed: PropTypes.func.isRequired,
     selectFeed: PropTypes.func.isRequired,
     moveNode: PropTypes.func.isRequired,
     openModal: PropTypes.func.isRequired,
@@ -45,19 +46,19 @@ class FeedTree extends React.PureComponent {
 
   getDepthStyle(depth) {
     if (!this.depthStyleCache[depth]) {
-      const {indent, indentUnits} = this.props
-      this.depthStyleCache[depth] = {paddingLeft: indent * depth + indentUnits}
+      const { indent, indentUnits } = this.props
+      this.depthStyleCache[depth] = { paddingLeft: indent * depth + indentUnits }
     }
 
     return this.depthStyleCache[depth]
   }
 
   render() {
-    const {nodes} = this.props
+    const { nodes } = this.props
 
     if (nodes.length === 0) {
-      return this.props.hasAvailableFeeds 
-        ? this.renderSubscribeEmptyState() 
+      return this.props.hasAvailableFeeds
+        ? this.renderSubscribeEmptyState()
         : this.renderEmptyState()
     } else {
       return this.renderContent(nodes)
@@ -70,7 +71,7 @@ class FeedTree extends React.PureComponent {
         <h2>Getting Started</h2>
         <ReadImage className="layout-hero" />
         <p>
-          <a href="http://www.npr.org">Visit</a> a site that publishes feeds, 
+          <a href="http://www.npr.org">Visit</a> a site that publishes feeds,
           or <a href={browser.runtime.getURL('import.html')}>import</a> existing ones.
         </p>
       </div>
@@ -99,37 +100,37 @@ class FeedTree extends React.PureComponent {
   }
 
   renderNode(node) {
-    const {currentFeed, currentFolder} = this.props
-    const {item} = node
+    const { currentFeed, currentFolder } = this.props
+    const { item } = node
     const isSelected = item === currentFeed || item === currentFolder
     const childProps = {
       style: this.getDepthStyle(node.depth),
       className: `List-item ${isSelected ? "isSelected" : ""}`,
       key: `${item.type}-${item.id}`,
     }
-    
+
     switch (item.type) {
-      case FEED: 
+      case FEED:
         return (
-          <FeedNode 
-            {...childProps} 
-            feed={item} 
+          <FeedNode
+            {...childProps}
+            feed={item}
             onDrop={this.props.moveNode}
             allowDrop={this.props.allowDrop}
-            onClick={this.props.selectFeed} 
-            onDelete={isSelected ? this.props.removeFeed : undefined}
-            isUnread={node.isUnread} 
+            onClick={this.props.selectFeed}
+            onRename={this.props.renameFeed}
+            isUnread={node.isUnread}
           />
         )
       case FOLDER:
         return (
-          <FolderNode 
-            {...childProps} 
-            folder={item} 
+          <FolderNode
+            {...childProps}
+            folder={item}
             allowDrop={this.props.allowDrop}
             onDrop={this.props.moveNode}
             onClick={this.props.selectFolder}
-            onRename={this.props.renameFolder }
+            onRename={this.props.renameFolder}
           />
         )
       default:
@@ -159,5 +160,6 @@ export default connect(mapStateToProps, {
   moveNode,
   openModal,
   renameFolder,
+  renameFeed,
   removeFeed,
 })(FeedTree)

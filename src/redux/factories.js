@@ -5,13 +5,13 @@ import { humanizeURL } from '../util/url'
 
 /**
  * Builds a feed from whatever data is available.
- * 
+ *
  * @param {Object} feed - parsed feed data
  * @param {string} feed.url - the feed's URL.  This is the only required attribute.
  */
 export function buildFeed(feed) {
   if (!feed.url) throw new Error("Feeds must have a URL")
-  
+
   return ({
     id: feed.id || randomId(),
     type: FEED,
@@ -19,6 +19,8 @@ export function buildFeed(feed) {
     isLoading: !!feed.isLoading,
     url: new URL(feed.url).toString(),
     title: feed.title || humanizeURL(feed.url),
+    customTitle: feed.customTitle,
+    isEditing: feed.isEditing || false,
     items: feed.items || [],
     updatedAt: feed.updatedAt || 0
   })

@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import feeds from '../redux/modules/feeds'
 
-class FolderEditor extends React.PureComponent {
+class FeedEditor extends React.PureComponent {
   static propTypes = {
-    folder: PropTypes.object.isRequired,
+    feed: PropTypes.object.isRequired,
     onRename: PropTypes.func,
   }
 
@@ -19,11 +20,11 @@ class FolderEditor extends React.PureComponent {
   }
 
   render() {
-    const { folder } = this.props
+    const title = feeds.selectors.getFeedTitle(this.props.feed)
 
     return (
       <input
-        defaultValue={folder.title}
+        defaultValue={title}
         ref={el => this.input = el}
         onBlur={this.handleSubmit}
         onKeyUp={this.handleKey}
@@ -35,17 +36,18 @@ class FolderEditor extends React.PureComponent {
     const onRename = this.props.onRename
     if (!onRename) return
 
-    onRename(this.props.folder, this.input.value)
+    onRename(this.props.feed, this.input.value)
   }
 
   handleKey(event) {
     if (event.keyCode === 13) {
       this.handleSubmit()
     } else if (event.keyCode === 27) {
-      this.input.value = this.props.folder.title
+      const title = feeds.selectors.getFeedTitle(this.props.feed)
+      this.input.value = title
       this.input.blur()
     }
   }
 }
 
-export default FolderEditor
+export default FeedEditor

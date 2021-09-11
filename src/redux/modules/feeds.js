@@ -2,8 +2,10 @@ import { buildFeed } from "../factories"
 
 export const ADD_FEED = "ADD_FEED"
 export const REMOVE_FEED = "REMOVE_FEED"
+export const RENAME_FEED = "RENAME_FEED"
 export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_ALL = "FETCH_ALL"
+export const EDIT_FEED = "EDIT_FEED"
 export const UPDATE_FEED = "UPDATE_FEED"
 
 export const FEED = "FEED"
@@ -31,9 +33,9 @@ export function addFeed(feed, { parentId, fetch } = {}) {
 export function useAlternateFeed(feed) {
   return (dispatch, getState) => {
     dispatch({
-      type: UPDATE_FEED, 
-      payload: { 
-        feed, 
+      type: UPDATE_FEED,
+      payload: {
+        feed,
         attributes: {
           ...feed.alternate,
           error: undefined,
@@ -46,13 +48,13 @@ export function useAlternateFeed(feed) {
     })
 
     // Fetch from the new feed to show updates to the user
-    dispatch(fetchFeed({...feed, ...feed.alternate}))
+    dispatch(fetchFeed({ ...feed, ...feed.alternate }))
   }
 }
 
 export function removeFeed(feed) {
   return {
-    type: REMOVE_FEED, 
+    type: REMOVE_FEED,
     payload: { feed },
     meta: {
       checkpoint: "Deleted feed"
@@ -60,23 +62,37 @@ export function removeFeed(feed) {
   }
 }
 
+export function renameFeed(feed, title) {
+  return {
+    type: RENAME_FEED,
+    payload: { feed, title }
+  }
+}
+
 export function fetchFeed(feed) {
   return {
-    type: FETCH_FEED, 
+    type: FETCH_FEED,
     payload: { feed }
   }
 }
 
 export function fetchAll() {
   return {
-    type: FETCH_ALL, 
-    payload: { }
+    type: FETCH_ALL,
+    payload: {}
+  }
+}
+
+export function editFeed(feed) {
+  return {
+    type: EDIT_FEED,
+    payload: { feed }
   }
 }
 
 export function updateFeed(feed, attributes) {
   return {
-    type: UPDATE_FEED, 
+    type: UPDATE_FEED,
     payload: { feed, attributes }
   }
 }
@@ -89,16 +105,22 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case ADD_FEED:
-      return Object.assign({}, state, {[feed.id]: feed})
+      return Object.assign({}, state, { [feed.id]: feed })
 
     case REMOVE_FEED:
       return reduceRemoveFeed(state, feed)
 
+    case RENAME_FEED:
+      return reduceFeedRenamed(state, feed, action.payload.title)
+
+    case EDIT_FEED:
+      return reduceEditFeed(state, feed)
+
     case UPDATE_FEED:
       return reduceFeedUpdate(state, feed, action.payload.attributes)
-      
-    case FETCH_FEED: 
-      return reduceFeedUpdate(state, feed, {isLoading: !action.ready})
+
+    case FETCH_FEED:
+      return reduceFeedUpdate(state, feed, { isLoading: !action.ready })
 
     default:
       return state
@@ -111,17 +133,30 @@ function reduceRemoveFeed(state, feed) {
   return nextState
 }
 
+function reduceEditFeed(state, feed) {
+  const newFeed = { ...feed, isEditing: true }
+
+  return { ...state, [feed.id]: newFeed }
+}
+
 function reduceFeedUpdate(state, feed, attributes) {
   const currentFeed = state[feed.id]
   if (!currentFeed) return state
 
   if (attributes.error) {
-    const newFeed = {...currentFeed, ...attributes, isLoading: false}
-    return Object.assign({}, state, {[feed.id]: newFeed})
+    const newFeed = { ...currentFeed, ...attributes, isLoading: false }
+    return Object.assign({}, state, { [feed.id]: newFeed })
   } else {
-    const newFeed = {...currentFeed, ...attributes}
-    return Object.assign({}, state, {[feed.id]: newFeed})
+    const newFeed = { ...currentFeed, ...attributes }
+    return Object.assign({}, state, { [feed.id]: newFeed })
   }
+}
+
+function reduceFeedRenamed(state, feed, title) {
+  const customTitle = title
+  const newFeed = { ...feed, customTitle, isEditing: false }
+
+  return { ...state, [feed.id]: newFeed }
 }
 
 const selectors = {
@@ -131,7 +166,7 @@ const selectors = {
   allFeedsByUrl: (state) => {
     const feedsByUrl = {}
     const allFeeds = selectors.allFeeds(state)
-    
+
     allFeeds.forEach((feed) => {
       feedsByUrl[feed.url] = feed
     })
@@ -140,6 +175,9 @@ const selectors = {
   },
   getFeedById: (state, id) => {
     return state[name][id]
+  },
+  getFeedTitle: (feed) => {
+    return feed.customTitle || feed.title
   }
 }
 
