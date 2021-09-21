@@ -122,7 +122,7 @@ function handleFeed(feed, res, dispatch) {
       attributes.url = res.url
     }
 
-    parser.on('end', function () {
+    parser.on('finish', function () {
       if (failed) return
 
       const feedData = parser.done()

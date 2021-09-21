@@ -2793,9 +2793,10 @@ cjs-module-lexer@^0.6.0:
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-0.6.0.tgz#4186fcca0eae175970aee870b9fe2d6cf8d5655f"
   integrity sha512-uc2Vix1frTfnuzxxu1Hp4ktSvM3QaI4oXl4ZUqL1wjTu/BGki9TrCWoqLTg/drR1KwAEarXuRFCG2Svr1GxPFw==
 
-clarinet@^0.12.0:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/clarinet/-/clarinet-0.12.1.tgz#3e2e2612c2573d172b1b171b92f2dced15c98a5a"
+clarinet@^0.12.4:
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/clarinet/-/clarinet-0.12.4.tgz#5d7196a2b2347ff283db2e2bf1ef615c0aa6afdb"
+  integrity sha512-Rx9Zw8KQkoPO3/O2yPRchCZm3cGubCQiRLmmFAlbkDKobUIPP3JYul+bKILR9DIv1gSVwPQSgF8JGGkXzX8Q0w==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -4033,10 +4034,6 @@ events@^3.0.0:
   resolved "https://registry.yarnpkg.com/events/-/events-3.0.0.tgz#9a0a0dfaf62893d92b875b8f2698ca4114973e88"
   integrity sha512-Dc381HFWJzEOhQ+d8pkNon++bk9h6cdAoAj4iE6Q4y6xgTzySWXlKn05/TVNpjnfRqi/X0EpJEJohPjNI3zpVA==
 
-eventyoshi@^0.2.0:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/eventyoshi/-/eventyoshi-0.2.1.tgz#e110e47c1197513ff1937542a99d34ed0324b8d4"
-
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/evp_bytestokey/-/evp_bytestokey-1.0.3.tgz#7fcbdb198dc71959432efe13842684e0525acb02"
@@ -4242,13 +4239,13 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-feedme@^1.0.1:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/feedme/-/feedme-1.2.0.tgz#7049249c1b4ef5293e48906de8d9c8626ce0fd46"
+feedme@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/feedme/-/feedme-2.0.2.tgz#f738b6ca434a30c57c23cbf9bdedc7cdb91413a9"
+  integrity sha512-0RNn0uLaSey8EThxgABR0T1Q47kSRatYnAXy1cfUc8/eypqXiAu38XGthuwwzb7mESCD9465k6Nym8D9AtB8HA==
   dependencies:
-    clarinet "^0.12.0"
-    eventyoshi "^0.2.0"
-    sax "^1.0.0"
+    clarinet "^0.12.4"
+    sax "^1.2.4"
 
 figgy-pudding@^3.5.1:
   version "3.5.1"
@@ -8221,7 +8218,7 @@ sane@^4.0.3:
     minimist "^1.1.1"
     walker "~1.0.5"
 
-sax@>=0.6.0, sax@^1.0.0:
+sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 

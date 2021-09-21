@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@sentry/browser": "^4.5.1",
-    "feedme": "^1.0.1",
+    "feedme": "^2.0.2",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
     "react": "16.13.1",
