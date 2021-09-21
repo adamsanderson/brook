@@ -13,8 +13,11 @@ const API_REGEXP = '(.+)/wp-content/'
  * Typically you can find them on image uploads for the site, ie:
  *  <meta property="og:image" content="https://api.example.com/wp-content/uploads/…">
  */
-function wordPressassets(document) {
-  const rootDomain = getRootDomain(document.location)
+function wordPressAssets(document) {
+  const location = document.location
+  if (!location) return
+
+  const rootDomain = getRootDomain(location)
 
   const feedLinks = document.querySelectorAll(SELECTORS)
   const feeds = Array.from(feedLinks)
@@ -36,4 +39,4 @@ function getApiEndpoint(link) {
   return link.match(API_REGEXP)[1] + '/wp-json/wp/v2/posts'
 }
 
-export default wordPressassets
+export default wordPressAssets
