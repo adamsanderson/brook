@@ -35,9 +35,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader',
-        ],
+        type: "asset/resource",
       },
     ],
   },
@@ -47,16 +45,19 @@ module.exports = {
       path.join(__dirname, "src"),
       'node_modules',
     ],
-  },
-  node: {
-    // Include Buffer polyfill for feed parsing (feedme)
-    Buffer: true 
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+    }
   },
   plugins: [
     new webpack.EnvironmentPlugin({
       // use 'development' unless process.env.NODE_ENV is defined
       NODE_ENV: 'development',
-    })
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      buffer: 'buffer',
+    }),
   ],
   optimization: {
     splitChunks: {
@@ -65,7 +66,7 @@ module.exports = {
     }
   },
   // Expose source maps
-  devtool: 'sourcemap',
+  devtool: 'source-map',
 }
 
 // Enforces building in either development or production mode.
