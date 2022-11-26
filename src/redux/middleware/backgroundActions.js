@@ -203,7 +203,7 @@ function translateFeedData(data, feedUrl) {
 
 function translateFeedItemData(data, feedUrl) {
   try {
-    const url = resolveUrl(chooseUrl(data["feedburner:origlink"] || data["link"]), feedUrl)
+    const url = resolveUrl(chooseUrl(data["feedburner:origlink"] || data["link"] || data["url"]), feedUrl)
     const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
     const title = decodeHtmlEntities((typeof data.title === "string") ? data.title : date.toLocaleDateString())
 
