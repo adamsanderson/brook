@@ -4,14 +4,14 @@
   "description": "The Brook feed reeder",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack -w --progress --color",
+    "build": "webpack -w --display-error-details --progress --colors",
     "clean": "rm -rf ./node_modules; rm -rf ./extensions/dist",
     "start": "yarn firefox",
-    "firefox": "web-ext run -s extension/ --url about:debugging#/runtime/this-firefox",
+    "firefox": "web-ext run -s ./extension/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
     "test": "jest",
-    "analyze": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack --profile --json > webpack-profile-data.json && webpack-bundle-analyzer webpack-profile-data.json extension/dist",
-    "package": "NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
+    "analyze": "NODE_ENV=production webpack --profile --json > webpack-profile-data.json && webpack-bundle-analyzer webpack-profile-data.json extension/dist",
+    "package": "NODE_ENV=production webpack && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "postpackage": "cat ./docs/publishing.md"
   },
   "author": "Adam Sanderson",
@@ -23,8 +23,8 @@
     "@babel/preset-react": "^7.0.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^27.2.1",
-    "babel-loader": "8.2.2",
+    "babel-jest": "^26.3.0",
+    "babel-loader": "8.1.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^7.9.0",
@@ -32,18 +32,16 @@
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-react-hooks": "^4.1.2",
     "file-loader": "^6.0.0",
-    "jest": "^27.2.1",
-    "web-ext": "6.4.0",
-    "webpack": "5.75.0",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-cli": "^5.0.0"
+    "jest": "^26.4.2",
+    "web-ext": "7.4.0",
+    "webpack": "4.44.1",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.2.3"
   },
   "dependencies": {
     "@sentry/browser": "^4.5.1",
-    "buffer": "^6.0.3",
     "feedme": "^2.0.2",
     "lodash": "^4.17.5",
-    "process": "^0.11.10",
     "prop-types": "^15.6.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -53,7 +51,6 @@
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
-    "stream-browserify": "^3.0.0",
     "webext-redux": "^2.0.1"
   },
   "jest": {
@@ -63,7 +60,6 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/web-ext-artifacts/"
     ],
-    "testURL": "http://example.com",
-    "testEnvironment": "jsdom"
+    "testURL": "http://example.com"
   }
 }
