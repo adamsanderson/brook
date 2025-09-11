@@ -31,7 +31,7 @@ export function humanizeURL(path) {
     }
     
   } catch (err) {
-    console.warn("Could not humanize: "+path+", "+err.toString())
+    console.warn("Could not humanize: "+path+", " + err.toString())
     return path
   }
 }
@@ -86,7 +86,7 @@ export function normalizeProtocol(uri) {
 function coerceToURL(path) {
   try {
     return new window.URL(path)
-  } catch (err) {
+  } catch (_err) {
     return new window.URL("http://" + path)
   }
 }

@@ -177,7 +177,7 @@ function handleWordpressApi(feed, res, dispatch) {
       const feedAttributes = translateWorpressData(json)
 
       dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
-    } catch (error) {
+    } catch (_error) {
       throw new FeedParseError("Could not parse feed", feed.url)
     }
 
