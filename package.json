@@ -6,12 +6,12 @@
   "scripts": {
     "build": "vite build --watch",
     "build:prod": "NODE_ENV=production vite build",
-    "clean": "rm -rf ./node_modules; rm -rf ./extension/dist",
+    "clean": "rm -rf ./node_modules; rm -rf ./dist",
     "start": "yarn firefox",
     "firefox": "web-ext run -s ./dist/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
     "test": "vitest",
-    "analyze": "NODE_ENV=production vite build && npx vite-bundle-analyzer extension/dist",
+    "analyze": "NODE_ENV=production vite build && npx vite-bundle-analyzer dist",
     "package": "yarn build:prod && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "postpackage": "cat ./docs/publishing.md"
   },
