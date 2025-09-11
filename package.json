@@ -1,10 +1,10 @@
 {
   "name": "brook-feed-reader",
   "version": "0.5.1",
-  "description": "The Brook feed reeder",
+  "description": "The Brook feed reader",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -w --display-error-details --progress --colors",
+    "build": "NODE_OPTIONS='--openssl-legacy-provider' webpack -w --display-error-details --progress --colors",
     "clean": "rm -rf ./node_modules; rm -rf ./extensions/dist",
     "start": "yarn firefox",
     "firefox": "web-ext run -s ./extension/ --url about:debugging#/runtime/this-firefox",
