@@ -1,11 +1,11 @@
-import { createBackgroundStore } from './redux/store'
-import { initErrorHandler } from './util/errorHandler'
+import { createBackgroundStore } from '../redux/store'
+import { initErrorHandler } from '../util/errorHandler'
 
-import { changeTab } from "./redux/modules/activeTab"
-import { fetchAll } from "./redux/modules/feeds"
-import { forgetFeeds } from "./redux/modules/discovery"
-import options from "./redux/modules/options"
-import { onPopupStateChange, getNotificationState } from './util/onPopupStateChange'
+import { changeTab } from "../redux/modules/activeTab"
+import { fetchAll } from "../redux/modules/feeds"
+import { forgetFeeds } from "../redux/modules/discovery"
+import options from "../redux/modules/options"
+import { onPopupStateChange, getNotificationState } from '../util/onPopupStateChange'
 
 const MINUTE = 60 * 1000
 

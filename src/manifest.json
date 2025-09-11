@@ -11,7 +11,7 @@
       "48": "images/Brook.svg"
     },
     "default_title": "Brook",
-    "default_panel": "sidebar.html"
+    "default_panel": "src/Sidebar/index.html"
   },
 
   "browser_action": {
@@ -24,17 +24,17 @@
   },
 
   "background": {
-    "page": "background.html"
+    "page": "src/background/index.html"
   },
 
   "options_ui": {
-    "page": "options.html"
+    "page": "src/Options/index.html"
   },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/shared.js", "dist/content.js"]
+      "js": ["src/content.js"]
     }
   ],
 
