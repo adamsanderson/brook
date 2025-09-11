@@ -10,7 +10,7 @@
     "start": "yarn firefox",
     "firefox": "web-ext run -s ./dist/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
-    "test": "jest",
+    "test": "vitest",
     "analyze": "NODE_ENV=production vite build && npx vite-bundle-analyzer extension/dist",
     "package": "yarn build:prod && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "postpackage": "cat ./docs/publishing.md"
@@ -24,17 +24,17 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@vitejs/plugin-react": "^5.0.2",
+    "@vitest/ui": "^3.2.4",
     "babel-core": "^7.0.0-0",
-    "babel-jest": "^30.1.2",
     "eslint": "^9.35.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "jest": "^30.1.3",
-    "jest-environment-jsdom": "^30.1.2",
+    "jsdom": "^26.1.0",
     "vite": "^7.1.5",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-web-extension": "^4.4.5",
+    "vitest": "^3.2.4",
     "web-ext": "8.9.0"
   },
   "dependencies": {
@@ -51,22 +51,6 @@
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
     "webext-redux": "^2.0.1"
-  },
-  "jest": {
-    "setupFiles": [
-      "./test/setup.js"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/web-ext-artifacts/"
-    ],
-    "testEnvironment": "jsdom",
-    "testEnvironmentOptions": {
-      "url": "http://example.com"
-    },
-    "moduleNameMapper": {
-      ".*util/env$": "<rootDir>/test/__mocks__/env.js",
-      "^\\./env$": "<rootDir>/test/__mocks__/env.js"
-    }
   },
   "packageManager": "yarn@4.9.4"
 }
