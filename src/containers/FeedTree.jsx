@@ -72,7 +72,7 @@ class FeedTree extends React.PureComponent {
         <ReadImage className="layout-hero" />
         <p>
           <a href="http://www.npr.org">Visit</a> a site that publishes feeds,
-          or <a href={browser.runtime.getURL('import.html')}>import</a> existing ones.
+          or <a href={browser.runtime.getURL('src/Import/index.html')}>import</a> existing ones.
         </p>
       </div>
     )

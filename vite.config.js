@@ -8,7 +8,10 @@ export default defineConfig({
   plugins: [
     react(),
     webExtension({
-      manifest: 'src/manifest.json'
+      manifest: 'src/manifest.json',
+      additionalInputs: [
+        'src/Import/index.html'
+      ]
     }),
     nodePolyfills({
       // Enable polyfills for specific globals and modules

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import emptyPath from '../images/empty.jpg'
-import importPath from '../images/import.jpg'
-import optionsPath from '../images/options.jpg'
-import readPath from '../images/read.jpg'
+import emptyPath from './empty.jpg'
+import importPath from './import.jpg'
+import optionsPath from './options.jpg'
+import readPath from './read.jpg'
 
 export const EmptyImage = (props) => <img {...props} src={emptyPath}/>
 export const ImportImage = (props) => <img {...props} src={importPath}/>
