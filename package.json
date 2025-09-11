@@ -7,7 +7,7 @@
     "build": "NODE_OPTIONS='--openssl-legacy-provider' webpack -w --display-error-details --progress --colors",
     "clean": "rm -rf ./node_modules; rm -rf ./extensions/dist",
     "start": "yarn firefox",
-    "firefox": "web-ext run -s ./extension/ --url about:debugging#/runtime/this-firefox",
+    "firefox": "web-ext run -s ./extension/ --firefox=/Applications/Firefox.app/Contents/MacOS/firefox --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
     "test": "jest",
     "analyze": "NODE_ENV=production webpack --profile --json > webpack-profile-data.json && webpack-bundle-analyzer webpack-profile-data.json extension/dist",
