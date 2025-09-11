@@ -1,6 +1,7 @@
 # Ignore build artifacts and other files.
 .DS_Store
 extension/dist
+dist/
 node_modules
 web-ext-artifacts
 webpack-profile-data.json

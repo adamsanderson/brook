@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import webExtension from 'vite-plugin-web-extension'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { resolve } from 'path'
 
 export default defineConfig({
@@ -8,23 +9,26 @@ export default defineConfig({
     react(),
     webExtension({
       manifest: 'src/manifest.json'
+    }),
+    nodePolyfills({
+      // Enable polyfills for specific globals and modules
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+      // Enable polyfill for specific modules  
+      protocolImports: true,
     })
   ],
   
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      stream: 'stream-browserify',
+      '@': resolve(__dirname, 'src')
     }
   },
   
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    global: 'globalThis',
-    Buffer: 'Buffer'
-  },
-  
   optimizeDeps: {
-    include: ['react', 'react-dom', 'redux', 'react-redux', 'feedme', 'buffer', 'stream-browserify']
+    include: ['react', 'react-dom', 'redux', 'react-redux', 'feedme']
   }
 })
