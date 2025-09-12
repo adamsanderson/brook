@@ -1,5 +1,4 @@
-import { SELECT_FEED, SELECT_ITEM } from './ui'
-import feeds, { REMOVE_FEED } from './feeds'
+import feeds from './feeds'
 
 export const OPEN_POPUP = "OPEN_POPUP"
 export const CLOSE_POPUP = "CLOSE_POPUP"

@@ -11,3 +11,12 @@ scratch
 
 # Ignore log files
 yarn-error.log
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

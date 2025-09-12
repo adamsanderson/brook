@@ -41,7 +41,7 @@ describe('Opml Reader', () => {
     const xml = `<outline xmlUrl="example.com"/>`
 
     readOpmlTemplate(xml, ({folderFn}) => {
-      expect(folderFn).toBeCalled()
+      expect(folderFn).toHaveBeenCalled()
       done()
     })
   })
@@ -90,7 +90,7 @@ describe('Opml Reader', () => {
     `
     
     readOpmlString(xml, ({feedFn}) => {
-      expect(feedFn).not.toBeCalled()
+      expect(feedFn).not.toHaveBeenCalled()
       done()
     })
   })
