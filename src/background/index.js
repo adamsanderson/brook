@@ -1,11 +1,15 @@
-import { createBackgroundStore } from './redux/store'
-import { initErrorHandler } from './util/errorHandler'
+import { createBackgroundStore } from '../redux/store'
+import { initErrorHandler } from '../util/errorHandler'
 
-import { changeTab } from "./redux/modules/activeTab"
-import { fetchAll } from "./redux/modules/feeds"
-import { forgetFeeds } from "./redux/modules/discovery"
-import options from "./redux/modules/options"
-import { onPopupStateChange, getNotificationState } from './util/onPopupStateChange'
+import { changeTab } from "../redux/modules/activeTab"
+import { fetchAll } from "../redux/modules/feeds"
+import { forgetFeeds } from "../redux/modules/discovery"
+import options from "../redux/modules/options"
+import { onPopupStateChange, getNotificationState } from '../util/onPopupStateChange'
+
+// These paths are not guaranteed, but they seem to work for now:
+const subscribePopupURL = '/src/SubscribePopup/index.html'
+const popupURL = '/src/Popup/index.html'
 
 const MINUTE = 60 * 1000
 
@@ -22,7 +26,7 @@ browser.browserAction.onClicked.addListener(() => {
   if (viewMode === 'sidebar') {
     const popupState = getNotificationState(state)
     if (popupState.canSubscribe) {
-      browser.browserAction.setPopup({popup: "subscribePopup.html"})
+      browser.browserAction.setPopup({popup: subscribePopupURL})
       browser.browserAction.openPopup()
       browser.browserAction.setPopup({popup: ""})
     } else {
@@ -30,7 +34,7 @@ browser.browserAction.onClicked.addListener(() => {
     }
   } else {
     browser.sidebarAction.close()
-    browser.browserAction.setPopup({popup: "popup.html"})
+    browser.browserAction.setPopup({popup: popupURL})
     browser.browserAction.openPopup()
     browser.browserAction.setPopup({popup: ""})
   }

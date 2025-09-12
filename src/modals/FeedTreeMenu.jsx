@@ -35,7 +35,7 @@ class FeedTreeMenu extends React.Component {
           <a onClick={ this.handleAddFeedByUrl }>Add Feed By URL</a>
         </div>
         <div>
-          <a href={ browser.runtime.getURL('import.html') }>Import Feeds</a>
+          <a href={ browser.runtime.getURL('src/Import/index.html') }>Import Feeds</a>
         </div>
         <div>
           <a onClick={ this.handleExport }>Export Feeds</a>

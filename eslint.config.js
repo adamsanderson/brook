@@ -1,9 +1,9 @@
-import js from '@eslint/js';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import importPlugin from 'eslint-plugin-import';
-import babelParser from '@babel/eslint-parser';
-import globals from 'globals';
+import js from '@eslint/js'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import importPlugin from 'eslint-plugin-import'
+import babelParser from '@babel/eslint-parser'
+import globals from 'globals'
 
 export default [
   js.configs.recommended,
@@ -54,15 +54,36 @@ export default [
     settings: {
       react: {
         version: 'detect'
+      },
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx']
+        }
       }
     },
   },
   {
-    files: ['test/**/*.test.js'],
+    files: ['test/**'],
     languageOptions: {
       globals: {
-        ...globals.jest,
-      },
-    },
+          suite: true,
+          test: true,
+          describe: true,
+          it: true,
+          expectTypeOf: true,
+          assertType: true,
+          expect: true,
+          assert: true,
+          chai: true,
+          vitest: true,
+          vi: true,
+          beforeAll: true,
+          afterAll: true,
+          beforeEach: true,
+          afterEach: true,
+          onTestFailed: true,
+          onTestFinished: true,
+      }
+    }
   }
-];
+]

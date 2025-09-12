@@ -32,7 +32,7 @@ class ImportModal extends React.Component {
     return (
       <div>
         <h2>
-          <img src='images/Brook.svg' className='Icon'/>
+          <img src="/icons/Brook.svg" className='Icon'/>
           Import Feeds
         </h2>
 

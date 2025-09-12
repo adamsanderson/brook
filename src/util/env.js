@@ -1,8 +1,6 @@
-/* global process */
-
 const ENV = {
-  [process.env.NODE_ENV]: true,
-  environmentName: process.env.NODE_ENV
+  [import.meta.env.MODE]: true,
+  environmentName: import.meta.env.MODE
 }
 
 export default ENV
