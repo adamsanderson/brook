@@ -10,7 +10,9 @@ export default defineConfig({
     webExtension({
       manifest: 'src/manifest.json',
       additionalInputs: [
-        'src/Import/index.html'
+        'src/Import/index.html',
+        'src/Popup/index.html',
+        'src/SubscribePopup/index.html',
       ]
     }),
     nodePolyfills({
