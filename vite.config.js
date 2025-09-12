@@ -13,7 +13,12 @@ export default defineConfig({
         'src/Import/index.html',
         'src/Popup/index.html',
         'src/SubscribePopup/index.html',
-      ]
+      ],
+      webExtConfig: {
+        target: "firefox-desktop",
+        devtools: true,
+        startUrl: "about:debugging#/runtime/this-firefox",
+      }
     }),
     nodePolyfills({
       // Enable polyfills for specific globals and modules
