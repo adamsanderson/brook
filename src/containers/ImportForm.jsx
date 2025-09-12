@@ -9,7 +9,6 @@ import OpmlReader from '../lib/OpmlReader'
 import FileButton from '../components/FileButton'
 import Feed from '../components/Feed'
 import { ImportImage } from '../components/images'
-import brookImageSrc from '../images/Brook.svg'
 
 class ImportModal extends React.Component {
   static propTypes = {
@@ -33,7 +32,7 @@ class ImportModal extends React.Component {
     return (
       <div>
         <h2>
-          <img src={brookImageSrc} className='Icon'/>
+          <img src="/icons/Brook.svg" className='Icon'/>
           Import Feeds
         </h2>
 

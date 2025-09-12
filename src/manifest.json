@@ -7,8 +7,8 @@
   "sidebar_action": {
     "browser_style": true,
     "default_icon": {
-      "96": "images/Brook.svg",
-      "48": "images/Brook.svg"
+      "96": "icons/Brook.svg",
+      "48": "icons/Brook.svg"
     },
     "default_title": "Brook",
     "default_panel": "src/Sidebar/index.html"
@@ -17,8 +17,8 @@
   "browser_action": {
     "browser_style": true,
     "default_icon": {
-      "96": "images/Brook.svg",
-      "48": "images/Brook.svg"
+      "96": "icons/Brook.svg",
+      "48": "icons/Brook.svg"
     },
     "default_title": "Brook"
   },
