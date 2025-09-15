@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import App from './App'
 import { createProxyStore } from '../redux/store'
@@ -10,11 +10,11 @@ initErrorHandler()
 
 const store = createProxyStore()
 
-ReactDOM.render(
+const root = createRoot(document.body)
+root.render(
   <ProxyStoreProvider store={store}>
     <div>
       <App/>
     </div>
-  </ProxyStoreProvider>,
-  document.body
+  </ProxyStoreProvider>
 )

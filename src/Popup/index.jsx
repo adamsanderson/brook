@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import App from './App'
 import ModalRoot from "../modals"
@@ -20,13 +20,13 @@ const autoCloseHandler = createAutoCloseHandler(store)
 store.dispatch(openPopup())
 window.addEventListener("unload", (ev) => store.dispatch(closePopup()), { once: true, passive: true})
 
-ReactDOM.render(
+const root = createRoot(document.body)
+root.render(
   <ProxyStoreProvider store={store}>
     <div className="Root" onClick={linkHandler} onMouseLeave={autoCloseHandler}>
       <App/>
       <ToastRoot/>
       <ModalRoot/>
     </div>
-  </ProxyStoreProvider>,
-  document.body
+  </ProxyStoreProvider>
 )

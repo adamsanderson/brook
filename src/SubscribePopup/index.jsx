@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import App from './App'
 import linkHandler from "../util/linkHandler"
@@ -11,11 +11,11 @@ initErrorHandler()
 
 const store = createProxyStore()
 
-ReactDOM.render( 
+const root = createRoot(document.body)
+root.render(
   <ProxyStoreProvider store={store}>
     <div className="Root" onClick={linkHandler}>
       <App/>
     </div>
-  </ProxyStoreProvider>,
-  document.body
+  </ProxyStoreProvider>
 )

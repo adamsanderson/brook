@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import App from './App'
 import ModalRoot from "../modals"
@@ -13,13 +13,13 @@ initErrorHandler()
 
 const store = createProxyStore()
 
-ReactDOM.render( 
+const root = createRoot(document.body)
+root.render(
   <ProxyStoreProvider store={store}>
     <div className="Root" onClick={linkHandler}>
       <App/>
       <ToastRoot/>
       <ModalRoot/>
     </div>
-  </ProxyStoreProvider>,
-  document.body
+  </ProxyStoreProvider>
 )

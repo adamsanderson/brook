@@ -6,7 +6,7 @@ import {
 } from 'webext-redux'
 import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff'
 import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch'
-import thunk from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 
 import ENV from '../util/env'
 import feeds from './modules/feeds'
