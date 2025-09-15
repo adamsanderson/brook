@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import modal, { closeModal } from '../redux/modules/modal'
 import SubscribeMenu from './SubscribeMenu'
@@ -52,19 +51,13 @@ function ModalRoot({ type, props, closeModal }) {
       throw new Error("Unknown modal type: " + type)
     }
     modal = (
-      <CSSTransition classNames="Modal" addEndListener={(node, done) => {
-        node.addEventListener('transitionend', done)
-      }} >
-        <SpecificModal closeModal={closeModal} {...props} />
-      </CSSTransition>
+        <div className='Modal'>
+          <SpecificModal closeModal={closeModal} {...props} />
+        </div>
     )
   }
 
-  return (
-    <TransitionGroup>
-      {modal}
-    </TransitionGroup>
-  )
+  return modal
 }
 
 export default connect(

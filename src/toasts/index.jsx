@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import toast, {hideToastNow as hideToast, holdToast, releaseToast} from '../redux/modules/toast'
 import UndoToast from './UndoToast'
@@ -40,24 +39,16 @@ function ToastRoot({type, props, hideToast, holdToast, releaseToast}) {
       throw new Error("Unknown toast type: "+type)
     }
     toast = (
-      <CSSTransition classNames="Modal" addEndListener={(node, done) => {
-        node.addEventListener('transitionend', done)
-      }} >
         <div className="Toast" onMouseEnter={holdToast} onMouseLeave={releaseToast}>
           <SpecificToast hideToast={hideToast} {...props} />
           <a className="Toast-close" onClick={hideToast} >
             ✖
           </a>
         </div>
-      </CSSTransition>
     )
   }
    
-  return (
-    <TransitionGroup>
-      {toast}
-    </TransitionGroup>
-  )
+  return toast
 }
 
 export default connect(

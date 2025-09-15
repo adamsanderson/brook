@@ -22,7 +22,7 @@ class App extends React.Component {
         </p>
         
         <div className="Panel-body">
-          <ErrorBoundary message="An error ocurred while running Brook.">
+          <ErrorBoundary message="An error occurred while running Brook.">
             <p>Subscribe to:</p>
             <SubscribeList feeds={this.props.feeds} onSubscribe={this.handleSubscription} />
           </ErrorBoundary>
