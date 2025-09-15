@@ -2882,7 +2882,7 @@ __metadata:
     vite-plugin-web-extension: "npm:^4.4.5"
     vitest: "npm:^3.2.4"
     web-ext: "npm:8.9.0"
-    webext-redux: "npm:^2.0.1"
+    webext-redux: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 
@@ -8859,15 +8859,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webext-redux@npm:^2.0.1":
-  version: 2.1.9
-  resolution: "webext-redux@npm:2.1.9"
+"webext-redux@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "webext-redux@npm:4.0.0"
   dependencies:
     lodash.assignin: "npm:^4.2.0"
     lodash.clonedeep: "npm:^4.5.0"
   peerDependencies:
-    redux: ">= 3 <= 4"
-  checksum: 10c0/ae6def6bf7a1f93da6740c20d2cc1da5bbac12e049b45d64359171ecd21c20af1d6985dd09f8ba1de125ae6d736e20aecc934989501335c3f9c4c889c4bc9086
+    redux: ">= 3 <= 5"
+  checksum: 10c0/35d16b50976ff122971bce716303edf6b16a8fe59e369ea459e09ea18a4c16b8de8ee156e6ba9ed3a0f039ede3bfc1a2aacde6c5fa576093da67732fc25da338
   languageName: node
   linkType: hard
 

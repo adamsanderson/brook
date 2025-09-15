@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { 
-  wrapStore,
   Store as ProxyStore,
-  applyMiddleware as applyProxyMiddleware 
+  applyMiddleware as applyProxyMiddleware, 
+  createWrapStore
 } from 'webext-redux'
 import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff'
 import patchDeepDiff from 'webext-redux/lib/strategies/deepDiff/patch'
@@ -37,8 +37,6 @@ export const sharedMiddleware = [thunk, promise, timeoutScheduler]
 export const middleware = [notifications, backgroundActions, ...sharedMiddleware]
 export const enhancers = []
 const serializePaths = []
-
-const REDUX_PORT_NAME = "Brook"
 
 // Register Modules:
 function addModule(module) {
@@ -99,8 +97,8 @@ export function createBackgroundStore() {
   connectStoreToDispatchChannel(store)
 
   // Wrap store with webext-redux
+  const wrapStore = createWrapStore({channelName: 'Brook'})
   wrapStore(store, {
-    portName: REDUX_PORT_NAME,
     diffStrategy: deepDiff,
   })
 
@@ -110,7 +108,7 @@ export function createBackgroundStore() {
 
 export function createProxyStore() {
   const proxy = new ProxyStore({
-    portName: REDUX_PORT_NAME,
+    channelName: 'Brook',
     patchStrategy: patchDeepDiff,
   })
 
