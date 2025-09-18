@@ -5,9 +5,9 @@
 const ENTITY_REGEXP = /&#?[a-zA-Z0-9]+;/
 
 // Cache a textarea element for decoding.
-let element
+let element: HTMLTextAreaElement | undefined
 
-export default function decodeHtmlEntities(text) {
+export default function decodeHtmlEntities(text: string): string {
     if (!ENTITY_REGEXP.test(text)) return text
 
     element = element || document.createElement("textarea")

@@ -1,7 +1,8 @@
 export class NetworkError extends Error {
   unreported = true
+  url: string
 
-  constructor(message, url) {
+  constructor(message: string, url: string) {
     super(message)
 
     if (Error.captureStackTrace) Error.captureStackTrace(this, NetworkError)
@@ -11,7 +12,9 @@ export class NetworkError extends Error {
 }
 
 export class FeedParseError extends Error {
-  constructor(message, url) {
+  url: string
+
+  constructor(message: string, url: string) {
     super(message)
 
     if (Error.captureStackTrace) Error.captureStackTrace(this, FeedParseError)
@@ -22,11 +25,12 @@ export class FeedParseError extends Error {
 
 export class DeadFeedError extends Error {
   unreported = true
+  url: string
 
-  constructor(message, url) {
+  constructor(message: string, url: string) {
     super(message)
 
-    if (Error.captureStackTrace) Error.captureStackTrace(this, FeedParseError)
+    if (Error.captureStackTrace) Error.captureStackTrace(this, DeadFeedError)
 
     this.url = url
   }
