@@ -2,12 +2,13 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import webExtension from "vite-plugin-web-extension"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
-import { resolve } from "path"
+import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ mode }) => {
 
   return ({
     plugins: [
+      // react(),
       webExtension({
         manifest: "src/manifest.json",
         additionalInputs: [
@@ -31,13 +32,8 @@ export default defineConfig(({ mode }) => {
         // Enable polyfill for specific modules
         protocolImports: true,
       }),
+      viteTsconfigPaths()
     ],
-    resolve: {
-      alias: {
-        "@": resolve(__dirname, "src"),
-      },
-    },
-
     optimizeDeps: {
       include: ["react", "react-dom", "redux", "react-redux", "feedme"],
     },

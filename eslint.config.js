@@ -3,6 +3,8 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import importPlugin from 'eslint-plugin-import'
 import babelParser from '@babel/eslint-parser'
+import tseslint from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
 import globals from 'globals'
 
 export default [
@@ -57,7 +59,60 @@ export default [
       },
       'import/resolver': {
         node: {
-          extensions: ['.js', '.jsx']
+          extensions: ['.js', '.jsx', '.ts', '.tsx']
+        }
+      }
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json',
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es6,
+        ...globals.webextensions,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint,
+      react,
+      'react-hooks': reactHooks,
+      import: importPlugin,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      ...importPlugin.configs.errors.rules,
+      ...importPlugin.configs.warnings.rules,
+      'no-console': ['error', {
+        allow: ['warn', 'error']
+      }],
+      '@typescript-eslint/no-unused-vars': ['error', {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+        args: 'none'
+      }],
+      'semi': ['error', 'never'],
+      'import/no-extraneous-dependencies': ['error'],
+    },
+    settings: {
+      react: {
+        version: 'detect'
+      },
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
       }
     },
