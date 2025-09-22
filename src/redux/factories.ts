@@ -2,14 +2,45 @@ import { FEED } from './modules/feeds'
 import { FOLDER } from './modules/folders'
 
 import { humanizeURL } from '../util/url'
+import { NodeRef } from './types'
+
+export type FeedItem = {
+  id: string
+  createdAt: number
+  title: string,
+  url: string,
+}
+
+export type Feed = {
+  id: string
+  type: typeof FEED
+  format?: string
+  isLoading: boolean
+  url: string
+  title: string
+  customTitle?: string
+  isEditing: boolean
+  items: FeedItem[]
+  updatedAt: number
+}
+
+export type Folder = {
+  id: string
+  type: typeof FOLDER
+  title: string
+  children: NodeRef[]
+  isEditing: boolean
+  expanded: boolean
+}
+
+export type FeedInput = Partial<Omit<Feed, 'type'>> & Required<Pick<Feed, 'url'>>
+
+export type FolderInput = Partial<Omit<Folder, 'type'>>
 
 /**
  * Builds a feed from whatever data is available.
- *
- * @param {Object} feed - parsed feed data
- * @param {string} feed.url - the feed's URL.  This is the only required attribute.
  */
-export function buildFeed(feed) {
+export function buildFeed(feed: FeedInput): Feed {
   if (!feed.url) throw new Error("Feeds must have a URL")
 
   return ({
@@ -28,10 +59,8 @@ export function buildFeed(feed) {
 
 /**
  * Builds a new folder from whatever data is available.
- * 
- * @param {Object=} folder - initial folder attributes
  */
-export function buildFolder(folder = {}) {
+export function buildFolder(folder: FolderInput = {}): Folder {
   return {
     id: folder.id || randomId(),
     type: FOLDER,
@@ -42,8 +71,8 @@ export function buildFolder(folder = {}) {
   }
 }
 
-function randomId() {
-  // Note: the substring is used to slice out the `0.` from a base36 string 
+function randomId(): string {
+  // Note: the substring is used to slice out the `0.` from a base36 string
   // like `0.occd054dfpi`.
   return Math.random().toString(36).substring(2, 15)
 }

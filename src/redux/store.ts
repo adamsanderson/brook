@@ -1,7 +1,7 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import { 
+import { createStore, applyMiddleware, compose, combineReducers, Store, Reducer, Middleware } from 'redux'
+import {
   Store as ProxyStore,
-  applyMiddleware as applyProxyMiddleware, 
+  applyMiddleware as applyProxyMiddleware,
   createWrapStore
 } from 'webext-redux'
 import deepDiff from 'webext-redux/lib/strategies/deepDiff/diff'
@@ -25,23 +25,33 @@ import { checkpointableReducer } from './checkpoint'
 
 import {connectStore as connectStoreToDispatchChannel} from './dispatchChannel'
 import backgroundActions from './middleware/backgroundActions'
-import { persistedReducer, connectStoretoStorage } from './storage'
+import { persistedReducer, connectStoreToStorage } from './storage'
 import logger from './middleware/logger'
 import promise from './middleware/promise'
 import timeoutScheduler from './middleware/timeoutScheduler'
 import notifications from './middleware/notifications'
 
-export const initialState = {}
-export const reducers = {}
+import type { RootState } from './types'
+
+type ReduxModule = {
+  name: string
+  reducer?: Reducer
+  middleware?: Middleware
+  enhancer?: any
+  serialize?: boolean
+}
+
+export const initialState: Partial<RootState> = {}
+export const reducers: Record<string, Reducer> = {}
 export const sharedMiddleware = [thunk, promise, timeoutScheduler]
-export const middleware = [notifications, backgroundActions, ...sharedMiddleware]
-export const enhancers = []
-const serializePaths = []
+export const middleware: Middleware[] = [notifications, backgroundActions, ...sharedMiddleware]
+export const enhancers: any[] = []
+const serializePaths: string[] = []
 
 // Register Modules:
-function addModule(module) {
+function addModule(module: ReduxModule): void {
   if (!module.name) throw new Error("Name required")
-  
+
   if (module.reducer)     reducers[module.name] = module.reducer
   if (module.middleware)  middleware.push(module.middleware)
   if (module.enhancer)    enhancers.push(module.enhancer)
@@ -83,15 +93,15 @@ const enhancedMiddleware = compose(
   ...enhancers
 )
 
-export function createBackgroundStore() {
+export function createBackgroundStore(): Store<RootState> {
   const store = createStore(
     rootReducer,
     initialState,
     enhancedMiddleware
   )
-  
+
   // Connect store to storage
-  connectStoretoStorage(store, serializePaths)
+  connectStoreToStorage(store, serializePaths)
 
   // Connect store to fire and forget dispatch channel
   connectStoreToDispatchChannel(store)
@@ -102,11 +112,10 @@ export function createBackgroundStore() {
     diffStrategy: deepDiff,
   })
 
-
   return store
 }
 
-export function createProxyStore() {
+export function createProxyStore(): Store<RootState> {
   const proxy = new ProxyStore({
     channelName: 'Brook',
     patchStrategy: patchDeepDiff,

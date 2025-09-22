@@ -58,6 +58,10 @@ export default [
         version: 'detect'
       },
       'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.app.json'
+        },
         node: {
           extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
@@ -74,7 +78,7 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-        project: './tsconfig.json',
+        projectService: true,
       },
       globals: {
         ...globals.browser,
@@ -111,6 +115,10 @@ export default [
         version: 'detect'
       },
       'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.app.json'
+        },
         node: {
           extensions: ['.js', '.jsx', '.ts', '.tsx']
         }

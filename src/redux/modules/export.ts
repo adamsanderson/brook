@@ -1,8 +1,13 @@
+import { ThunkAction } from 'redux-thunk'
 import folders, { FOLDER } from "./folders"
 import OpmlWriter from "../../lib/OpmlWriter"
 import { download } from "../../util/download"
+import type { RootState } from '../types'
+import type { Feed, Folder } from '../factories'
 
-export function exportOpml() {
+type ExportThunk<T = void> = ThunkAction<T, RootState, unknown, never>
+
+export function exportOpml(): ExportThunk {
   return function(_dispatch, getState) {
     const state = getState()
 
@@ -16,10 +21,10 @@ export function exportOpml() {
   }
 }
 
-function write(state, exportNode, item) {
+function write(state: RootState, exportNode: any, item: Feed | Folder): void {
   if (item.type === FOLDER) {
     const folderNode = exportNode.addFolder(item.title)
-    folders.selectors.getChildren(state, item).forEach(child => {
+    folders.selectors.getChildren(state, item as Folder).forEach(child => {
       write(state, folderNode, child)
     })
   } else {

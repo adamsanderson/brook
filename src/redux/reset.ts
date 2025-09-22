@@ -1,3 +1,5 @@
+import { Action, Reducer, Store } from "redux"
+
 export const RESET_DATA = "RESET_DATA"
 
 export function resetData() {
@@ -6,8 +8,8 @@ export function resetData() {
   }
 }
 
-export function resetableReducer(reducer, initialState={}) {
-  return (state, action) => {  
+export function resetableReducer(reducer: Reducer, initialState: any) {
+  return (state: Store, action: Action) => {  
     if (action.type === RESET_DATA) {
       state = initialState
     }

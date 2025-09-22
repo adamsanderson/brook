@@ -1,3 +1,4 @@
+import React from "react"
 import { getOperatingSystem, MAC } from "./operatingSystem"
 import browser from "webextension-polyfill"
 
