@@ -1,4 +1,7 @@
+import type { Middleware, UnknownAction } from "redux"
+
 export const DELAYED_ACTION = "timeoutScheduler/DELAYED"
+
 
 /**
  * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
@@ -7,14 +10,16 @@ export const DELAYED_ACTION = "timeoutScheduler/DELAYED"
  * Based on:
  * https://redux.js.org/docs/advanced/Middleware.html
  */
-const timeoutScheduler = store => next => action => {
-  if (!action.meta || !action.meta.delay) {
+const timeoutScheduler: Middleware = _store => next => (action: unknown): unknown => {
+  const unknownAction = action as UnknownAction & { meta?: { delay?: number } }
+
+  if (!unknownAction.meta?.delay) {
     return next(action)
   }
 
-  let timeoutId = setTimeout(
+  const timeoutId = setTimeout(
     () => next(action),
-    action.meta.delay
+    unknownAction.meta.delay
   )
 
   next({
