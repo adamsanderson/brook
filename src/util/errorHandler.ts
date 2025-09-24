@@ -1,9 +1,14 @@
 import * as Sentry from '@sentry/browser'
 import ENV from './env'
+import browser from "webextension-polyfill"
 
 const extensionUrlRegexp = /^[\w]+-extension:\//
 
-export function initErrorHandler(options = {}){
+type InitErrorHandlerOptions = {
+  globalHandlers?: boolean;
+}
+
+export function initErrorHandler(options: InitErrorHandlerOptions = {}){
   const globalHandlers = options.globalHandlers
 
   try {
@@ -20,6 +25,7 @@ export function initErrorHandler(options = {}){
           integrations = integrations
             .filter(i => i.name !== 'GlobalHandlers')
             .concat(new Sentry.Integrations.ReportingObserver({
+              // @ts-expect-error 'crash' is typed as an enum, but isn't exported.
               types: ['crash'],
             }))
         }
@@ -41,12 +47,12 @@ function createUrlCleaner() {
         frame.filename = frame.filename.replace(/\/\/[a-f0-9-]+/,"")
       }
 
-      return frame
+      return Promise.resolve(frame)
     })
   })
 }
 
-export function reportError(error, info) {
+export function reportError(error: unknown, info?: Record<string, unknown>) {
   const reportable = isReportable(error)
   
   // Treat errors outside the control of Brook as warnings and 
@@ -71,13 +77,10 @@ export function reportError(error, info) {
 /**
  * Determines whether a given error should be reported.  We are not interested in issues
  * outside the control of Brook such as HTTP timeouts.
- * 
- * @param {Error} error 
- * @returns {Boolean}
  */
-function isReportable(error) {
+function isReportable(error: unknown): boolean {
   // Internal errors may flag themselves as unreported:
-  if (error.unreported) return false
+  if ((error as {unreported: boolean})?.unreported) return false
   
   // Some common DOMExceptions should not be reported because there is nothing we can
   // do about them.
