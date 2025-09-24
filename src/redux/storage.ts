@@ -7,11 +7,11 @@ import type { RootState } from './types'
 
 const STATE_KEY = "brook" as const
 
-const UPDATE_PERSISTANT_STATE = "UPDATE_PERSISTANT_STATE" as const
+const UPDATE_PERSISTENT_STATE = "UPDATE_PERSISTENT_STATE" as const
 
 function updatePersistedState(data: Partial<RootState>) {
   return {
-    type: UPDATE_PERSISTANT_STATE,
+    type: UPDATE_PERSISTENT_STATE,
     payload: data,
   } as const
 }
@@ -20,7 +20,7 @@ type UpdatePersistedStateAction = ReturnType<typeof updatePersistedState>
 
 export function persistedReducer<S extends RootState>(reducer: Reducer<S, UnknownAction>) {
   return (state: S | undefined, action: UnknownAction | UpdatePersistedStateAction): S => {
-    if (action.type === UPDATE_PERSISTANT_STATE) {
+    if (action.type === UPDATE_PERSISTENT_STATE) {
       const updateAction = action as UpdatePersistedStateAction
       state = {...state, ...updateAction.payload} as S
     }
