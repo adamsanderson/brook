@@ -1,9 +1,8 @@
-import { ThunkAction } from 'redux-thunk'
-import { Feed, Folder } from '../factories'
+import { Feed, FeedItem, Folder } from '../factories'
 import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER, FoldersState } from './folders'
 import views from './views'
-import type { RootState } from '../types'
+import type { RootState, Thunk } from '../types'
 
 export const SELECT_FEED = "SELECT_FEED" as const
 export const SELECT_FOLDER = "SELECT_FOLDER" as const
@@ -57,8 +56,8 @@ type TreeNode = {
   expanded?: boolean
 }
 
-export function selectFeed(feed: Feed) {
-  return (dispatch: any, _getState: () => RootState) => {
+export function selectFeed(feed: Feed): Thunk {
+  return (dispatch, _getState) => {
     dispatch({type: FETCH_FEED, payload: { feed }})
     dispatch({type: SELECT_FEED, payload: { feed }})
   }
@@ -77,7 +76,7 @@ export function clearSelection() {
   } as const
 }
 
-export function selectItem(item: Feed | FoldersState[string]) {
+export function selectItem(item: FeedItem) {
   return {
     type: SELECT_ITEM,
     payload: { item }
@@ -111,8 +110,6 @@ type UIAction =
   | RemoveFeedAction
   | RemoveFolderAction
 
-type UIThunk<T = void> = ThunkAction<T, RootState, unknown, UIAction>
-
 const initialState: UIState = {
   selectedId: undefined,
   selectedType: undefined,
@@ -133,8 +130,6 @@ const reducer = (state = initialState, action: UIAction): UIState => {
       return reduceRemoveItem(state, action.payload.folder)
     case CHANGE_VIEW:
       return { ...state, currentViewId: action.payload.view }
-    case SELECT_ITEM:
-      return { ...state, selectedId: action.payload.item.id, selectedType: action.payload.item.type }
     default:
       return state
   }
