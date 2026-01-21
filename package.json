@@ -38,7 +38,7 @@
   "dependencies": {
     "@sentry/browser": "^4.5.1",
     "feedme": "^2.0.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.23",
     "prop-types": "^15.6.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
