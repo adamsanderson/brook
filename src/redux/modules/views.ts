@@ -1,7 +1,6 @@
 import { SELECT_FEED, SELECT_ITEM } from './ui'
 import { REMOVE_FEED } from './feeds'
-import { type Feed, type FeedItem } from '../factories'
-import type { RootState } from '../types'
+import type { RootState, Feed, FeedItem } from '../types'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED" as const
 

@@ -1,41 +1,7 @@
 import { FEED } from './modules/feeds'
-import { FOLDER } from './modules/folders'
-
 import { humanizeURL } from '../util/url'
-import { NodeRef } from './types'
-
-export type FeedItem = {
-  id: string
-  createdAt: number
-  title: string,
-  url: string,
-}
-
-export type Feed = {
-  id: string
-  type: typeof FEED
-  format?: string
-  isLoading: boolean
-  url: string
-  title: string
-  customTitle?: string
-  isEditing: boolean
-  items: FeedItem[]
-  updatedAt: number
-}
-
-export type Folder = {
-  id: string
-  type: typeof FOLDER
-  title: string
-  children: NodeRef[]
-  isEditing: boolean
-  expanded: boolean
-}
-
-export type FeedInput = Partial<Omit<Feed, 'type'>> & Required<Pick<Feed, 'url'>>
-
-export type FolderInput = Partial<Omit<Folder, 'type'>>
+import type { Feed, Folder, FeedInput, FolderInput } from './types'
+import { FOLDER } from './modules/folders'
 
 /**
  * Builds a feed from whatever data is available.

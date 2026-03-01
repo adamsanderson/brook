@@ -1,4 +1,4 @@
-import { Feed, FeedItem, Folder } from '../factories'
+import { Feed, FeedItem, Folder } from '../types'
 import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER, FoldersState } from './folders'
 import views from './views'

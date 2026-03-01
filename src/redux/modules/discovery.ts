@@ -1,6 +1,5 @@
 import feeds from "./feeds"
-import type { RootState, WebExtAction } from '../types'
-import type { FeedInput } from '../factories'
+import type { RootState, WebExtAction, FeedInput } from '../types'
 
 export const FOUND_FEEDS = "FOUND_FEEDS" as const
 export const FORGET_FEEDS = "FORGET_FEEDS" as const

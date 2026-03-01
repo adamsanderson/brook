@@ -1,9 +1,9 @@
 import { ThunkAction } from 'redux-thunk'
 import folders, { FOLDER } from "./folders"
+// @ts-expect-error migration
 import OpmlWriter from "../../lib/OpmlWriter"
 import { download } from "../../util/download"
-import type { RootState } from '../types'
-import type { Feed, Folder } from '../factories'
+import type { RootState, Feed, Folder } from '../types'
 
 type ExportThunk<T = void> = ThunkAction<T, RootState, unknown, never>
 

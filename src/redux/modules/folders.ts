@@ -1,6 +1,7 @@
-import { buildFolder, Folder, FolderInput, Feed } from "../factories"
+import { buildFolder } from "../factories"
+import {Folder, FolderInput, Feed} from "../types"
 import feeds, { ADD_FEED, REMOVE_FEED, FEED, removeFeed } from './feeds'
-import {BEFORE, OVER, type PositionType} from '../../constants'
+import { BEFORE, OVER, AFTER, type PositionType } from '../../constants'
 import { SELECT_FOLDER } from './ui'
 import { startBatch, endBatch } from "../checkpoint"
 import type { NodeRef, RootState, Thunk } from "../types"
@@ -200,10 +201,11 @@ function nodeAdded(state: FoldersState, node: NodeRef, parentId?: string): Folde
 function nodeSiblingAdded(state: FoldersState, source: NodeRef, target: NodeRef, position: PositionType): FoldersState {
   const targetId = target.id
   const targetType = target.type
+  const targetFolder = targetType === FOLDER ? state[targetId] : undefined
   let childIndex: number = -1
   let parent: Folder | undefined
 
-  if (targetType === FOLDER && (target as any).expanded && position === 1) {
+  if (targetFolder?.expanded && position === AFTER) {
     // Special case: dropping "after" an open folder is actually dropping into the first
     // position of that folder's children
     parent = state[targetId] || state[ROOT]

@@ -1,18 +1,19 @@
 import { alias } from 'webext-redux'
 import FeedMe from 'feedme'
 import { uniqBy } from 'lodash'
+import type { Dispatch, UnknownAction } from 'redux'
 
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
 import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
+// @ts-expect-error discoveryStrategies has not been migrated yet
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
 import { WP_API } from '../../constants'
-import type { Feed, FeedItem, FeedInput } from '../types'
-import type { RootState, Thunk } from '../types'
+import type { Feed, FeedItem, Thunk } from '../types'
 
 // Raw feed data from parser
 type RawFeedData = {
@@ -44,7 +45,10 @@ type WordPressPost = {
 
 // Action types
 type FetchAllAction = { type: typeof FETCH_ALL }
-type FetchFeedAction = { type: typeof FETCH_FEED; payload: { feed: Feed }; promise?: Promise<{ feed: Feed }> }
+type FetchFeedResult = { feed: Feed } | void
+type FetchFeedAction = { type: typeof FETCH_FEED; payload: { feed: Feed }; promise?: Promise<FetchFeedResult> }
+type FeedUpdate = Partial<Feed>
+type ReduxDispatch = Dispatch<UnknownAction>
 
 const WORKER_COUNT = 8
 const FETCH_TIMEOUT = 5 * 1000
@@ -53,19 +57,19 @@ const aliases = {
   [FETCH_ALL]: (_action: FetchAllAction): Thunk => {
     return (dispatch, getState) => {
       const state = getState()
-      const allFeeds = feeds.selectors.allFeeds(state)
+      const allFeeds = [...feeds.selectors.allFeeds(state)]
 
       if (workers.selectors.hasFeedWorkers(state)) return
 
       // TODO: Make WORKER_COUNT configurable
       for (let i = 0; i < WORKER_COUNT; i++) {
         dispatch(startedFeedWorker())
-        fetchFromQueue([...allFeeds], dispatch)
+        fetchFromQueue(allFeeds, dispatch)
       }
     }
   },
 
-  [FETCH_FEED]: (action: FetchFeedAction): FetchFeedAction | Thunk<Promise<{ feed: Feed }>> => {
+  [FETCH_FEED]: (action: FetchFeedAction): FetchFeedAction | Thunk<Promise<FetchFeedResult>> => {
     // If there's a promise, the action has already been kicked off by the background.
     if (action.promise) return action
 
@@ -74,7 +78,7 @@ const aliases = {
   },
 }
 
-function fetchFeed(feed: Feed, dispatch: any): Promise<{ feed: Feed }> {
+function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult> {
   const cache = feed.error ? "reload" : "default"
   const headers: Record<string, string> = {}
 
@@ -93,17 +97,17 @@ function fetchFeed(feed: Feed, dispatch: any): Promise<{ feed: Feed }> {
     }
   }
 
-  const promise = Promise.race([
+  const promise = Promise.race<Response>([
     // Fetch feed…
     fetch(feed.url, { cache, headers }),
     // …with a timeout.
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${feed.url}`)), FETCH_TIMEOUT)
+    new Promise<Response>((_, reject) =>
+      setTimeout(() => reject(new NetworkError(`Timeout: Site did not respond ${feed.url}`, feed.url)), FETCH_TIMEOUT)
     )
   ])
     .then(res => {
       if (res.status === 304) return { feed }
-      if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`)
+      if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`, feed.url)
 
       if (feed.format === WP_API) {
         return handleWordpressApi(feed, res, dispatch)
@@ -127,7 +131,7 @@ function fetchFeed(feed: Feed, dispatch: any): Promise<{ feed: Feed }> {
   return promise
 }
 
-function fetchFromQueue(feedQueue: Feed[], dispatch: any): void {
+function fetchFromQueue(feedQueue: Feed[], dispatch: ReduxDispatch): void {
   window.requestAnimationFrame(() => {
     const feed = feedQueue.shift()
     if (!feed) {
@@ -141,13 +145,13 @@ function fetchFromQueue(feedQueue: Feed[], dispatch: any): void {
   })
 }
 
-function handleFeed(feed: Feed, res: Response, dispatch: any): Promise<{ feed: Feed }> {
+function handleFeed(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
   return res.text().then(body => {
     const parser = new FeedMe(true)
     let failed = false
 
-    const attributes = {
-      etag: res.headers.get("etag"),
+    const attributes: FeedUpdate = {
+      etag: res.headers.get("etag") || undefined,
       lastFetched: Date.now(),
     }
 
@@ -158,15 +162,15 @@ function handleFeed(feed: Feed, res: Response, dispatch: any): Promise<{ feed: F
     parser.on('finish', function () {
       if (failed) return
 
-      const feedData = parser.done()
+      const feedData = parser.done() || {} as RawFeedData
       const feedAttributes = translateFeedData(feedData, feed.url)
 
       dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
     })
 
-    parser.on('error', function (error) {
+    parser.on('error', function () {
       failed = true
-      const contentType = res.headers.get("content-type")
+      const contentType = res.headers.get("content-type") || ""
       const url = alternateUrl(feed, body, contentType)
 
       if (url && url !== feed.url) {
@@ -195,11 +199,11 @@ function handleFeed(feed: Feed, res: Response, dispatch: any): Promise<{ feed: F
   })
 }
 
-function handleWordpressApi(feed: Feed, res: Response, dispatch: any): Promise<{ feed: Feed }> {
-  return res.json().then(json => {
+function handleWordpressApi(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
+  return res.json().then((json: WordPressPost[]) => {
     try {
-      const attributes = {
-        etag: res.headers.get("etag"),
+      const attributes: FeedUpdate = {
+        etag: res.headers.get("etag") || undefined,
         lastFetched: Date.now(),
       }
 
@@ -218,12 +222,12 @@ function handleWordpressApi(feed: Feed, res: Response, dispatch: any): Promise<{
   })
 }
 
-function translateFeedData(data: RawFeedData, feedUrl: string): FeedInput {
-  const feed: FeedInput = {}
+function translateFeedData(data: RawFeedData, feedUrl: string): FeedUpdate {
+  const feed: FeedUpdate = {}
 
   // Only assign present data, we don't want to override anything with missing data.
   if (data.title) feed.title = data.title
-  if (data.link || data['atom:link']) feed.linkUrl = chooseUrl(data.link || data['atom:link'])
+  if (data.link || data?.['atom:link']) feed.linkUrl = chooseUrl(data.link || data['atom:link'])
   if (data.items) feed.items = data.items.map((item) => translateFeedItemData(item, feedUrl))
 
   // If the same URL is referenced multiple times, only include the first instance
@@ -236,8 +240,11 @@ function translateFeedData(data: RawFeedData, feedUrl: string): FeedInput {
 
 function translateFeedItemData(data: RawFeedItemData, feedUrl: string): FeedItem | (FeedItem & { error: string; data: RawFeedItemData }) {
   try {
-    const url = resolveUrl(chooseUrl(data["feedburner:origlink"] || data["link"] || data["url"]), feedUrl)
-    const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"])
+    const chosenUrl = chooseUrl(data["feedburner:origlink"] || data["link"] || data["url"])
+    if (!chosenUrl) throw new Error("Could not resolve item URL")
+
+    const url = resolveUrl(chosenUrl, feedUrl)
+    const date = new Date(data.pubdate || data.published || data.updated || data["dc:date"] || "")
     const title = decodeHtmlEntities((typeof data.title === "string") ? data.title : date.toLocaleDateString())
 
     return {
@@ -252,14 +259,14 @@ function translateFeedItemData(data: RawFeedItemData, feedUrl: string): FeedItem
       id: Math.random().toString(36).substring(2, 15),
       title: '',
       url: '',
-      error: error.toString(),
+      error: error instanceof Error ? error.toString() : String(error),
       createdAt: 0,
       data
     }
   }
 }
 
-function translateWorpressData(data: WordPressPost[]): FeedInput {
+function translateWorpressData(data: WordPressPost[]): FeedUpdate {
   return ({
     error: undefined,
     alternate: undefined,
@@ -291,7 +298,7 @@ function alternateUrl(feed: Feed, body: string, contentType: string): string | u
   }
 
   const urls = findUrls(body)
-  if (urls.length === 1 && urls[0] !== feed.url) return urls[0]
+  if (urls && urls.length === 1 && urls[0] !== feed.url) return urls[0]
 }
 
 export default alias(aliases)

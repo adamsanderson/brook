@@ -1,5 +1,5 @@
-import { buildFeed, Feed, FeedInput } from "../factories"
-import type { RootState, Thunk } from "../types"
+import { buildFeed } from "../factories"
+import type { RootState, Thunk, Feed, FeedInput } from "../types"
 
 export const ADD_FEED = "ADD_FEED" as const
 export const REMOVE_FEED = "REMOVE_FEED" as const
@@ -108,7 +108,7 @@ export function updateFeed(feed: Feed, attributes: Partial<Feed>) {
 // Action types derived from action creators
 type RemoveFeedAction = ReturnType<typeof removeFeed> 
 type RenameFeedAction = ReturnType<typeof renameFeed>
-type FetchFeedAction = ReturnType<typeof fetchFeed>
+type FetchFeedAction = ReturnType<typeof fetchFeed> & { ready?: boolean }
 type FetchAllAction = ReturnType<typeof fetchAll>
 type EditFeedAction = ReturnType<typeof editFeed>
 type UpdateFeedAction = ReturnType<typeof updateFeed>
@@ -131,7 +131,7 @@ type FeedAction =
 const initialState: FeedsState = {}
 
 const reducer = (state = initialState, action: FeedAction): FeedsState => {
-  if (action.type === FETCH_ALL) return state;
+  if (action.type === FETCH_ALL) return state
 
   const feed = action.payload?.feed
 
@@ -152,7 +152,7 @@ const reducer = (state = initialState, action: FeedAction): FeedsState => {
       return reduceFeedUpdate(state, feed, action.payload.attributes)
 
     case FETCH_FEED:
-      return reduceFeedUpdate(state, feed, { isLoading: !(action as any).ready })
+      return reduceFeedUpdate(state, feed, { isLoading: !action.ready })
 
     default:
       return state
@@ -175,7 +175,7 @@ function reduceFeedUpdate(state: FeedsState, feed: Feed, attributes: Partial<Fee
   const currentFeed = state[feed.id]
   if (!currentFeed) return state
 
-  if ((attributes as any).error) {
+  if ((attributes).error) {
     const newFeed = { ...currentFeed, ...attributes, isLoading: false }
     return Object.assign({}, state, { [feed.id]: newFeed })
   } else {

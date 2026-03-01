@@ -1,3 +1,4 @@
+// @ts-expect-error migration
 import { leftAlignedBelow, rightAlignedBelow } from "../../lib/position"
 import type { RootState } from '../types'
 
@@ -13,12 +14,15 @@ type Position = {
   right?: number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+type EmptyObject = {}
+
 type ModalState = {
   type?: string
-  props?: Record<string, any> & {
+  props?: Record<string, unknown> & {
     position?: Position
   }
-} | {}
+} | EmptyObject
 
 export type { ModalState }
 
@@ -28,14 +32,14 @@ export function closeModal() {
   } as const
 }
 
-export function openModal(type: string, props: Record<string, any> = {}) {
+export function openModal(type: string, props: object = {}) {
   return {
     type: OPEN,
     payload: { type, props }
   } as const
 }
 
-export function openModalRightAlignedBelow(element: Element, type: string, props: Record<string, any> = {}) {
+export function openModalRightAlignedBelow(element: Element, type: string, props: object = {}) {
   const position = rightAlignedBelow(element)
 
   return {
@@ -44,7 +48,7 @@ export function openModalRightAlignedBelow(element: Element, type: string, props
   } as const
 }
 
-export function openModalLeftAlignedBelow(element: Element, type: string, props: Record<string, any> = {}) {
+export function openModalLeftAlignedBelow(element: Element, type: string, props: object = {}) {
   const position = leftAlignedBelow(element)
 
   return {
