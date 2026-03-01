@@ -9,7 +9,7 @@
     "clean": "rm -rf ./node_modules; rm -rf ./dist",
     "firefox": "web-ext run -s ./dist/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "test": "vitest",
     "package": "yarn build && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "postpackage": "cat ./docs/publishing.md"
