@@ -4,10 +4,11 @@ import feedHandler from './feedHandler'
 import medium from './medium'
 import wordpressApi from './wordpressApi'
 import wordpressAssets from './wordpressAssets'
+import type { DiscoveredFeed, DiscoveryStrategy } from './types'
 
-const NONE = []
+const NONE: DiscoveredFeed[] = []
 
-const strategies = [
+const strategies: DiscoveryStrategy[] = [
   documentLinks,
   feedBurner,
   feedHandler,
@@ -16,8 +17,8 @@ const strategies = [
   wordpressAssets,
 ]
 
-export function discoverFeeds(document) {
-  for (var i = 0; i < strategies.length; i++) {
+export function discoverFeeds(document: Document): DiscoveredFeed[] {
+  for (let i = 0; i < strategies.length; i++) {
     const feeds = strategies[i](document)
     if (feeds && feeds.length > 0) return feeds
   }
@@ -25,8 +26,8 @@ export function discoverFeeds(document) {
   return NONE
 }
 
-export function discoverFeedsFromString(string) {
+export function discoverFeedsFromString(string: string): DiscoveredFeed[] {
   const parser = new DOMParser()
-  const document = parser.parseFromString(string, "text/html")
+  const document = parser.parseFromString(string, 'text/html')
   return discoverFeeds(document)
 }

@@ -1,4 +1,5 @@
-import { humanizeHost } from "../util/url"
+import { humanizeHost } from '../util/url'
+import type { DiscoveredFeed } from './types'
 
 // Search for known permutations of possible feed sources:
 const SELECTORS = `
@@ -13,11 +14,11 @@ const SELECTORS = `
 /**
  * Searches the current page for discovery link metadata.
  */
-function documentLinks(document) {
-  const feedLinks = document.querySelectorAll(SELECTORS)
-  const feeds = Array.from(feedLinks).map(linkEl => ({
-    title: linkEl.getAttribute("title") || humanizeHost(linkEl.getAttribute("href")),
-    url: linkEl.getAttribute("href")
+function documentLinks(document: Document): DiscoveredFeed[] {
+  const feedLinks = document.querySelectorAll<HTMLLinkElement>(SELECTORS)
+  const feeds = Array.from(feedLinks).map((linkEl) => ({
+    title: linkEl.getAttribute('title') || humanizeHost(linkEl.getAttribute('href') || ''),
+    url: linkEl.getAttribute('href') || '',
   }))
 
   return feeds

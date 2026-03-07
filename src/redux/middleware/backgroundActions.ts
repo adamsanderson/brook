@@ -8,7 +8,6 @@ import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
-// @ts-expect-error discoveryStrategies has not been migrated yet
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
