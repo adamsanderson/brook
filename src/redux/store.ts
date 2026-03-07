@@ -43,9 +43,12 @@ import notifications from './middleware/notifications'
 
 import type { RootState } from './types'
 
-type ReduxModule = {
-  name: keyof RootState
-  reducer?: Reducer<any, any>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyAction = any;
+
+type ReduxModule<K extends keyof RootState = keyof RootState> = {
+  name: K
+  reducer?: Reducer<RootState[K], AnyAction>
   middleware?: Middleware
   enhancer?: StoreEnhancer
   serialize?: boolean
@@ -53,7 +56,7 @@ type ReduxModule = {
 
 export const initialState: Partial<RootState> = {}
 export const reducers: {
-  [K in keyof RootState]?: Reducer<any, any>
+  [K in keyof RootState]?: Reducer<RootState[K], AnyAction>
 } = {}
 export const sharedMiddleware = [thunk, promise, timeoutScheduler]
 export const middleware: Middleware[] = [notifications, backgroundActions, ...sharedMiddleware]
@@ -61,10 +64,12 @@ export const enhancers: StoreEnhancer[] = []
 const serializePaths: (keyof RootState)[] = []
 
 // Register Modules:
-function addModule(module: ReduxModule): void {
+function addModule<K extends keyof RootState>(module: ReduxModule<K>): void {
   if (!module.name) throw new Error("Name required")
 
-  if (module.reducer) reducers[module.name] = module.reducer
+  if (module.reducer) {
+    reducers[module.name] = module.reducer as (typeof reducers)[K]
+  }
   if (module.middleware)  middleware.push(module.middleware)
   if (module.enhancer)    enhancers.push(module.enhancer)
   if (module.serialize)   serializePaths.push(module.name)
@@ -91,7 +96,7 @@ if (!ENV.production) {
 // Create store
 const combinedReducers = combineReducers(
   reducers as {
-    [K in keyof RootState]: Reducer<any, any>
+    [K in keyof RootState]: Reducer<RootState[K], AnyAction>
   }
 ) as Reducer<RootState, UnknownAction>
 
