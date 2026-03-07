@@ -1,4 +1,5 @@
 import documentLinks from './documentLinks'
+import documentUrls from './documentUrls'
 import feedBurner from './feedBurner'
 import feedHandler from './feedHandler'
 import medium from './medium'
@@ -10,6 +11,7 @@ const NONE: DiscoveredFeed[] = []
 
 const strategies: DiscoveryStrategy[] = [
   documentLinks,
+  documentUrls,
   feedBurner,
   feedHandler,
   medium,
