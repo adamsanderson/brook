@@ -29,7 +29,7 @@ export function closePopup() {
 type OpenPopupAction = ReturnType<typeof openPopup>
 type ClosePopupAction = ReturnType<typeof closePopup>
 
-type PopupAction = OpenPopupAction | ClosePopupAction
+export type PopupAction = OpenPopupAction | ClosePopupAction
 
 const initialState: PopupState = {
   openedAt: 0,

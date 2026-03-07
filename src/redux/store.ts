@@ -1,4 +1,14 @@
-import { createStore, applyMiddleware, compose, combineReducers, Store, Reducer, Middleware } from 'redux'
+import {
+  createStore,
+  applyMiddleware,
+  compose,
+  combineReducers,
+  Store,
+  Reducer,
+  Middleware,
+  StoreEnhancer,
+  UnknownAction,
+} from 'redux'
 import {
   Store as ProxyStore,
   applyMiddleware as applyProxyMiddleware,
@@ -34,25 +44,27 @@ import notifications from './middleware/notifications'
 import type { RootState } from './types'
 
 type ReduxModule = {
-  name: string
-  reducer?: Reducer
+  name: keyof RootState
+  reducer?: Reducer<any, any>
   middleware?: Middleware
-  enhancer?: any
+  enhancer?: StoreEnhancer
   serialize?: boolean
 }
 
 export const initialState: Partial<RootState> = {}
-export const reducers: Record<string, Reducer> = {}
+export const reducers: {
+  [K in keyof RootState]?: Reducer<any, any>
+} = {}
 export const sharedMiddleware = [thunk, promise, timeoutScheduler]
 export const middleware: Middleware[] = [notifications, backgroundActions, ...sharedMiddleware]
-export const enhancers: any[] = []
-const serializePaths: string[] = []
+export const enhancers: StoreEnhancer[] = []
+const serializePaths: (keyof RootState)[] = []
 
 // Register Modules:
 function addModule(module: ReduxModule): void {
   if (!module.name) throw new Error("Name required")
 
-  if (module.reducer)     reducers[module.name] = module.reducer
+  if (module.reducer) reducers[module.name] = module.reducer
   if (module.middleware)  middleware.push(module.middleware)
   if (module.enhancer)    enhancers.push(module.enhancer)
   if (module.serialize)   serializePaths.push(module.name)
@@ -77,7 +89,12 @@ if (!ENV.production) {
 }
 
 // Create store
-const combinedReducers = combineReducers(reducers)
+const combinedReducers = combineReducers(
+  reducers as {
+    [K in keyof RootState]: Reducer<any, any>
+  }
+) as Reducer<RootState, UnknownAction>
+
 export const rootReducer = resetableReducer(
   checkpointableReducer(
     persistedReducer(
@@ -91,12 +108,12 @@ export const rootReducer = resetableReducer(
 const enhancedMiddleware = compose(
   applyMiddleware(...middleware),
   ...enhancers
-)
+) as StoreEnhancer
 
 export function createBackgroundStore(): Store<RootState> {
   const store = createStore(
     rootReducer,
-    initialState,
+    initialState as RootState,
     enhancedMiddleware
   )
 

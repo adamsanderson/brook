@@ -3,6 +3,8 @@ import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER, FoldersState } from './folders'
 import views from './views'
 import type { RootState, Thunk } from '../types'
+import type { RemoveFeedAction } from './feeds'
+import type { RemoveFolderAction } from './folders'
 
 export const SELECT_FEED = "SELECT_FEED" as const
 export const SELECT_FOLDER = "SELECT_FOLDER" as const
@@ -91,15 +93,13 @@ export function changeView(view: string) {
 }
 
 // Action types derived from action creators
-type SelectFolderAction = ReturnType<typeof selectFolder>
+export type SelectFolderAction = ReturnType<typeof selectFolder>
 type ClearSelectionAction = ReturnType<typeof clearSelection>
-type SelectItemAction = ReturnType<typeof selectItem>
+export type SelectItemAction = ReturnType<typeof selectItem>
 type ChangeViewAction = ReturnType<typeof changeView>
 
 // External actions and manual actions
-type SelectFeedAction = { type: typeof SELECT_FEED; payload: { feed: Feed } }
-type RemoveFeedAction = { type: typeof REMOVE_FEED; payload: { feed: Feed } }
-type RemoveFolderAction = { type: typeof REMOVE_FOLDER; payload: { folder: FoldersState[string] } }
+export type SelectFeedAction = { type: typeof SELECT_FEED; payload: { feed: Feed } }
 
 type UIAction =
   | SelectFeedAction
@@ -109,6 +109,7 @@ type UIAction =
   | ChangeViewAction
   | RemoveFeedAction
   | RemoveFolderAction
+export type { UIAction }
 
 const initialState: UIState = {
   selectedId: undefined,

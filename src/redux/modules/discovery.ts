@@ -30,7 +30,7 @@ export function forgetFeeds(tabId?: number) {
 type FoundFeedsAction = ReturnType<typeof foundFeeds> & WebExtAction
 type ForgetFeedsAction = ReturnType<typeof forgetFeeds> & WebExtAction
 
-type DiscoveryAction = FoundFeedsAction | ForgetFeedsAction
+export type DiscoveryAction = FoundFeedsAction | ForgetFeedsAction
 
 const initialState: DiscoveryState = {
   feeds: {},
@@ -39,9 +39,9 @@ const initialState: DiscoveryState = {
 const reducer = (state = initialState, action: DiscoveryAction): DiscoveryState => {
   switch (action.type) {
     case FOUND_FEEDS:
-      return reduceFoundFeeds(state, action as FoundFeedsAction)
+      return reduceFoundFeeds(state, action)
     case FORGET_FEEDS:
-      return reduceForgetFeeds(state, action as ForgetFeedsAction)
+      return reduceForgetFeeds(state, action)
     default:
       return state
   }

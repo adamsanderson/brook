@@ -22,7 +22,7 @@ export function setViewMode(viewMode: ViewMode) {
 // Action types derived from action creators
 type SetViewModeAction = ReturnType<typeof setViewMode>
 
-type OptionsAction = SetViewModeAction
+export type OptionsAction = SetViewModeAction
 
 const initialState: OptionsState = {
   viewMode: 'sidebar'

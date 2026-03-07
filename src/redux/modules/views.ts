@@ -1,6 +1,8 @@
 import { SELECT_FEED, SELECT_ITEM } from './ui'
 import { REMOVE_FEED } from './feeds'
 import type { RootState, Feed, FeedItem } from '../types'
+import type { SelectFeedAction, SelectItemAction } from './ui'
+import type { RemoveFeedAction } from './feeds'
 
 export const MARK_ALL_ITEMS_VIEWED = "MARK_ALL_ITEMS_VIEWED" as const
 
@@ -38,16 +40,12 @@ export function markAllItemsViewed(feed: Feed) {
 // Action types derived from action creators
 type MarkAllItemsViewedAction = ReturnType<typeof markAllItemsViewed>
 
-// External actions this module responds to
-type SelectFeedAction = { type: typeof SELECT_FEED; payload: { feed: Feed } }
-type SelectItemAction = { type: typeof SELECT_ITEM; payload: { item: FeedItem } }
-type RemoveFeedAction = { type: typeof REMOVE_FEED; payload: { feed: Feed } }
-
 type ViewsAction =
   | MarkAllItemsViewedAction
   | SelectFeedAction
   | SelectItemAction
   | RemoveFeedAction
+export type { ViewsAction }
 
 const initialState: ViewsState = {
   feedsViewedAt: {},
@@ -59,13 +57,13 @@ const initialState: ViewsState = {
 const reducer = (state = initialState, action: ViewsAction): ViewsState => {
   switch (action.type) {
     case SELECT_FEED:
-      return selectedFeed(state, action as SelectFeedAction)
+      return selectedFeed(state, action)
     case SELECT_ITEM:
-      return selectedItem(state, action as SelectItemAction)
+      return selectedItem(state, action)
     case REMOVE_FEED:
-      return removedFeed(state, action as RemoveFeedAction)
+      return removedFeed(state, action)
     case MARK_ALL_ITEMS_VIEWED:
-      return markedAllItemsViewed(state, action as MarkAllItemsViewedAction)
+      return markedAllItemsViewed(state, action)
     default:
       return state
   }

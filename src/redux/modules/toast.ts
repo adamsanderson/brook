@@ -99,6 +99,7 @@ type ToastAction =
   | HoldToastAction
   | ReleaseToastAction
   | DelayedAction
+export type { ToastAction }
 
 type ToastThunk<T = void> = ThunkAction<T, RootState, unknown, ToastAction>
 

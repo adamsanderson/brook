@@ -106,15 +106,15 @@ export function updateFeed(feed: Feed, attributes: Partial<Feed>) {
 }
 
 // Action types derived from action creators
-type RemoveFeedAction = ReturnType<typeof removeFeed> 
+export type RemoveFeedAction = ReturnType<typeof removeFeed>
 type RenameFeedAction = ReturnType<typeof renameFeed>
-type FetchFeedAction = ReturnType<typeof fetchFeed> & { ready?: boolean }
+export type FetchFeedAction = ReturnType<typeof fetchFeed> & { ready?: boolean }
 type FetchAllAction = ReturnType<typeof fetchAll>
 type EditFeedAction = ReturnType<typeof editFeed>
 type UpdateFeedAction = ReturnType<typeof updateFeed>
 
 // Special actions not derived from simple action creators
-type AddFeedAction = {
+export type AddFeedAction = {
   type: typeof ADD_FEED
   payload: { feed: Feed; parentId?: string }
 }
@@ -127,6 +127,7 @@ type FeedAction =
   | FetchAllAction
   | EditFeedAction
   | UpdateFeedAction
+export type { FeedAction }
 
 const initialState: FeedsState = {}
 

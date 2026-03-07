@@ -1,6 +1,5 @@
 import { ThunkAction } from 'redux-thunk'
 import folders, { FOLDER } from "./folders"
-// @ts-expect-error migration
 import OpmlWriter from "../../lib/OpmlWriter"
 import { download } from "../../util/download"
 import type { RootState, Feed, Folder } from '../types'

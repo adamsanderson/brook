@@ -1,4 +1,4 @@
-import { Action, Reducer, Store } from "redux"
+import { type Action, type Reducer } from "redux"
 
 export const RESET_DATA = "RESET_DATA"
 
@@ -8,12 +8,15 @@ export function resetData() {
   }
 }
 
-export function resetableReducer(reducer: Reducer, initialState: any) {
-  return (state: Store, action: Action) => {  
+export function resetableReducer<S, A extends Action = Action>(
+  reducer: Reducer<S, A>,
+  initialState: S | Partial<S>
+): Reducer<S, A | ReturnType<typeof resetData>> {
+  return (state: S | undefined, action: A | ReturnType<typeof resetData>) => {
     if (action.type === RESET_DATA) {
-      state = initialState
+      state = initialState as S
     }
-    
-    return reducer(state, action)
+
+    return reducer(state, action as A)
   }
 }

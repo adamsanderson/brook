@@ -68,6 +68,7 @@ type ModalAction =
   | OpenModalAction
   | OpenModalRightAlignedBelowAction
   | OpenModalLeftAlignedBelowAction
+export type { ModalAction }
 
 const initialState: ModalState = {}
 

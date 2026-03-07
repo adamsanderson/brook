@@ -5,6 +5,8 @@ import { BEFORE, OVER, AFTER, type PositionType } from '../../constants'
 import { SELECT_FOLDER } from './ui'
 import { startBatch, endBatch } from "../checkpoint"
 import type { NodeRef, RootState, Thunk } from "../types"
+import type { AddFeedAction, RemoveFeedAction } from './feeds'
+import type { SelectFolderAction } from './ui'
 
 export const TOGGLE_FOLDER = "TOGGLE_FOLDER" as const
 export const ADD_FOLDER = "ADD_FOLDER" as const
@@ -83,14 +85,9 @@ export function renameFolder(folder: Folder, title: string) {
 type AddFolderAction = ReturnType<typeof addFolder>
 type MoveFeedAction = ReturnType<typeof moveNode> & { type: typeof MOVE_FEED }
 type MoveFolderAction = ReturnType<typeof moveNode> & { type: typeof MOVE_FOLDER }
-type RemoveFolderAction = ReturnType<typeof removeFolder>
+export type RemoveFolderAction = ReturnType<typeof removeFolder>
 type EditFolderAction = ReturnType<typeof editFolder>
 type RenameFolderAction = ReturnType<typeof renameFolder>
-
-// External actions this module responds to
-type SelectFolderAction = { type: typeof SELECT_FOLDER; payload: { folder: Folder } }
-type AddFeedAction = { type: typeof ADD_FEED; payload: { feed: Feed; parentId?: string } }
-type RemoveFeedAction = { type: typeof REMOVE_FEED; payload: { feed: Feed } }
 
 type FolderAction =
   | AddFolderAction
@@ -102,6 +99,7 @@ type FolderAction =
   | SelectFolderAction
   | AddFeedAction
   | RemoveFeedAction
+export type { FolderAction }
 
 const initialState: FoldersState = {
   [ROOT]: {
@@ -117,31 +115,31 @@ const initialState: FoldersState = {
 const reducer = (state = initialState, action: FolderAction): FoldersState => {
   switch (action.type) {
     case ADD_FEED:
-      return feedAdded(state, action as AddFeedAction)
+      return feedAdded(state, action)
 
     case REMOVE_FEED:
-      return feedRemoved(state, action as RemoveFeedAction)
+      return feedRemoved(state, action)
 
     case ADD_FOLDER:
-      return folderAdded(state, action as AddFolderAction)
+      return folderAdded(state, action)
 
     case REMOVE_FOLDER:
-      return folderRemoved(state, action as RemoveFolderAction)
+      return folderRemoved(state, action)
 
     case EDIT_FOLDER:
-      return folderEdited(state, action as EditFolderAction)
+      return folderEdited(state, action)
 
     case RENAME_FOLDER:
-      return folderRenamed(state, action as RenameFolderAction)
+      return folderRenamed(state, action)
 
     case MOVE_FEED:
-      return feedMoved(state, action as MoveFeedAction)
+      return feedMoved(state, action)
 
     case MOVE_FOLDER:
-      return folderMoved(state, action as MoveFolderAction)
+      return folderMoved(state, action)
 
     case SELECT_FOLDER:
-      return folderToggled(state, action as SelectFolderAction)
+      return folderToggled(state, action)
 
     default:
       return state

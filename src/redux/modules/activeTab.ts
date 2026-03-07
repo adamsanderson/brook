@@ -20,7 +20,7 @@ export function changeTab(tabId: number) {
 // Action types derived from action creators
 type ChangeTabAction = ReturnType<typeof changeTab>
 
-type ActiveTabAction = ChangeTabAction
+export type ActiveTabAction = ChangeTabAction
 
 const initialState: ActiveTabState = {
   activeTabId: undefined

@@ -1,7 +1,7 @@
 import omit from 'lodash/omit'
 import get from 'lodash/get'
 import has from 'lodash/has'
-import { Action, Reducer, UnknownAction } from 'redux'
+import { type Action, type Reducer } from 'redux'
 import type { RootState } from './types'
 
 export const ROLLBACK = "CHECKPOINT:ROLLBACK" as const
@@ -57,17 +57,17 @@ export type CheckpointAction =
 
 type CheckPointableAction = Action & {meta: {checkpoint: string}}
 
-export function checkpointableReducer(
-  reducer: Reducer<RootState, UnknownAction>,
+export function checkpointableReducer<A extends Action>(
+  reducer: Reducer<RootState, A>,
   options: Partial<CheckpointOptions> = {}
-): Reducer<StateWithCheckpoint, UnknownAction> {
+): Reducer<StateWithCheckpoint, A | CheckpointAction> {
   const finalOptions: CheckpointOptions = {
     exclude: [],
     ...options
   }
   finalOptions.exclude.push(KEY)
 
-  return (state: StateWithCheckpoint = {} as StateWithCheckpoint, action: UnknownAction): StateWithCheckpoint => {
+  return (state: StateWithCheckpoint = {} as StateWithCheckpoint, action: A | CheckpointAction): StateWithCheckpoint => {
     if (action.type === ROLLBACK && state[KEY]) {
       return Object.assign({}, omit(state, [KEY]), state[KEY].checkpoint) as StateWithCheckpoint
 
@@ -91,9 +91,9 @@ export function checkpointableReducer(
     }
   }
 
-  function nextState(state: StateWithCheckpoint, action: UnknownAction, checkpointState?: CheckpointState): StateWithCheckpoint {
+  function nextState(state: StateWithCheckpoint, action: A | CheckpointAction, checkpointState?: CheckpointState): StateWithCheckpoint {
     const stateWithoutCheckpoint = omit(state, [KEY]) as RootState
-    const reduced = reducer(stateWithoutCheckpoint, action)
+    const reduced = reducer(stateWithoutCheckpoint, action as A)
     return {...reduced, [KEY]: checkpointState} as StateWithCheckpoint
   }
 }

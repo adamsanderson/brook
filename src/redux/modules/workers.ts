@@ -29,7 +29,7 @@ export function finishedFeedWorker() {
 type StartedFeedWorkerAction = ReturnType<typeof startedFeedWorker>
 type FinishedFeedWorkerAction = ReturnType<typeof finishedFeedWorker>
 
-type WorkersAction = StartedFeedWorkerAction | FinishedFeedWorkerAction
+export type WorkersAction = StartedFeedWorkerAction | FinishedFeedWorkerAction
 
 const initialState: WorkersState = {
   feedWorkers: 0
