@@ -1,4 +1,4 @@
-import React from "react"
+import type { MouseEvent } from 'react'
 import { getOperatingSystem, MAC } from "./operatingSystem"
 import browser from "webextension-polyfill"
 
@@ -6,7 +6,7 @@ import browser from "webextension-polyfill"
  * Firefox changed the semantics of following a link (brilliant!) and always opens
  * sidebar tabs in new windows.  So we need to manually handle clicking links…
  */
-export default function handleOnClick(event: React.MouseEvent): void {
+export default function handleOnClick(event: MouseEvent): void {
   // Ignore handled events
   if (event.isDefaultPrevented()) return
   
@@ -24,9 +24,9 @@ export default function handleOnClick(event: React.MouseEvent): void {
   }
 }
 
-function openLink(url: string, event: React.MouseEvent): void {
+function openLink(url: string, event: MouseEvent): void {
   if (useNewTab(event)) {
-    browser.tabs.create({url: url, active: !event.shiftKey})
+    browser.tabs.create({url: url, active: event.shiftKey})
   } else if (useNewWindow(event)) {
     browser.windows.create({url: url})
   } else {
@@ -34,7 +34,7 @@ function openLink(url: string, event: React.MouseEvent): void {
   }
 }
 
-function useNewTab(event: React.MouseEvent): boolean {
+function useNewTab(event: MouseEvent): boolean {
   if (getOperatingSystem() === MAC) {
     return event.metaKey
   } else {
@@ -42,6 +42,6 @@ function useNewTab(event: React.MouseEvent): boolean {
   }
 }
 
-function useNewWindow(event: React.MouseEvent): boolean {
+function useNewWindow(event: MouseEvent): boolean {
   return event.shiftKey
 }
