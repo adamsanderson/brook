@@ -1,17 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-class PopupLayout extends React.Component {
+type Props = {
+  position: React.CSSProperties
+  onClose: React.MouseEventHandler<HTMLDivElement>
+  children: React.ReactNode
+}
 
-  static propTypes = {
-    position: PropTypes.object.isRequired,
-    onClose: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired,
-  }
-
-  render() {    
+class PopupLayout extends React.Component<Props> {
+  render() {
     const { position, children, onClose } = this.props
-    
+
     return (
       <div className="Modal PopupLayout" onClickCapture={ onClose }>
         <div className="Menu" style={ position }>

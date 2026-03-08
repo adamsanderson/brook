@@ -1,27 +1,27 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import browser from 'webextension-polyfill'
+import { connect, ConnectedProps } from 'react-redux'
 
 import { addFolder } from '../redux/modules/folders'
 import { exportOpml } from '../redux/modules/export'
 import { openModal } from '../redux/modules/modal'
+import type { FolderInput } from '../redux/types'
 
 import PopupLayout from "./layouts/PopupLayout"
 import { MODALS } from '../modals/index'
 
-class FeedTreeMenu extends React.Component {
+type OwnProps = {
+  position: React.CSSProperties
+  closeModal: () => void
+}
 
-  static propTypes = {
-    position: PropTypes.object.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    openModal: PropTypes.func.isRequired,
-    addFolder: PropTypes.func.isRequired,
-    exportOpml: PropTypes.func.isRequired,
-  }
+const connector = connect(null, {
+  addFolder,
+  openModal,
+  exportOpml,
+})
 
-  constructor(props) {
-    super(props)
-  }
+class FeedTreeMenu extends React.Component<OwnProps & ConnectedProps<typeof connector>> {
 
   render() {
     const { position, closeModal } = this.props
@@ -51,7 +51,7 @@ class FeedTreeMenu extends React.Component {
   handleAddFolder = () => {
     this.props.closeModal()
 
-    const newFolder = {
+    const newFolder: FolderInput = {
       title: "New Folder",
       isEditing: true
     }
@@ -66,17 +66,9 @@ class FeedTreeMenu extends React.Component {
     this.props.exportOpml()
   }
 
-  handleOptions() {
+  handleOptions = () => {
     browser.runtime.openOptionsPage()
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  // state
-})
-
-export default connect(mapStateToProps, {
-  addFolder,
-  openModal,
-  exportOpml,
-})(FeedTreeMenu)
+export default connector(FeedTreeMenu)

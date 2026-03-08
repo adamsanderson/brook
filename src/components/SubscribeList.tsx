@@ -1,15 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
 import feeds from '../redux/modules/feeds'
+import type { Feed } from '../redux/types'
 
-class SubscribeList extends React.Component {
+type Props = {
+  feeds: Feed[]
+  onSubscribe: (feed: Feed) => void
+}
 
-  static propTypes = {
-    feeds: PropTypes.array.isRequired,
-    onSubscribe: PropTypes.func.isRequired,
-  }
+class SubscribeList extends React.Component<Props> {
 
   render() {
     return (
@@ -19,7 +19,7 @@ class SubscribeList extends React.Component {
           return (
             <li key={feed.url} className="List-item">
               <StatusIndicator />
-              <a onClick={(event) => this.props.onSubscribe(feed)} title={title}>
+              <a onClick={() => this.props.onSubscribe(feed)} title={title}>
                 {title}
               </a>
             </li>

@@ -1,17 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 
 import { addFeed } from '../redux/modules/feeds'
+import type { FeedInput } from '../redux/types'
 import FullPageLayout from './layouts/FullPageLayout'
 
-class AddByUrlMenu extends React.Component {
-  static propTypes = {
-    closeModal: PropTypes.func.isRequired,
-    addFeed: PropTypes.func.isRequired,
-  }
+type OwnProps = {
+  closeModal: () => void
+}
 
-  state = {
+type State = {
+  url: string
+}
+
+const connector = connect(null, {
+  addFeed,
+})
+
+class AddByUrlMenu extends React.Component<OwnProps & ConnectedProps<typeof connector>, State> {
+  state: State = {
     url: ""
   }
 
@@ -33,20 +40,15 @@ class AddByUrlMenu extends React.Component {
     )
   }
 
-  handleUrlChange = (event) => {
+  handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ url: event.target.value })
   }
 
-  handleAdd = (event) => {
+  handleAdd = (_event: React.MouseEvent<HTMLButtonElement>) => {
     this.props.closeModal()
-    this.props.addFeed({url: this.state.url}, { fetch: true })
+    const feed: FeedInput = { url: this.state.url }
+    this.props.addFeed(feed, { fetch: true })
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  // state...
-})
-
-export default connect(mapStateToProps, {
-  addFeed,
-})(AddByUrlMenu)
+export default connector(AddByUrlMenu)
