@@ -44,7 +44,7 @@ class AddByUrlMenu extends React.Component<OwnProps & ConnectedProps<typeof conn
     this.setState({ url: event.target.value })
   }
 
-  handleAdd = (_event: React.MouseEvent<HTMLButtonElement>) => {
+  handleAdd = () => {
     this.props.closeModal()
     const feed: FeedInput = { url: this.state.url }
     this.props.addFeed(feed, { fetch: true })

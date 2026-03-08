@@ -65,7 +65,7 @@ class TreeViewMenuItem extends React.Component<TreeViewMenuItemProps> {
     )
   }
 
-  handleClick = (_event: React.MouseEvent<HTMLAnchorElement>) => {
+  handleClick = () => {
     this.props.changeView(this.props.viewId)
   }
 }

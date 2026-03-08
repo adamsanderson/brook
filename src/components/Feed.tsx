@@ -1,33 +1,34 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import isEqual from 'react-fast-compare'
 
 import StatusIndicator from '../components/icons/StatusIndicator'
 import feeds from '../redux/modules/feeds'
 import FeedEditor from './FeedEditor'
+import type { Feed as FeedType } from '../redux/types'
 
-class Feed extends React.Component {
+type Props = {
+  feed: FeedType
+  isUnread?: boolean
+  onClick?: (feed: FeedType) => void
+  onRename?: (feed: FeedType, title: string) => void
+  style?: React.CSSProperties
+  className?: string
+}
 
-  static propTypes = {
-    feed: PropTypes.object.isRequired,
-    isUnread: PropTypes.bool,
-    onClick: PropTypes.func,
-    onRename: PropTypes.func,
-    style: PropTypes.object,
-    className: PropTypes.string,
-  }
+type FeedElementProps = {
+  title: string
+  className?: string
+  href?: string
+  children: React.ReactNode
+}
 
-  static defaultProps = {
-    isUnread: false,
-    className: "",
-  }
-
+class Feed extends React.Component<Props> {
   // Feeds are evaluated and rendered any time that the user interacts
-  // with th feed tree.  Unfortunately not all props can be easily compared 
-  // since the drag an drop wrapper's `allowDrop` is regenerated on each render.
+  // with the feed tree. Unfortunately not all props can be easily compared
+  // since the drag and drop wrapper's `allowDrop` is regenerated on each render.
   //
   // To work around this for now, we implement a custom `shouldComponentUpdate`.
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Props) {
     if (this.props === nextProps) return false
 
     return (this.props.className !== nextProps.className) ||
@@ -37,13 +38,10 @@ class Feed extends React.Component {
       (!isEqual(this.props.feed, nextProps.feed))
   }
 
-  constructor(props) {
-    super(props)
-    this.handleClick = this.handleClick.bind(this)
-  }
-
   render() {
-    const { feed, isUnread, style, className, onRename } = this.props
+    const { feed, style, onRename } = this.props
+    const isUnread = this.props.isUnread ?? false
+    const className = this.props.className ?? ""
     const readClass = isUnread ? "isUnread" : "isRead"
     const error = feed.error
 
@@ -59,17 +57,16 @@ class Feed extends React.Component {
             ? <FeedEditor feed={feed} onRename={onRename} />
             : error ? this.renderError(feed) : this.renderFeed(feed)
         }
-        {}
       </div>
     )
   }
 
-  renderError(feed) {
+  renderError(feed: FeedType) {
     const title = feeds.selectors.getFeedTitle(feed)
-    return this.renderFeedElement({ title: feed.error, className: "hasError", href: feed.url, children: title })
+    return this.renderFeedElement({ title: feed.error || title, className: "hasError", href: feed.url, children: title })
   }
 
-  renderFeed(feed) {
+  renderFeed(feed: FeedType) {
     const title = feeds.selectors.getFeedTitle(feed)
     return this.renderFeedElement({
       title,
@@ -78,23 +75,21 @@ class Feed extends React.Component {
     })
   }
 
-  // renderFeedElement allows us to switch the element easily based on whether there's a onClick handler.
-  renderFeedElement(attrs) {
+  // renderFeedElement allows us to switch the element easily based on whether there's an onClick handler.
+  renderFeedElement(attrs: FeedElementProps) {
     if (this.props.onClick) {
-      return <a {...attrs} onClick={noopLinkHandler} />
-    } else {
-      return <span {...attrs} />
+      return <a title={attrs.title} className={attrs.className} href={attrs.href} onClick={noopLinkHandler}>{attrs.children}</a>
     }
+
+    return <span title={attrs.title} className={attrs.className}>{attrs.children}</span>
   }
 
-  handleClick(event) {
-    if (this.props.onClick) {
-      this.props.onClick(this.props.feed)
-    }
+  handleClick = () => {
+    this.props.onClick?.(this.props.feed)
   }
 }
 
-function noopLinkHandler(event) {
+function noopLinkHandler(event: React.MouseEvent<HTMLAnchorElement>) {
   event.preventDefault()
 }
 
