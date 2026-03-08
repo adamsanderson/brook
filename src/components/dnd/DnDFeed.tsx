@@ -45,7 +45,7 @@ class DnDFeed extends React.Component<Props, State> {
   }
 
   handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.setData("text/html", String(event.currentTarget))
+    event.dataTransfer.setData("text/html", event.currentTarget.outerHTML)
     event.dataTransfer.setData("application/brook", JSON.stringify(this.props.feed))
     event.dataTransfer.effectAllowed = "move"
   }
