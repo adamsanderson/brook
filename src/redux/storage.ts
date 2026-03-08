@@ -86,7 +86,7 @@ function loadStateFromExtensionStorage(): Promise<Partial<RootState>> {
 }
 
 function saveStateToExtensionStorage(state: Partial<RootState>): Promise<void> {
-  if (!browser.storage?.local) return Promise.resolve(undefined);
+  if (!browser.storage?.local) return Promise.resolve(undefined)
 
   return browser.storage.local.set({
     [STATE_KEY]: state

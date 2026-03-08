@@ -40,6 +40,7 @@ export default [
       ...react.configs.recommended.rules,
       ...importPlugin.configs.errors.rules,
       ...importPlugin.configs.warnings.rules,
+      'react/react-in-jsx-scope': 'off',
       'no-console': ['error', {
         allow: ['warn', 'error']
       }],
@@ -97,6 +98,7 @@ export default [
       ...react.configs.recommended.rules,
       ...importPlugin.configs.errors.rules,
       ...importPlugin.configs.warnings.rules,
+      'react/react-in-jsx-scope': 'off',
       'no-console': ['error', {
         allow: ['warn', 'error']
       }],
@@ -146,6 +148,7 @@ export default [
           afterEach: true,
           onTestFailed: true,
           onTestFinished: true,
+          global: true,
       }
     }
   }
