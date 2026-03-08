@@ -1,26 +1,30 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import browser from 'webextension-polyfill'
+import { connect, ConnectedProps } from 'react-redux'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import SubscribeList from '../components/SubscribeList'
 import { addFeed } from '../redux/modules/feeds'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
+import type { Feed, RootState } from '../redux/types'
 
-class App extends React.Component {
-  static propTypes = {
-    feeds: PropTypes.array.isRequired,
-    addFeed: PropTypes.func.isRequired,
-  }
+const mapStateToProps = (state: RootState) => ({
+  feeds: discovery.selectors.unsubscribedFeeds(state, activeTab.selectors.getActiveTabId(state) ?? -1) as Feed[],
+})
 
+const connector = connect(mapStateToProps, {
+  addFeed,
+})
+
+class App extends React.Component<ConnectedProps<typeof connector>> {
   render() {
     return (
       <div className="FullPageLayout layout-vertical">
         <p className="Panel-header">
           Brook
         </p>
-        
+
         <div className="Panel-body">
           <ErrorBoundary message="An error occurred while running Brook.">
             <p>Subscribe to:</p>
@@ -31,17 +35,11 @@ class App extends React.Component {
     )
   }
 
-  handleSubscription = (feed) => {
-    this.props.addFeed(feed, {fetch: true})
+  handleSubscription = (feed: Feed) => {
+    this.props.addFeed(feed, { fetch: true })
     browser.sidebarAction.open()
     window.close()
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  feeds: discovery.selectors.unsubscribedFeeds(state, activeTab.selectors.getActiveTabId(state)),
-})
-
-export default connect(mapStateToProps, {
-  addFeed,
-})(App)
+export default connector(App)

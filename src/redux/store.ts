@@ -137,7 +137,7 @@ export function createBackgroundStore(): Store<RootState> {
   return store
 }
 
-export function createProxyStore(): Store<RootState> {
+export function createProxyStore(): ProxyStore {
   const proxy = new ProxyStore({
     channelName: 'Brook',
     patchStrategy: patchDeepDiff,

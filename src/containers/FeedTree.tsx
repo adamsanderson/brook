@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import browser from 'webextension-polyfill'
+import { connect, ConnectedProps } from 'react-redux'
 
 import { FEED, removeFeed, renameFeed } from '../redux/modules/feeds'
 import folder, { FOLDER, moveNode, renameFolder } from '../redux/modules/folders'
@@ -12,42 +12,57 @@ import { MODALS } from '../modals'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
 import { ReadImage } from '../components/images'
+import type { Feed, Folder, NodeRef, RootState } from '../redux/types'
 
+type TreeNode = {
+  depth: number
+  id: string
+  item: Feed | Folder
+  isUnread?: boolean
+}
 
-class FeedTree extends React.PureComponent {
-  static propTypes = {
-    nodes: PropTypes.array.isRequired,
-    indent: PropTypes.number,
-    indentUnits: PropTypes.string,
-    currentFeed: PropTypes.object,
-    currentFolder: PropTypes.object,
-    hasAvailableFeeds: PropTypes.bool.isRequired,
-    selectFolder: PropTypes.func.isRequired,
-    renameFolder: PropTypes.func.isRequired,
-    renameFeed: PropTypes.func.isRequired,
-    selectFeed: PropTypes.func.isRequired,
-    moveNode: PropTypes.func.isRequired,
-    openModal: PropTypes.func.isRequired,
-    allowDrop: PropTypes.func.isRequired,
-    removeFeed: PropTypes.func.isRequired
+type OwnProps = {
+  nodes: TreeNode[]
+  indent?: number
+  indentUnits?: string
+}
+
+const mapStateToProps = (state: RootState) => ({
+  currentFeed: ui.selectors.currentFeed(state),
+  currentFolder: ui.selectors.currentFolder(state),
+  hasAvailableFeeds: discovery.selectors.hasAvailableFeeds(state, activeTab.selectors.getActiveTabId(state) ?? -1),
+  allowDrop: (draggable: NodeRef, dropTarget: NodeRef) => {
+    const draggableNode = draggable.type === FEED ? state.feeds[draggable.id] : state.folders[draggable.id]
+    const dropTargetNode = dropTarget.type === FEED ? state.feeds[dropTarget.id] : state.folders[dropTarget.id]
+    if (!draggableNode || !dropTargetNode) return false
+
+    return !folder.selectors.containsNode(state, draggableNode, dropTargetNode)
   }
+})
 
+const connector = connect(mapStateToProps, {
+  selectFolder,
+  selectFeed,
+  moveNode,
+  openModal,
+  renameFolder,
+  renameFeed,
+  removeFeed,
+})
+
+class FeedTree extends React.PureComponent<OwnProps & ConnectedProps<typeof connector>> {
   static defaultProps = {
     indent: 1,
-    indentUnits: "em"
+    indentUnits: 'em'
   }
 
-  constructor(props) {
-    super(props)
+  private depthStyleCache: React.CSSProperties[] = []
 
-    this.handleShowImport = this.handleShowImport.bind(this)
-    this.depthStyleCache = []
-  }
-
-  getDepthStyle(depth) {
+  getDepthStyle(depth: number) {
     if (!this.depthStyleCache[depth]) {
-      const { indent, indentUnits } = this.props
-      this.depthStyleCache[depth] = { paddingLeft: indent * depth + indentUnits }
+      const indent = this.props.indent ?? 1
+      const indentUnits = this.props.indentUnits ?? 'em'
+      this.depthStyleCache[depth] = { paddingLeft: `${indent * depth}${indentUnits}` }
     }
 
     return this.depthStyleCache[depth]
@@ -60,9 +75,9 @@ class FeedTree extends React.PureComponent {
       return this.props.hasAvailableFeeds
         ? this.renderSubscribeEmptyState()
         : this.renderEmptyState()
-    } else {
-      return this.renderContent(nodes)
     }
+
+    return this.renderContent(nodes)
   }
 
   renderEmptyState() {
@@ -91,7 +106,7 @@ class FeedTree extends React.PureComponent {
     )
   }
 
-  renderContent(nodes) {
+  renderContent(nodes: TreeNode[]) {
     return (
       <div className="List">
         {nodes.map((n) => this.renderNode(n))}
@@ -99,13 +114,13 @@ class FeedTree extends React.PureComponent {
     )
   }
 
-  renderNode(node) {
+  renderNode(node: TreeNode) {
     const { currentFeed, currentFolder } = this.props
     const { item } = node
     const isSelected = item === currentFeed || item === currentFolder
     const childProps = {
       style: this.getDepthStyle(node.depth),
-      className: `List-item ${isSelected ? "isSelected" : ""}`,
+      className: `List-item ${isSelected ? 'isSelected' : ''}`,
       key: `${item.type}-${item.id}`,
     }
 
@@ -134,32 +149,15 @@ class FeedTree extends React.PureComponent {
           />
         )
       default:
-        console.error("Unkown node type: ", item)
-        throw new Error(`Unknown node type: ${item.type}`)
+        console.error('Unkown node type: ', item)
+        throw new Error('Unknown node type')
     }
   }
 
-  handleShowImport(event) {
+  handleShowImport = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     this.props.openModal(MODALS.ImportModal)
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  currentFeed: ui.selectors.currentFeed(state),
-  currentFolder: ui.selectors.currentFolder(state),
-  hasAvailableFeeds: discovery.selectors.hasAvailableFeeds(state, activeTab.selectors.getActiveTabId(state)),
-  allowDrop: (draggable, dropTarget) => {
-    return !folder.selectors.containsNode(state, draggable, dropTarget)
-  }
-})
-
-export default connect(mapStateToProps, {
-  selectFolder,
-  selectFeed,
-  moveNode,
-  openModal,
-  renameFolder,
-  renameFeed,
-  removeFeed,
-})(FeedTree)
+export default connector(FeedTree)

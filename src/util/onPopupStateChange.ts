@@ -9,7 +9,7 @@ import type { RootState } from '../redux/types'
 export type NotificationState = {
   canSubscribe: boolean
   isUnread: boolean
-  viewMode: 'sidebar' | 'fullwidth'
+  viewMode: 'sidebar' | 'popup'
 }
 
 export function onPopupStateChange(

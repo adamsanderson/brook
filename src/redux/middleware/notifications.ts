@@ -1,5 +1,4 @@
 import type { Middleware, UnknownAction } from 'redux'
-// @ts-expect-error migration
 import { TOASTS } from '../../toasts'
 import { showToast } from '../modules/toast'
 

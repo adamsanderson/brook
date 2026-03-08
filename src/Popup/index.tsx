@@ -1,15 +1,14 @@
-import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
 
 import App from './App'
-import ModalRoot from "../modals"
-import ToastRoot from "../toasts"
-import linkHandler from "../util/linkHandler"
+import ModalRoot from '../modals'
+import ToastRoot from '../toasts'
+import linkHandler from '../util/linkHandler'
 import createAutoCloseHandler from '../util/autoCloseHandler'
 import { initErrorHandler } from '../util/errorHandler'
 import { openPopup, closePopup } from '../redux/modules/popup'
-import { Provider } from "react-redux"
-import { createProxyStore } from "../redux/store"
+import { createProxyStore } from '../redux/store'
 
 initErrorHandler()
 
@@ -20,7 +19,7 @@ store.ready().then(() => {
 
   // Track popup visibility
   store.dispatch(openPopup())
-  window.addEventListener("unload", (ev) => store.dispatch(closePopup()), { once: true, passive: true })
+  window.addEventListener('unload', () => store.dispatch(closePopup()), { once: true, passive: true })
 
   const root = createRoot(document.body)
   root.render(

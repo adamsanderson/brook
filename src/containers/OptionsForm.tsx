@@ -1,27 +1,30 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import browser from 'webextension-polyfill'
+import { connect, ConnectedProps } from 'react-redux'
 
 import options, { setViewMode } from '../redux/modules/options'
 import { OptionsImage } from '../components/images'
+import type { RootState } from '../redux/types'
 
 const VIEW_MODE_HINTS = {
   sidebar: 'Clicking the Brook toolbar icon will show your feeds in the sidebar.',
   popup: 'Feeds will appear in a popup when you click the Brook toolbar icon.',
-}
+} as const
 
-class OptionsForm extends React.Component {
+const mapStateToProps = (state: RootState) => ({
+  viewMode: options.selectors.getViewMode(state),
+})
 
-  static propTypes = {
-    viewMode: PropTypes.string.isRequired,
-    setViewMode: PropTypes.func.isRequired,
-  }
+const connector = connect(mapStateToProps, {
+  setViewMode
+})
 
+class OptionsForm extends React.Component<ConnectedProps<typeof connector>> {
   render() {
     const { viewMode } = this.props
 
     return (
-      <React.Fragment>
+      <>
         <h4>View Options</h4>
         <div className='layout-column-aligned Form'>
           <label htmlFor='brook-view-option'>View feeds in</label>
@@ -38,12 +41,12 @@ class OptionsForm extends React.Component {
           </div>
         </div>
         <OptionsImage className='layout-trailing'/>
-      </React.Fragment>
+      </>
     )
   }
 
-  handleViewMode = (event) => {
-    const viewMode = event.target.value
+  handleViewMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const viewMode = event.target.value as 'sidebar' | 'popup'
     this.props.setViewMode(viewMode)
 
     // Due to the browser extension API, this must be a direct response to user input,
@@ -56,10 +59,4 @@ class OptionsForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  viewMode: options.selectors.getViewMode(state),
-})
-
-export default connect(mapStateToProps, {
-  setViewMode
-})(OptionsForm)
+export default connector(OptionsForm)

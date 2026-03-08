@@ -1,10 +1,10 @@
-type OpmlFeed = {
+export type OpmlFeed = {
   id: string
   title: string | null
   url: string | null
 }
 
-type OpmlFolder = {
+export type OpmlFolder = {
   id: string
   title: string | null
 }

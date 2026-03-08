@@ -4,7 +4,7 @@ export const SET_VIEW_MODE = "SET_VIEW_MODE" as const
 
 const name = "options" as const
 
-type ViewMode = 'sidebar' | 'fullwidth'
+type ViewMode = 'sidebar' | 'popup'
 
 type OptionsState = {
   viewMode: ViewMode

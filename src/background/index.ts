@@ -1,10 +1,12 @@
+import browser from 'webextension-polyfill'
+
 import { createBackgroundStore } from '../redux/store'
 import { initErrorHandler } from '../util/errorHandler'
 
-import { changeTab } from "../redux/modules/activeTab"
-import { fetchAll } from "../redux/modules/feeds"
-import { forgetFeeds } from "../redux/modules/discovery"
-import options from "../redux/modules/options"
+import { changeTab } from '../redux/modules/activeTab'
+import { fetchAll } from '../redux/modules/feeds'
+import { forgetFeeds } from '../redux/modules/discovery'
+import options from '../redux/modules/options'
 import { onPopupStateChange, getNotificationState } from '../util/onPopupStateChange'
 
 // These paths are not guaranteed, but they seem to work for now:
@@ -26,17 +28,17 @@ browser.browserAction.onClicked.addListener(() => {
   if (viewMode === 'sidebar') {
     const popupState = getNotificationState(state)
     if (popupState.canSubscribe) {
-      browser.browserAction.setPopup({popup: subscribePopupURL})
+      browser.browserAction.setPopup({ popup: subscribePopupURL })
       browser.browserAction.openPopup()
-      browser.browserAction.setPopup({popup: ""})
+      browser.browserAction.setPopup({ popup: '' })
     } else {
       browser.sidebarAction.open()
     }
   } else {
     browser.sidebarAction.close()
-    browser.browserAction.setPopup({popup: popupURL})
+    browser.browserAction.setPopup({ popup: popupURL })
     browser.browserAction.openPopup()
-    browser.browserAction.setPopup({popup: ""})
+    browser.browserAction.setPopup({ popup: '' })
   }
 })
 
@@ -46,17 +48,17 @@ browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
 browser.tabs.onRemoved.addListener(tabId => store.dispatch(forgetFeeds(tabId)))
 
 // Set up browser action to display status
-browser.browserAction.setBadgeTextColor({color: "#FFFFFF"})
-browser.browserAction.setBadgeBackgroundColor({color: "#617CBA"})
-onPopupStateChange(store, (popupState => {
+browser.browserAction.setBadgeTextColor({ color: '#FFFFFF' })
+browser.browserAction.setBadgeBackgroundColor({ color: '#617CBA' })
+onPopupStateChange(store, popupState => {
   if (popupState.isUnread && popupState.viewMode !== 'sidebar') {
-    browser.browserAction.setBadgeText({text: "★"})
+    browser.browserAction.setBadgeText({ text: '★' })
   } else if (popupState.canSubscribe) {
-    browser.browserAction.setBadgeText({text: "✚"})
+    browser.browserAction.setBadgeText({ text: '✚' })
   } else {
-    browser.browserAction.setBadgeText({text: ""})
+    browser.browserAction.setBadgeText({ text: '' })
   }
-}))
+})
 
 // Schedule fetching feeds every 15m
 setInterval(() => {

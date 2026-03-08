@@ -1,15 +1,15 @@
 import React from 'react'
 
 import Feed from '../Feed'
-import { type PositionType } from '../../constants'
+import { OVER, type PositionType } from '../../constants'
 import type { Feed as FeedType, NodeRef } from '../../redux/types'
 import { HOVER_CLASSES, getDragItem, draggablePosition } from "./position"
 
 type FeedProps = React.ComponentProps<typeof Feed>
 
 type Props = FeedProps & {
-  onDrop: (item: NodeRef, feed: FeedType, position: PositionType | undefined, event: React.DragEvent<HTMLDivElement>) => void
-  allowDrop: (item: NodeRef, feed: FeedType) => boolean
+  onDrop: (source: NodeRef, target: NodeRef, position: PositionType) => void
+  allowDrop: (source: NodeRef, target: NodeRef) => boolean
   feed: FeedType
   className?: string
 }
@@ -52,11 +52,11 @@ class DnDFeed extends React.Component<Props, State> {
 
   handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     const item = getDragItem(event)
-    const position = this.state.position
-    const feed = this.props.feed
+    const position = this.state.position ?? OVER
+    const feed = this.props.feed as NodeRef
 
     if (item) {
-      this.props.onDrop(item, feed, position, event)
+      this.props.onDrop(item, feed, position)
     }
 
     this.setState({ position: undefined })
@@ -68,7 +68,7 @@ class DnDFeed extends React.Component<Props, State> {
 
   handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     const item = getDragItem(event)
-    if (item && this.props.allowDrop(item, this.props.feed)) {
+    if (item && this.props.allowDrop(item, this.props.feed as NodeRef)) {
       this.setState({ position: draggablePosition(event, 0.5) })
       event.preventDefault()
     }
