@@ -27,7 +27,6 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.es6,
-        ...globals.amd,
         ...globals.webextensions,
       },
     },
@@ -38,6 +37,7 @@ export default [
     },
     rules: {
       ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
       ...importPlugin.configs.errors.rules,
       ...importPlugin.configs.warnings.rules,
       'react/react-in-jsx-scope': 'off',
@@ -94,8 +94,9 @@ export default [
       import: importPlugin,
     },
     rules: {
-      ...tseslint.configs.recommended.rules,
+      ...tseslint.configs['recommended-type-checked'].rules,
       ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
       ...importPlugin.configs.errors.rules,
       ...importPlugin.configs.warnings.rules,
       'react/react-in-jsx-scope': 'off',
