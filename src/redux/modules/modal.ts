@@ -18,7 +18,7 @@ type EmptyObject = {}
 
 type ModalState = {
   type?: string
-  props?: Record<string, unknown> & {
+  props?: Record<string, object> & {
     position?: Position
   }
 } | EmptyObject

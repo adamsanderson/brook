@@ -1,4 +1,3 @@
-import type { ComponentType } from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 
 import toast, { hideToastNow as hideToast, holdToast, releaseToast } from '../redux/modules/toast'
@@ -10,9 +9,9 @@ import type { RootState } from '../redux/types'
   http://stackoverflow.com/questions/35623656/how-can-i-display-a-modal-dialog-in-redux-that-performs-asynchronous-actions/35641680
 */
 
-const TOAST_COMPONENTS: Record<string, ComponentType<any>> = {
+const TOAST_COMPONENTS = {
   UndoToast
-}
+} as const
 
 /**
  * All available named toasts.
@@ -24,7 +23,7 @@ Object.keys(TOAST_COMPONENTS).forEach(key => {
 
 type StateProps = {
   type?: string
-  toastProps?: Record<string, any>
+  toastProps?: object
 }
 
 const mapStateToProps = (state: RootState): StateProps => {
@@ -55,7 +54,7 @@ const connector = connect(mapStateToProps, {
 function ToastRoot({ type, toastProps, hideToast, holdToast, releaseToast }: ConnectedProps<typeof connector>) {
   if (!type) return null
 
-  const SpecificToast = TOAST_COMPONENTS[type]
+  const SpecificToast = TOAST_COMPONENTS[type as keyof typeof TOAST_COMPONENTS]
   if (!SpecificToast) {
     throw new Error(`Unknown toast type: ${type}`)
   }

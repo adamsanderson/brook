@@ -17,7 +17,7 @@ const name = "toast" as const
 
 type ToastPayload = {
   type: string
-  props: Record<string, any>
+  props: object
 } | typeof NONE
 
 type ToastState = {
@@ -42,7 +42,7 @@ export function hideToastNow() {
   } as const
 }
 
-export function showToast(type: string, props: Record<string, any> = {}, duration: number = DEFAULT_DURATION): ToastThunk {
+export function showToast(type: string, props: object = {}, duration: number = DEFAULT_DURATION): ToastThunk {
   return (dispatch, _getState) => {
     dispatch({
       type: SHOW,

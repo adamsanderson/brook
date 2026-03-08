@@ -1,4 +1,9 @@
-export default class OpmlWriter {
+export type OpmlExportNode = {
+  addFolder: (title: string) => OpmlExportNode
+  addFeed: (title: string, url: string) => void
+}
+
+export default class OpmlWriter implements OpmlExportNode {
   doc: XMLDocument
   head: HTMLHeadElement
   body: HTMLBodyElement
@@ -43,7 +48,7 @@ export default class OpmlWriter {
   }
 }
 
-class OpmlFolder {
+class OpmlFolder implements OpmlExportNode {
   doc: XMLDocument
   root: Element
   
