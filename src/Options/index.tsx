@@ -18,4 +18,6 @@ store.ready().then(() => {
       </div>
     </Provider>
   )
+}).catch(err => {
+  console.error("Error initializing Brook/Options", err)
 })
