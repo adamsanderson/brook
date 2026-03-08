@@ -23,7 +23,7 @@ export function exportOpml(): ExportThunk {
 function write(state: RootState, exportNode: OpmlExportNode, item: Feed | Folder): void {
   if (item.type === FOLDER) {
     const folderNode = exportNode.addFolder(item.title)
-    folders.selectors.getChildren(state, item as Folder).forEach(child => {
+    folders.selectors.getChildren(state, item).forEach(child => {
       write(state, folderNode, child)
     })
   } else {

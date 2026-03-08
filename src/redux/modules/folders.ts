@@ -58,10 +58,10 @@ export function removeBranch(folder: Folder): Thunk {
 
     function removeRecursively(node: Folder | Feed) {
       if (node.type === FEED) {
-        dispatch(removeFeed(node as Feed))
+        dispatch(removeFeed(node))
       } else if (node.type === FOLDER) {
-        dispatch(removeFolder(node as Folder))
-        selectors.getChildren(state, node as Folder).forEach(n => removeRecursively(n))
+        dispatch(removeFolder(node))
+        selectors.getChildren(state, node).forEach(n => removeRecursively(n))
       }
     }
   }
@@ -310,7 +310,7 @@ const selectors = {
     if (parent.id === target.id && parent.type === target.type) return true
     if (parent.type !== FOLDER) return false
 
-    const children = selectors.getChildren(state, parent as Folder)
+    const children = selectors.getChildren(state, parent)
     return children.some(child => selectors.containsNode(state, child, target))
   },
 }

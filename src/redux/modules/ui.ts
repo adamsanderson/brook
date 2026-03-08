@@ -183,7 +183,7 @@ const selectors = {
     }
 
     if (node.type === FEED) {
-      const include = !filter || filter(state, node as Feed)
+      const include = !filter || filter(state, node)
       return include ? [createTreeNode(node, depth)] : []
     } else if (node.type === FOLDER && !filter && !node.expanded) {
       // Shortcut, skip evaluating children for collapsed nodes if
@@ -191,7 +191,7 @@ const selectors = {
       return [createTreeNode(node, depth)]
     } else {
       let children = folders.selectors
-        .getChildren(state, node as FoldersState[string])
+        .getChildren(state, node)
         .flatMap(c => selectors.getNodeList(state, filter, c, depth + 1))
 
       if (!filter || children.length > 0) {
@@ -207,7 +207,7 @@ const selectors = {
     }
 
     function createTreeNode(node: Feed | Folder, depth: number): TreeNode {
-      const isUnread = node.type === FEED ? views.selectors.isFeedUnread(state, node as Feed) : undefined
+      const isUnread = node.type === FEED ? views.selectors.isFeedUnread(state, node) : undefined
       return {
         depth,
         id: node.id,
