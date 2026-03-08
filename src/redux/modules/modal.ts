@@ -1,4 +1,3 @@
-// @ts-expect-error migration
 import { leftAlignedBelow, rightAlignedBelow } from "../../lib/position"
 import type { RootState } from '../types'
 
