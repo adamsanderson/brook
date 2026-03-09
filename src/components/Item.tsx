@@ -46,7 +46,7 @@ class Item extends React.PureComponent<Props> {
     )
   }
 
-  handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  handleClick = () => {
     const item = this.props.item
 
     if (item.error) {
@@ -55,8 +55,6 @@ class Item extends React.PureComponent<Props> {
     } else {
       this.props.onClick?.(item)
     }
-
-    event.preventDefault()
   }
 }
 
