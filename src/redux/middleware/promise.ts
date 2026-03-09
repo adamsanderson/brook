@@ -1,7 +1,7 @@
 import type { Middleware, UnknownAction } from 'redux'
 
 type PromiseAction = UnknownAction & {
-  promise: Promise<unknown>
+  promise?: Promise<unknown>
 }
 
 type ReadyAction = UnknownAction & {
