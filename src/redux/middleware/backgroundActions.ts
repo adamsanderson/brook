@@ -115,7 +115,7 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
       }
     })
     .catch(error => {
-      dispatch(updateFeed(feed, { error: error.toString() }))
+      dispatch(updateFeed(feed, { error: String(error) }))
 
       // For now, always warn in the console.
       reportError(error)
