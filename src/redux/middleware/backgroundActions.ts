@@ -140,7 +140,9 @@ function fetchFromQueue(feedQueue: Feed[], dispatch: ReduxDispatch): void {
 
     const next = () => fetchFromQueue(feedQueue, dispatch)
 
-    fetchFeed(feed, dispatch).finally(next)
+    fetchFeed(feed, dispatch).catch((error) => {
+      console.warn("Could not fetch feed", feed?.url, error)
+    }).finally(next)
   })
 }
 

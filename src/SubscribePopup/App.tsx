@@ -37,7 +37,9 @@ class App extends React.Component<ConnectedProps<typeof connector>> {
 
   handleSubscription = (feed: Feed) => {
     this.props.addFeed(feed, { fetch: true })
-    browser.sidebarAction.open()
+    void browser.sidebarAction.open().catch((error) => {
+      console.warn('Could not open sidebar', error)
+    })
     window.close()
   }
 }

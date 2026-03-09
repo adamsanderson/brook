@@ -21,42 +21,61 @@ const store = createBackgroundStore()
 // Close the sidebar when the popup is triggered.
 // In order to receive events here, you need to not have a popup, and you need to trigger
 // open/close events on sidebarAction and browserAction from a direct user event.
-browser.browserAction.onClicked.addListener(() => {
+browser.browserAction.onClicked.addListener(
+  () => void handleBrowserActionClick()
+)
+
+async function handleBrowserActionClick() {
   const state = store.getState()
   const viewMode = options.selectors.getViewMode(state)
 
   if (viewMode === 'sidebar') {
     const popupState = getNotificationState(state)
     if (popupState.canSubscribe) {
-      browser.browserAction.setPopup({ popup: subscribePopupURL })
-      browser.browserAction.openPopup()
-      browser.browserAction.setPopup({ popup: '' })
+      await openPopup(subscribePopupURL)
     } else {
-      browser.sidebarAction.open()
+      await browser.browserAction.setPopup({ popup: "" })
+      await browser.sidebarAction.open()
     }
   } else {
-    browser.sidebarAction.close()
-    browser.browserAction.setPopup({ popup: popupURL })
-    browser.browserAction.openPopup()
-    browser.browserAction.setPopup({ popup: '' })
+    await openPopup(popupURL)
   }
-})
+}
+
+// Open a custom popup and then reset the popup URL for the next caller.
+async function openPopup(url: string) {
+  await browser.browserAction.setPopup({ popup: url })
+  await browser.browserAction.openPopup()
+  // Reset to default popup
+  await browser.browserAction.setPopup({ popup: "" })
+}
 
 // Track when tabs change
 browser.tabs.onActivated.addListener(tabInfo => store.dispatch(changeTab(tabInfo.tabId)))
 browser.tabs.onUpdated.addListener(tabId => store.dispatch(changeTab(tabId)))
 browser.tabs.onRemoved.addListener(tabId => store.dispatch(forgetFeeds(tabId)))
 
-// Set up browser action to display status
-browser.browserAction.setBadgeTextColor({ color: '#FFFFFF' })
-browser.browserAction.setBadgeBackgroundColor({ color: '#617CBA' })
+// Set up browser action badge styling
+browser.browserAction.setBadgeTextColor({ color: '#FFFFFF' }).then(
+  () => browser.browserAction.setBadgeBackgroundColor({ color: '#617CBA' })
+).catch((error) => {
+  console.warn('Could not style badge', error)
+})
+
+// Update badge based on page state.
 onPopupStateChange(store, popupState => {
   if (popupState.isUnread && popupState.viewMode !== 'sidebar') {
-    browser.browserAction.setBadgeText({ text: '★' })
+    browser.browserAction.setBadgeText({ text: '★' }).catch((error) => {
+      console.warn('Could not update badge', error)
+    })
   } else if (popupState.canSubscribe) {
-    browser.browserAction.setBadgeText({ text: '✚' })
+    browser.browserAction.setBadgeText({ text: '✚' }).catch((error) => {
+      console.warn('Could not update badge', error)
+    })
   } else {
-    browser.browserAction.setBadgeText({ text: '' })
+    browser.browserAction.setBadgeText({ text: '' }).catch((error) => {
+      console.warn('Could not update badge', error)
+    })
   }
 })
 

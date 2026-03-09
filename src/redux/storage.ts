@@ -22,7 +22,7 @@ export function persistedReducer<S extends RootState, A extends Action>(reducer:
   return (state: S | undefined, action: A | UpdatePersistedStateAction): S => {
     if (action.type === UPDATE_PERSISTENT_STATE) {
       const updateAction = action as UpdatePersistedStateAction
-      state = {...state, ...updateAction.payload} as S
+      state = { ...state, ...updateAction.payload } as S
     }
 
     return reducer(state, action as A)
@@ -37,16 +37,18 @@ export function connectStoreToStorage(store: Store<RootState>, serializePaths: (
         store.dispatch(updatePersistedState(state))
       }
     })
-    .catch(error => {
-      reportError(error)
-    })
     .then(() => {
       store.subscribe(throttle(() => {
         const state = store.getState()
         const savedState = pick(state, serializePaths)
 
-        saveState(savedState)
+        saveState(savedState).catch(error => {
+          reportError(error)
+        })
       }, 1000))
+    })
+    .catch(error => {
+      reportError(error)
     })
 }
 
@@ -75,7 +77,7 @@ function saveState(state: Partial<RootState>): Promise<void> {
 
 function loadStateFromLocalStorage(): Partial<RootState> {
   const jsonState = localStorage.getItem(STATE_KEY)
-  return jsonState ? JSON.parse(jsonState) : {}
+  return jsonState ? JSON.parse(jsonState) as Partial<RootState> : {}
 }
 
 function loadStateFromExtensionStorage(): Promise<Partial<RootState>> {

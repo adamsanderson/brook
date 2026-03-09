@@ -25,16 +25,22 @@ export default function handleOnClick(event: MouseEvent): void {
 }
 
 function openLink(url: string, event: MouseEvent): void {
-  if (useNewTab(event)) {
-    browser.tabs.create({url: url, active: event.shiftKey})
-  } else if (useNewWindow(event)) {
-    browser.windows.create({url: url})
+  if (shouldUseNewTab(event)) {
+    browser.tabs.create({url: url, active: event.shiftKey}).catch((error) => {
+      console.warn("Could not open new tab", error)
+    })
+  } else if (shouldUseNewWindow(event)) {
+    browser.windows.create({url: url}).catch((error) => {
+      console.warn("Could not open new window", error)
+    })
   } else {
-    browser.tabs.update({url: url})
+    browser.tabs.update({url: url}).catch((error) => {
+      console.warn("Could not open tab", error)
+    })
   }
 }
 
-function useNewTab(event: MouseEvent): boolean {
+function shouldUseNewTab(event: MouseEvent): boolean {
   if (getOperatingSystem() === MAC) {
     return event.metaKey
   } else {
@@ -42,6 +48,6 @@ function useNewTab(event: MouseEvent): boolean {
   }
 }
 
-function useNewWindow(event: MouseEvent): boolean {
+function shouldUseNewWindow(event: MouseEvent): boolean {
   return event.shiftKey
 }

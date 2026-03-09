@@ -40,7 +40,7 @@ class OptionsForm extends React.Component<ConnectedProps<typeof connector>> {
             </div>
           </div>
         </div>
-        <OptionsImage className='layout-trailing'/>
+        <OptionsImage className='layout-trailing' />
       </>
     )
   }
@@ -52,9 +52,13 @@ class OptionsForm extends React.Component<ConnectedProps<typeof connector>> {
     // Due to the browser extension API, this must be a direct response to user input,
     // and cannot happen in a middleware.
     if (viewMode === 'sidebar') {
-      browser.sidebarAction.open()
+      browser.sidebarAction.open().catch((error) => {
+        console.warn('Could not open sidebar', error)
+      })
     } else {
-      browser.sidebarAction.close()
+      browser.sidebarAction.close().catch((error) => {
+        console.warn('Could not close sidebar', error)
+      })
     }
   }
 }

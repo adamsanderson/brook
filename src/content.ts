@@ -27,7 +27,9 @@ function findFeeds() {
 function reportFeeds(feeds: DiscoveredFeed[]) {
   try {
     const transformed = transformFeeds(feeds)
-    dispatch(foundFeeds(transformed))
+    dispatch(foundFeeds(transformed)).catch((error) => {
+      console.warn('Could not dispatch feed discovery', error)
+    })
   } catch (error) {
     reportError(error)
   }

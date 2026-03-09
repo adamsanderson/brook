@@ -67,7 +67,9 @@ class FeedTreeMenu extends React.Component<OwnProps & ConnectedProps<typeof conn
   }
 
   handleOptions = () => {
-    browser.runtime.openOptionsPage()
+    browser.runtime.openOptionsPage().catch((error) => {
+      console.warn('Could not open options page', error)
+    })
   }
 }
 
