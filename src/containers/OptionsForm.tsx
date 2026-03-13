@@ -26,7 +26,7 @@ class OptionsForm extends React.Component<ConnectedProps<typeof connector>> {
     return (
       <>
         <h4>View Options</h4>
-        <div className='layout-column-aligned Form'>
+        <div className='layout-form-grid Form'>
           <label htmlFor='brook-view-option'>View feeds in</label>
           <div>
             <div className='Form-control'>

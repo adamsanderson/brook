@@ -32,7 +32,6 @@ class ImportForm extends React.Component<ConnectedProps<typeof connector>, State
     return (
       <div>
         <h2>
-          <img src="/icons/Brook.svg" className='Icon'/>
           Import Feeds
         </h2>
 

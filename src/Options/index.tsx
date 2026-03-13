@@ -10,12 +10,14 @@ initErrorHandler()
 const store = createProxyStore()
 
 store.ready().then(() => {
-  const root = createRoot(document.body)
+  const rootEl = document.querySelector('#root')
+  if (!rootEl) {
+    throw new Error("Root element not found")
+  }
+  const root = createRoot(rootEl)
   root.render(
     <Provider store={store}>
-      <div>
-        <App />
-      </div>
+      <App />
     </Provider>
   )
 }).catch(err => {

@@ -39,7 +39,7 @@ body {
   background: var(--color-background);
 }
 
-.Page body {
+body.Page {
   max-width: 40em;
   margin: 1em auto;
 }
@@ -433,18 +433,14 @@ a[href]:hover {
 }
 
 /* Useful for laying out a column oriented form where the fields align along the gap */
-.layout-column-aligned {
-  display: flex;
+.layout-form-grid {
+  display: grid;
+  grid-template-columns: minmax(4em, max-content) 1fr;
+  column-gap: 1em;
 }
 
-.layout-column-aligned > * {
-  flex: 2;
-}
-
-.layout-column-aligned > :first-child {
-  flex: 1;
+.layout-form-grid > :first-child {
   text-align: right;
-  margin-right: 0.25em;
 }
 
 .layout-visually-hidden {
