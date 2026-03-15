@@ -1,4 +1,5 @@
-import transformFeeds from "../../src/lib/discoveryPipeline"
+import { describe, it, expect } from "vitest"
+import transformFeeds from "../../src/lib/discoveryPipeline.ts"
 
 describe('Discovery Pipeline', () => {
   describe('Duplicates', () => {
