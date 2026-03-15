@@ -1,5 +1,6 @@
-import fs from "fs/promises"
-import OpmlReader from "../../src/lib/OpmlReader"
+import {readdir, readFile} from "node:fs/promises"
+import OpmlReader, { OpmlReaderHandlers } from "../../src/lib/OpmlReader.ts"
+import { describe, it, expect, vi, Mock } from "vitest"
 
 const FIXTURE_DIR = "test/data/opml/"
 
@@ -8,10 +9,10 @@ describe('Opml Reader', () => {
   // makes no specific assertions about them.  For more detailed tests,
   // see below.
   it("can read all the sample files", async () => {
-    const paths = await fs.readdir(FIXTURE_DIR)
+    const paths = await readdir(FIXTURE_DIR)
 
     const promises = paths.map(async (path) => {
-      const buffer = await fs.readFile(FIXTURE_DIR + path)
+      const buffer = await readFile(FIXTURE_DIR + path)
       await readOpmlString(buffer.toString())
     })
 
@@ -77,7 +78,7 @@ describe('Opml Reader', () => {
 
 })
 
-function readOpmlTemplate(xmlUnderTest) {
+function readOpmlTemplate(xmlUnderTest: string) {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <opml version="1.1">
       <body>
@@ -89,7 +90,10 @@ function readOpmlTemplate(xmlUnderTest) {
   return readOpmlString(xml)
 }
 
-function readOpmlString(xml) {  
+function readOpmlString(xml: string): Promise<{
+  feedFn: Mock<Required<OpmlReaderHandlers>['onFeed']>,
+  folderFn: Mock<Required<OpmlReaderHandlers>['onFolder']>,
+}> {  
   const feedFn = vi.fn()
   const folderFn = vi.fn()
 

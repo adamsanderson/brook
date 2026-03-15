@@ -9,7 +9,7 @@ export type OpmlFolder = {
   title: string | null
 }
 
-type OpmlReaderHandlers = {
+export type OpmlReaderHandlers = {
   onFeed?: (feed: OpmlFeed, parentId?: string) => void
   onFolder?: (folder: OpmlFolder, parentId?: string) => void
   onFinish?: () => void
