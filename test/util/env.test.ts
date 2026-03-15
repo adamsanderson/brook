@@ -1,4 +1,5 @@
-import env from '../../src/util/env'
+import { describe, it, expect } from 'vitest/dist/index.js'
+import env from '../../src/util/env.ts'
 
 describe('env', () => {
   it('should have an environment name', () => {

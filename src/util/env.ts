@@ -1,6 +1,8 @@
+type EnvironmentName = "production" | "development" | "test"
+
 const ENV = {
-  [import.meta.env.MODE]: true,
-  environmentName: import.meta.env.MODE
+  [import.meta.env.MODE as EnvironmentName]: true,
+  environmentName: import.meta.env.MODE as EnvironmentName
 }
 
 export default ENV
