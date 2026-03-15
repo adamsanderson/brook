@@ -1,13 +1,13 @@
 import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
 import webExtension from "vite-plugin-web-extension"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
-import viteTsconfigPaths from 'vite-tsconfig-paths';
+import viteTsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig(({ mode }) => {
 
   return ({
     plugins: [
+      // React plugin appears to conflict with `webExtension`
       // react(),
       webExtension({
         manifest: "src/manifest.json",
