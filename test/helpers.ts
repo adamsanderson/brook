@@ -1,5 +1,8 @@
-import { createStore, applyMiddleware } from 'redux'
-import { rootReducer, sharedMiddleware } from "../src/redux/store"
+import { createStore, applyMiddleware, type Reducer, type UnknownAction } from 'redux'
+import { rootReducer, sharedMiddleware } from "../src/redux/store.ts"
+import { RootState } from '../src/redux/types.ts'
+
+export type TestState = Partial<RootState>
 
 /**
  * Applies a redux reducer to a series of actions, returning the final state.
@@ -11,7 +14,7 @@ import { rootReducer, sharedMiddleware } from "../src/redux/store"
  * 
  * @returns {Object}
  */
-export function reduceEach(reducer, actions, initialState = undefined) {
+export function reduceEach<S extends TestState>(reducer: Reducer<S, UnknownAction>, actions: UnknownAction[], initialState: S) {
   let state = initialState
   actions.forEach(a => state = reducer(state, a))
 
@@ -24,7 +27,7 @@ export function reduceEach(reducer, actions, initialState = undefined) {
  * 
  * @param {Object} initialState for the test store
  */
-export function createTestStore(initialState = {}) {
+export function createTestStore<S extends TestState>(initialState: S) {
   return createStore(
     rootReducer,
     initialState,
@@ -41,7 +44,7 @@ export function createTestStore(initialState = {}) {
  * 
  * @returns {Object}
  */
-export function dispatchEach(actions, initialState = {}) {
+export function dispatchEach<S extends TestState>(actions: UnknownAction | UnknownAction[], initialState: S): S {
   const store = createTestStore(initialState)
   if (Array.isArray(actions)) {
     actions.forEach(a => store.dispatch(a))
@@ -49,5 +52,5 @@ export function dispatchEach(actions, initialState = {}) {
     store.dispatch(actions)
   }
 
-  return store.getState()
+  return store.getState() as S
 }
