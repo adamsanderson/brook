@@ -9,6 +9,7 @@
     "clean": "rm -rf ./node_modules; rm -rf ./dist",
     "firefox": "web-ext run -s ./dist/ --url about:debugging#/runtime/this-firefox",
     "lint": "eslint src test",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "test": "vitest",
     "package": "yarn build && web-ext build -s extension/ && git archive --format=zip -o web-ext-artifacts/brook-src.zip master",
     "postpackage": "cat ./docs/publishing.md"
@@ -21,17 +22,26 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@types/lodash": "^4.17.20",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@types/webextension-polyfill": "^0.12.3",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "@vitejs/plugin-react": "^5.0.2",
     "@vitest/ui": "^3.2.4",
     "babel-core": "^7.0.0-0",
     "eslint": "^9.35.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.6.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "jsdom": "^26.1.0",
+    "typescript": "^5.9.2",
     "vite": "^7.1.5",
     "vite-plugin-node-polyfills": "^0.24.0",
     "vite-plugin-web-extension": "^4.4.5",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "web-ext": "8.9.0"
   },
@@ -47,7 +57,8 @@
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
-    "webext-redux": "^4.0.0"
+    "webext-redux": "^4.0.0",
+    "webextension-polyfill": "^0.12.0"
   },
   "packageManager": "yarn@4.9.4"
 }
