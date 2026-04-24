@@ -16,9 +16,8 @@
     "jsx": "react-jsx",
 
     // Path mapping (matches vite config)
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Linting */
