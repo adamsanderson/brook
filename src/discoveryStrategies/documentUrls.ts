@@ -4,9 +4,16 @@ import type { DiscoveredFeed } from './types'
 // Search for common page links.
 // Ideally these would be link relations, but folks love to hard link feeds, and that's just fine.
 const SELECTORS = `
+  a[href$="/feed"],
+  a[href$="/feed/"],
   a[href$="/feed.xml"],
-  a[href$="/atom.xml"],
-  a[href$="/rss.xml"]
+  a[href$="/feed.json"],
+  a[href$="/rss"],
+  a[href$="/rss/"],
+  a[href$="/rss.xml"],
+  a[href$="/atom"],
+  a[href$="/atom/"],
+  a[href$="/atom.xml"]
 `
 
 /**
