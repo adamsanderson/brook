@@ -115,26 +115,26 @@ const enhancedMiddleware = compose(
   ...enhancers
 ) as StoreEnhancer
 
-export function createBackgroundStore(): Store<RootState> {
+export function createBackgroundStore(): Promise<Store<RootState>> {
   const store = createStore(
     rootReducer,
     initialState as RootState,
     enhancedMiddleware
   )
 
-  // Connect store to storage
-  connectStoreToStorage(store, serializePaths)
-
   // Connect store to fire and forget dispatch channel
   connectStoreToDispatchChannel(store)
 
-  // Wrap store with webext-redux
+  // Register onMessage listeners synchronously before any async work
   const wrapStore = createWrapStore({channelName: 'Brook'})
-  wrapStore(store, {
-    diffStrategy: deepDiff,
-  })
 
-  return store
+  // Load storage first so the initial STATE_TYPE broadcast has correct state
+  return connectStoreToStorage(store, serializePaths).then(() => {
+    wrapStore(store, {
+      diffStrategy: deepDiff,
+    })
+    return store
+  })
 }
 
 export function createProxyStore(): ProxyStore {

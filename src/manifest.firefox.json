@@ -1,11 +1,10 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Brook Feed Reader",
   "version": "0.6.0",
   "author": "Adam Sanderson <netghost@gmail.com>",
-  
+
   "sidebar_action": {
-    "browser_style": true,
     "default_icon": {
       "96": "icons/Brook.svg",
       "48": "icons/Brook.svg"
@@ -14,8 +13,7 @@
     "default_panel": "src/Sidebar/index.html"
   },
 
-  "browser_action": {
-    "browser_style": true,
+  "action": {
     "default_icon": {
       "96": "icons/Brook.svg",
       "48": "icons/Brook.svg"
@@ -24,7 +22,7 @@
   },
 
   "background": {
-    "page": "src/background/index.html"
+    "scripts": ["src/background/index.ts"]
   },
 
   "options_ui": {
@@ -39,10 +37,15 @@
   ],
 
   "permissions": [
-    "<all_urls>",
+    "alarms",
     "storage",
     "unlimitedStorage"
   ],
+
+  "host_permissions": [
+    "<all_urls>"
+  ],
+
   "browser_specific_settings": {
     "gecko": {
       "id": "{e22ef003-e424-45f0-9da1-b0b93617ce49}"

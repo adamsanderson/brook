@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
       // React plugin appears to conflict with `webExtension`
       // react(),
       webExtension({
-        manifest: "src/manifest.json",
+        manifest: "src/manifest.firefox.json",
         additionalInputs: [
           "src/Import/index.html",
           "src/Popup/index.html",

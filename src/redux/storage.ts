@@ -29,9 +29,8 @@ export function persistedReducer<S extends RootState, A extends Action>(reducer:
   }
 }
 
-export function connectStoreToStorage(store: Store<RootState>, serializePaths: (keyof RootState)[]) {
-  // Set up store persistence
-  loadState()
+export function connectStoreToStorage(store: Store<RootState>, serializePaths: (keyof RootState)[]): Promise<void> {
+  return loadState()
     .then(state => {
       if (state) {
         store.dispatch(updatePersistedState(state))
