@@ -57,8 +57,8 @@ export function humanizeHost(path: string): string {
  * the [URL constructor](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL)
  * that will always return a String.
  */
-export function resolveUrl(url: string, base: string | URL = window.location.toString()): string {
-  return new window.URL(url, base).toString()
+export function resolveUrl(url: string, base: string | URL = globalThis.location.toString()): string {
+  return new globalThis.URL(url, base).toString()
 }
 
 /**
@@ -80,9 +80,9 @@ export function normalizeProtocol(uri: string): string {
 */
 function coerceToURL(path: string): URL {
   try {
-    return new window.URL(path)
+    return new globalThis.URL(path)
   } catch (_err) {
-    return new window.URL("http://" + path)
+    return new globalThis.URL("http://" + path)
   }
 }
 
