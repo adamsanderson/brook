@@ -1,5 +1,4 @@
 import React from 'react'
-import browser from 'webextension-polyfill'
 import { connect, ConnectedProps } from 'react-redux'
 
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -7,6 +6,7 @@ import SubscribeList from '../components/SubscribeList'
 import { addFeed } from '../redux/modules/feeds'
 import discovery from '../redux/modules/discovery'
 import activeTab from '../redux/modules/activeTab'
+import { openSidebar } from '../util/sidebarAction'
 import type { Feed, RootState } from '../redux/types'
 
 const mapStateToProps = (state: RootState) => ({
@@ -37,7 +37,7 @@ class App extends React.Component<ConnectedProps<typeof connector>> {
 
   handleSubscription = (feed: Feed) => {
     this.props.addFeed(feed, { fetch: true })
-    void browser.sidebarAction.open().catch((error) => {
+    void openSidebar().catch((error) => {
       console.warn('Could not open sidebar', error)
     })
     window.close()

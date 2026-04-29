@@ -85,6 +85,7 @@ export default [
         ...globals.browser,
         ...globals.es6,
         ...globals.webextensions,
+        __BROWSER__: 'readonly',
       },
     },
     plugins: {
@@ -126,6 +127,14 @@ export default [
           extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
       }
+    },
+  },
+  {
+    files: ['vite.config.ts', 'vitest.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
     },
   },
   {

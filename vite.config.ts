@@ -3,6 +3,9 @@ import webExtension from "vite-plugin-web-extension"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 
+const target = process.env.TARGET ?? "firefox"
+const isChrome = target === "chrome"
+
 export default defineConfig(({ mode }) => {
 
   return ({
@@ -10,16 +13,17 @@ export default defineConfig(({ mode }) => {
       // React plugin appears to conflict with `webExtension`
       // react(),
       webExtension({
-        manifest: "src/manifest.firefox.json",
+        manifest: isChrome ? "src/manifest.chrome.json" : "src/manifest.firefox.json",
+        browser: target,
         additionalInputs: [
           "src/Import/index.html",
           "src/Popup/index.html",
           "src/SubscribePopup/index.html",
         ],
         webExtConfig: {
-          target: "firefox-desktop",
+          target: isChrome ? "chromium" : "firefox-desktop",
           devtools: true,
-          startUrl: "about:debugging#/runtime/this-firefox",
+          startUrl: isChrome ? "chrome://extensions" : "about:debugging#/runtime/this-firefox",
         },
       }),
       nodePolyfills({
@@ -34,6 +38,9 @@ export default defineConfig(({ mode }) => {
       }),
       viteTsconfigPaths()
     ],
+    define: {
+      __BROWSER__: JSON.stringify(target),
+    },
     optimizeDeps: {
       include: ["react", "react-dom", "redux", "react-redux", "feedme"],
     },

@@ -1,8 +1,8 @@
 import React from 'react'
-import browser from 'webextension-polyfill'
 import { connect, ConnectedProps } from 'react-redux'
 
 import options, { setViewMode } from '../redux/modules/options'
+import { openSidebar, closeSidebar } from '../util/sidebarAction'
 import { OptionsImage } from '../components/images'
 import type { RootState } from '../redux/types'
 
@@ -52,11 +52,11 @@ class OptionsForm extends React.Component<ConnectedProps<typeof connector>> {
     // Due to the browser extension API, this must be a direct response to user input,
     // and cannot happen in a middleware.
     if (viewMode === 'sidebar') {
-      browser.sidebarAction.open().catch((error) => {
+      openSidebar().catch((error) => {
         console.warn('Could not open sidebar', error)
       })
     } else {
-      browser.sidebarAction.close().catch((error) => {
+      closeSidebar().catch((error) => {
         console.warn('Could not close sidebar', error)
       })
     }

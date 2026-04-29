@@ -8,6 +8,7 @@ import { fetchAll } from '../redux/modules/feeds'
 import { forgetFeeds } from '../redux/modules/discovery'
 import options from '../redux/modules/options'
 import { onPopupStateChange, getNotificationState } from '../util/onPopupStateChange'
+import { openSidebar } from '../util/sidebarAction'
 
 // These paths are not guaranteed, but they seem to work for now:
 const subscribePopupURL = '/src/SubscribePopup/index.html'
@@ -24,7 +25,7 @@ const storeReady = createBackgroundStore().then(s => { store = s })
 browser.action.onClicked.addListener(
   // In order to receive events here, you need to not have a popup, and you need to trigger
   // open/close events on sidebarAction and action from a direct user event.
-  () => void storeReady.then(() => handleBrowserActionClick())
+  (tab) => void storeReady.then(() => handleBrowserActionClick(tab))
 )
 
 browser.tabs.onActivated.addListener(tabInfo =>
@@ -76,7 +77,7 @@ void storeReady.then(() => {
 
 // ── Handlers ────────────────────────────────────────────────────────────
 
-async function handleBrowserActionClick() {
+async function handleBrowserActionClick(tab: browser.Tabs.Tab) {
   const state = store.getState()
   const viewMode = options.selectors.getViewMode(state)
 
@@ -86,7 +87,7 @@ async function handleBrowserActionClick() {
       await openPopup(subscribePopupURL)
     } else {
       await browser.action.setPopup({ popup: "" })
-      await browser.sidebarAction.open()
+      await openSidebar(tab.windowId)
     }
   } else {
     await openPopup(popupURL)
