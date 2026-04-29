@@ -6,7 +6,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths'
 const target = process.env.TARGET ?? "firefox"
 const isChrome = target === "chrome"
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode: _mode }) => {
 
   return ({
     plugins: [
