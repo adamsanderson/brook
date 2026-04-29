@@ -1,6 +1,6 @@
 import { alias } from 'webext-redux'
 import FeedMe from 'feedme'
-import { uniqBy } from 'lodash'
+import uniqBy from 'lodash/uniqBy'
 import type { Dispatch, UnknownAction } from 'redux'
 
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
@@ -131,7 +131,7 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
 }
 
 function fetchFromQueue(feedQueue: Feed[], dispatch: ReduxDispatch): void {
-  window.requestAnimationFrame(() => {
+  globalThis.queueMicrotask(() => {
     const feed = feedQueue.shift()
     if (!feed) {
       dispatch(finishedFeedWorker())
