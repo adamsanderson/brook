@@ -3,6 +3,10 @@
   "name": "Brook Feed Reader",
   "version": "0.6.0",
   "author": "Adam Sanderson <netghost@gmail.com>",
+  "icons": {
+    "96": "icons/Brook-96.png",
+    "48": "icons/Brook-48.png"
+  },
 
   "side_panel": {
     "default_path": "src/Sidebar/index.html"
@@ -10,8 +14,8 @@
 
   "action": {
     "default_icon": {
-      "96": "icons/Brook.svg",
-      "48": "icons/Brook.svg"
+      "96": "icons/Brook-96.png",
+      "48": "icons/Brook-48.png"
     },
     "default_title": "Brook"
   },
@@ -32,14 +36,7 @@
     }
   ],
 
-  "permissions": [
-    "alarms",
-    "sidePanel",
-    "storage",
-    "unlimitedStorage"
-  ],
+  "permissions": ["alarms", "sidePanel", "storage", "unlimitedStorage"],
 
-  "host_permissions": [
-    "<all_urls>"
-  ]
+  "host_permissions": ["<all_urls>"]
 }

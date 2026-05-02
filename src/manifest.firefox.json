@@ -3,6 +3,10 @@
   "name": "Brook Feed Reader",
   "version": "0.6.0",
   "author": "Adam Sanderson <netghost@gmail.com>",
+  "icons": {
+    "96": "icons/Brook.svg",
+    "48": "icons/Brook.svg"
+  },
 
   "sidebar_action": {
     "default_icon": {
@@ -36,15 +40,9 @@
     }
   ],
 
-  "permissions": [
-    "alarms",
-    "storage",
-    "unlimitedStorage"
-  ],
+  "permissions": ["alarms", "storage", "unlimitedStorage"],
 
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
 
   "browser_specific_settings": {
     "gecko": {
