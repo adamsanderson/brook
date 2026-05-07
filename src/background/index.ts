@@ -5,11 +5,9 @@ import { initErrorHandler } from '../util/errorHandler'
 
 import { changeTab } from '../redux/modules/activeTab'
 import { fetchAll } from '../redux/modules/feeds'
-import discovery, { forgetFeeds } from '../redux/modules/discovery'
-import { getNotificationState, onPopupStateChange } from '../util/onPopupStateChange'
-import { openSidebar } from '../util/sidebarAction'
-import { openModal } from '@/redux/modules/modal'
-import { MODALS } from '@/modals'
+import { forgetFeeds } from '../redux/modules/discovery'
+import { onPopupStateChange } from '../util/onPopupStateChange'
+import { openSidebar, openSubscribeMenuIfNeeded } from '../util/sidebarAction'
 
 initErrorHandler()
 
@@ -21,14 +19,9 @@ browser.action.onClicked.addListener(tabInfo => {
   openSidebar(tabInfo.windowId)
     .catch((error) => console.error("Could not open sidebar", error))
   
-  void storeReady.then(() => {
-    const state = store.getState()
-    const notificationState = getNotificationState(state)
-    if (notificationState.canSubscribe) {
-      const feeds = discovery.selectors.unsubscribedFeeds(state, tabInfo.id ?? -1)
-      store.dispatch(openModal(MODALS.SubscribeMenu, { feeds }))
-    }
-  })
+  void storeReady.then(() =>
+    openSubscribeMenuIfNeeded(store.getState(), store.dispatch, tabInfo.id ?? -1)
+  )
 })
 
 // These can wake the page, so they must be registered before any async work.
