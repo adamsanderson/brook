@@ -27,8 +27,13 @@ class App extends React.Component<ConnectedProps<typeof connector>> {
 
         <div className="Panel-body">
           <ErrorBoundary message="An error occurred while running Brook.">
-            <p>Subscribe to:</p>
-            <SubscribeList feeds={this.props.feeds} onSubscribe={this.handleSubscription} />
+            {this.props.feeds.length === 0 && <p>No feeds available on this page.</p>}
+            {this.props.feeds.length > 0 &&
+              <>
+                <p>Subscribe to:</p>
+                <SubscribeList feeds={this.props.feeds} onSubscribe={this.handleSubscription} />
+              </>
+            }
           </ErrorBoundary>
         </div>
       </div>

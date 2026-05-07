@@ -26,14 +26,8 @@ async function handleActionClick(tabInfo: browser.Tabs.Tab) {
     console.error("Could not open sidebar", error)
   }
 
-  await storeReady
-
-  const state = store.getState()
-  const notificationState = getNotificationState(state)
-  if (notificationState.canSubscribe) {
-    await browser.action.setPopup({ popup: '/src/SubscribePopup/index.html' })
-    await browser.action.openPopup({ windowId: tabInfo.windowId })
-  }
+  await browser.action.setPopup({ popup: '/src/SubscribePopup/index.html' })
+  await browser.action.openPopup({ windowId: tabInfo.windowId })
 }
 
 // These can wake the page, so they must be registered before any async work.
