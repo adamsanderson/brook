@@ -29,10 +29,6 @@
     "scripts": ["src/background/index.ts"]
   },
 
-  "options_ui": {
-    "page": "src/Options/index.html"
-  },
-
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

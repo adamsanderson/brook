@@ -346,17 +346,8 @@ a[href]:hover {
   padding: 0.5em 1em;
 }
 
-.Form-control {
-  padding-bottom: 0.5em;
-}
-
-.Form-hint {
-  color: var(--color-grey);
-  padding-bottom: 0.5em;
-}
-
-/* 
-  Layout Helpers 
+/*
+  Layout Helpers
 */
 .layout-vertical {
   height: 100%;
@@ -406,42 +397,6 @@ a[href]:hover {
   max-height: 10em;
   margin: 2em auto 0 auto;
   max-width: 100%;
-}
-
-.layout-spread {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  column-gap: 0.5em;
-}
-
-.layout-spread > * {
-  text-align: center;
-  flex-grow: 1;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.layout-spread > :last-child {
-  text-align: right;
-}
-
-.layout-spread > :first-child {
-  text-align: left;
-}
-
-/* Useful for laying out a column oriented form where the fields align along the gap */
-.layout-form-grid {
-  display: grid;
-  grid-template-columns: minmax(4em, max-content) 1fr;
-  column-gap: 1em;
-}
-
-.layout-form-grid > :first-child {
-  text-align: right;
 }
 
 .layout-visually-hidden {

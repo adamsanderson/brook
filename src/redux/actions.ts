@@ -3,7 +3,6 @@ import type { DiscoveryAction } from './modules/discovery'
 import type { FeedAction } from './modules/feeds'
 import type { FolderAction } from './modules/folders'
 import type { ModalAction } from './modules/modal'
-import type { OptionsAction } from './modules/options'
 import type { PopupAction } from './modules/popup'
 import type { ToastAction } from './modules/toast'
 import type { UIAction } from './modules/ui'
@@ -16,7 +15,6 @@ export type AppAction =
   | FeedAction
   | FolderAction
   | ModalAction
-  | OptionsAction
   | PopupAction
   | ToastAction
   | UIAction

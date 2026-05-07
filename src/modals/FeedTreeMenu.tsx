@@ -40,10 +40,6 @@ class FeedTreeMenu extends React.Component<OwnProps & ConnectedProps<typeof conn
         <div>
           <a onClick={ this.handleExport }>Export Feeds</a>
         </div>
-        <hr/>
-        <div>
-          <a onClick={ this.handleOptions }>Options</a>
-        </div>
       </PopupLayout>
     )
   }
@@ -66,11 +62,6 @@ class FeedTreeMenu extends React.Component<OwnProps & ConnectedProps<typeof conn
     this.props.exportOpml()
   }
 
-  handleOptions = () => {
-    browser.runtime.openOptionsPage().catch((error) => {
-      console.warn('Could not open options page', error)
-    })
-  }
 }
 
 export default connector(FeedTreeMenu)

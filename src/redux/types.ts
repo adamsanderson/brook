@@ -5,7 +5,6 @@ import type { ViewsState } from './modules/views'
 import type { ActiveTabState } from './modules/activeTab'
 import type { DiscoveryState } from './modules/discovery'
 import type { ModalState } from './modules/modal'
-import type { OptionsState } from './modules/options'
 import type { ToastState } from './modules/toast'
 import type { WorkersState } from './modules/workers'
 import type { PopupState } from './modules/popup'
@@ -68,7 +67,6 @@ export type RootState = {
   toast: ToastState
   workers: WorkersState
   popup: PopupState
-  options: OptionsState
 }
 
 // Node reference type (used in children arrays for folders)
