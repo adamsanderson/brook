@@ -5,14 +5,11 @@ import { initErrorHandler } from '../util/errorHandler'
 
 import { changeTab } from '../redux/modules/activeTab'
 import { fetchAll } from '../redux/modules/feeds'
-import { forgetFeeds } from '../redux/modules/discovery'
-import options from '../redux/modules/options'
-import { onPopupStateChange, getNotificationState } from '../util/onPopupStateChange'
+import discovery, { forgetFeeds } from '../redux/modules/discovery'
+import { getNotificationState, onPopupStateChange } from '../util/onPopupStateChange'
 import { openSidebar } from '../util/sidebarAction'
-
-// These paths are not guaranteed, but they seem to work for now:
-const subscribePopupURL = '/src/SubscribePopup/index.html'
-const popupURL = '/src/Popup/index.html'
+import { openModal } from '@/redux/modules/modal'
+import { MODALS } from '@/modals'
 
 initErrorHandler()
 
@@ -20,14 +17,21 @@ let store: Awaited<ReturnType<typeof createBackgroundStore>>
 const storeReady = createBackgroundStore().then(s => { store = s })
 
 // Listeners
+browser.action.onClicked.addListener(tabInfo => {
+  openSidebar(tabInfo.windowId)
+    .catch((error) => console.error("Could not open sidebar", error))
+  
+  void storeReady.then(() => {
+    const state = store.getState()
+    const notificationState = getNotificationState(state)
+    if (notificationState.canSubscribe) {
+      const feeds = discovery.selectors.unsubscribedFeeds(state, tabInfo.id ?? -1)
+      store.dispatch(openModal(MODALS.SubscribeMenu, { feeds }))
+    }
+  })
+})
+
 // These can wake the page, so they must be registered before any async work.
-
-browser.action.onClicked.addListener(
-  // In order to receive events here, you need to not have a popup, and you need to trigger
-  // open/close events on sidebarAction and action from a direct user event.
-  (tab) => void storeReady.then(() => handleBrowserActionClick(tab))
-)
-
 browser.tabs.onActivated.addListener(tabInfo =>
   void storeReady.then(() => store.dispatch(changeTab(tabInfo.tabId)))
 )
@@ -56,11 +60,7 @@ void storeReady.then(() => {
 
   // Update badge based on page state.
   onPopupStateChange(store, popupState => {
-    if (popupState.isUnread && popupState.viewMode !== 'sidebar') {
-      browser.action.setBadgeText({ text: '★' }).catch((error) => {
-        console.warn('Could not update badge', error)
-      })
-    } else if (popupState.canSubscribe) {
+    if (popupState.canSubscribe) {
       browser.action.setBadgeText({ text: '✚' }).catch((error) => {
         console.warn('Could not update badge', error)
       })
@@ -74,30 +74,3 @@ void storeReady.then(() => {
   // Schedule fetching feeds every 15m, persisting across event page restarts
   browser.alarms.create('fetchFeeds', { periodInMinutes: 15 })
 })
-
-// ── Handlers ────────────────────────────────────────────────────────────
-
-async function handleBrowserActionClick(tab: browser.Tabs.Tab) {
-  const state = store.getState()
-  const viewMode = options.selectors.getViewMode(state)
-
-  if (viewMode === 'sidebar') {
-    const popupState = getNotificationState(state)
-    if (popupState.canSubscribe) {
-      await openPopup(subscribePopupURL)
-    } else {
-      await browser.action.setPopup({ popup: "" })
-      await openSidebar(tab.windowId)
-    }
-  } else {
-    await openPopup(popupURL)
-  }
-}
-
-// Open a custom popup and then reset the popup URL for the next caller.
-async function openPopup(url: string) {
-  await browser.action.setPopup({ popup: url })
-  await browser.action.openPopup()
-  // Reset to default popup
-  await browser.action.setPopup({ popup: "" })
-}
