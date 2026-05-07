@@ -6,8 +6,8 @@ import { initErrorHandler } from '../util/errorHandler'
 import { changeTab } from '../redux/modules/activeTab'
 import { fetchAll } from '../redux/modules/feeds'
 import { forgetFeeds } from '../redux/modules/discovery'
-import { onPopupStateChange } from '../util/onPopupStateChange'
-import { openSidebar, openSubscribeMenuIfNeeded } from '../util/sidebarAction'
+import { getNotificationState, onPopupStateChange } from '../util/onPopupStateChange'
+import { openSidebar } from '../util/sidebarAction'
 
 initErrorHandler()
 
@@ -15,14 +15,26 @@ let store: Awaited<ReturnType<typeof createBackgroundStore>>
 const storeReady = createBackgroundStore().then(s => { store = s })
 
 // Listeners
-browser.action.onClicked.addListener(tabInfo => {
-  openSidebar(tabInfo.windowId)
-    .catch((error) => console.error("Could not open sidebar", error))
-  
-  void storeReady.then(() =>
-    openSubscribeMenuIfNeeded(store.getState(), store.dispatch, tabInfo.id ?? -1)
-  )
-})
+browser.action.onClicked.addListener((tabInfo) =>
+  void handleActionClick(tabInfo)
+)
+
+async function handleActionClick(tabInfo: browser.Tabs.Tab) {
+  try {
+    await openSidebar(tabInfo.windowId)
+  } catch (error) {
+    console.error("Could not open sidebar", error)
+  }
+
+  await storeReady
+
+  const state = store.getState()
+  const notificationState = getNotificationState(state)
+  if (notificationState.canSubscribe) {
+    await browser.action.setPopup({ popup: '/src/SubscribePopup/index.html' })
+    await browser.action.openPopup({ windowId: tabInfo.windowId })
+  }
+}
 
 // These can wake the page, so they must be registered before any async work.
 browser.tabs.onActivated.addListener(tabInfo =>
