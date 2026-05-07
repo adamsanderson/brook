@@ -6,7 +6,7 @@ import { initErrorHandler } from '../util/errorHandler'
 import { changeTab } from '../redux/modules/activeTab'
 import { fetchAll } from '../redux/modules/feeds'
 import { forgetFeeds } from '../redux/modules/discovery'
-import { getNotificationState, onPopupStateChange } from '../util/onPopupStateChange'
+import { onPopupStateChange } from '../util/onPopupStateChange'
 import { openSidebar } from '../util/sidebarAction'
 
 initErrorHandler()

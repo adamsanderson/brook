@@ -17,7 +17,6 @@ export default defineConfig(({ mode: _mode }) => {
         browser: target,
         additionalInputs: [
           "src/Import/index.html",
-          "src/Popup/index.html",
           "src/SubscribePopup/index.html",
         ],
         webExtConfig: {
