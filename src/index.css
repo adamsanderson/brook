@@ -111,6 +111,11 @@ a[href]:hover {
   display: flex;
   justify-content: flex-start;
   white-space: nowrap;
+
+  /* Adjust for chrome's ridiculous rounded corners */
+  .chrome & {
+    padding: 0.75em;
+  }
 }
 
 .Panel-header :first-child {
@@ -133,6 +138,16 @@ a[href]:hover {
 .Panel-header .Icon:hover {
   color: var(--color-active);
   cursor: pointer;
+}
+
+.Panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.Panel-actions .Button-subscribe {
+  margin-right: 1em;
 }
 
 .Panel-body {
@@ -160,6 +175,11 @@ a[href]:hover {
 
   display: flex;
   align-items: center;
+
+  .chrome & {
+    padding-left: 0.5em;
+    line-height: 1.4;
+  }
 }
 
 .List .List-item :last-child {

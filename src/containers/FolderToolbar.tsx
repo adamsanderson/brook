@@ -23,7 +23,7 @@ class FolderToolbar extends React.PureComponent<OwnProps & ConnectedProps<typeof
         <span>
           {folder?.title || 'Folder'}
         </span>
-        <span>
+        <span className='Panel-actions'>
           <MenuIcon className="Icon" onClick={ this.handleMenu } />
         </span>
       </div>

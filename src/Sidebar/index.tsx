@@ -7,8 +7,10 @@ import ToastRoot from '../toasts'
 import linkHandler from '../util/linkHandler'
 import { initErrorHandler } from '../util/errorHandler'
 import { createProxyStore } from '../redux/store'
+import { addBrowserClass } from '@/util/addBrowserClass'
 
 initErrorHandler()
+addBrowserClass(document)
 
 const store = createProxyStore()
 

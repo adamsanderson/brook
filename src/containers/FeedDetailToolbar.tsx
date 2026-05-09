@@ -31,13 +31,11 @@ class FeedDetailToolbar extends React.PureComponent<OwnProps & ConnectedProps<ty
         <span>
           {this.renderTitle(feed)}
         </span>
-        <span>
+        <span className='Panel-actions'>
           {
             itemNodes.some(i => i.isUnread) &&
             <MarkReadIcon className="Icon" onClick={this.handleMarkAllRead} />
           }
-        </span>
-        <span>
           <MenuIcon className="Icon" onClick={ this.handleMenu } />
         </span>
       </div>

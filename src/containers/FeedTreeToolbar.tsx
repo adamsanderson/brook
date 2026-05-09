@@ -35,7 +35,7 @@ class FeedTreeToolbar extends React.PureComponent<ConnectedProps<typeof connecto
         <span className="isActionable" onClick={ this.handleViewMenu }>
           {this.props.currentViewName}
         </span>
-        <span>
+        <span className='Panel-actions'>
           { this.renderSubscribeButton() }
           <RefreshIcon className={`Icon ${isFetching ? 'isSpinning' : ''}`} onClick={ () => { fetchAll() } } />
           <MenuIcon className="Icon" onClick={ this.handleMenu } />
@@ -49,7 +49,7 @@ class FeedTreeToolbar extends React.PureComponent<ConnectedProps<typeof connecto
     if (unsubscribedFeeds.length === 0) return null
 
     return (
-      <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive">
+      <a title="Subscribe to Feed" onClick={this.handleNewSubscription} className="isActive Button-subscribe">
         Subscribe{unsubscribedFeeds.length > 1 ? '… ' : ' '}
       </a>
     )

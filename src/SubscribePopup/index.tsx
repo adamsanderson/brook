@@ -5,10 +5,12 @@ import App from './App'
 import linkHandler from '../util/linkHandler'
 import { initErrorHandler } from '../util/errorHandler'
 import { createProxyStore } from '../redux/store'
+import { addBrowserClass } from '@/util/addBrowserClass'
 
 initErrorHandler()
 
 const store = createProxyStore()
+addBrowserClass(document)
 
 store.ready().then(() => {
   const root = createRoot(document.body)
