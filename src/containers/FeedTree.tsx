@@ -108,7 +108,7 @@ class FeedTree extends React.PureComponent<OwnProps & ConnectedProps<typeof conn
 
   renderContent(nodes: TreeNode[]) {
     return (
-      <div className="List">
+      <div className="List FeedTree">
         {nodes.map((n) => this.renderNode(n))}
       </div>
     )
