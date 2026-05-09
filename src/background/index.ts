@@ -6,7 +6,7 @@ import { initErrorHandler } from '../util/errorHandler'
 import { changeTab } from '../redux/modules/activeTab'
 import { fetchAll } from '../redux/modules/feeds'
 import { forgetFeeds } from '../redux/modules/discovery'
-import { onPopupStateChange } from '../util/onPopupStateChange'
+import { getNotificationState, onPopupStateChange } from '../util/onPopupStateChange'
 import { openSidebar } from '../util/sidebarAction'
 
 initErrorHandler()
@@ -26,8 +26,15 @@ async function handleActionClick(tabInfo: browser.Tabs.Tab) {
     console.error("Could not open sidebar", error)
   }
 
-  await browser.action.setPopup({ popup: '/src/SubscribePopup/index.html' })
-  await browser.action.openPopup({ windowId: tabInfo.windowId })
+  // Set and clear the popup.
+  // If the popup is set when this action is called, the popup will trigger,
+  // ignoring the browser action.
+  await storeReady
+  if (getNotificationState(store.getState()).canSubscribe) {
+    await browser.action.setPopup({ popup: '/src/SubscribePopup/index.html' })
+    await browser.action.openPopup({ windowId: tabInfo.windowId })
+    await browser.action.setPopup({ popup: '' })
+  }
 }
 
 // These can wake the page, so they must be registered before any async work.
