@@ -3,7 +3,7 @@ import React from 'react'
 import Folder from '../Folder'
 import { OVER, type PositionType } from '../../constants'
 import type { Folder as FolderType, NodeRef } from '../../redux/types'
-import { HOVER_CLASSES, getDragItem, draggablePosition } from "./position"
+import { HOVER_CLASSES, getDragItem, setDragItem, clearDragItem, draggablePosition } from "./position"
 
 type FolderProps = React.ComponentProps<typeof Folder>
 
@@ -30,8 +30,9 @@ class DnDFolder extends React.Component<Props, State> {
 
     return (
       <div
-        onDragStart={this.handleDragStart}
         draggable={true}
+        onDragStart={this.handleDragStart}
+        onDragEnd={this.handleDragEnd}
         onDragOver={this.handleDragOver}
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
@@ -45,13 +46,17 @@ class DnDFolder extends React.Component<Props, State> {
   }
 
   handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    setDragItem(this.props.folder)
     event.dataTransfer.setData("text/html", event.currentTarget.outerHTML)
-    event.dataTransfer.setData("application/brook", JSON.stringify(this.props.folder))
     event.dataTransfer.effectAllowed = "move"
   }
 
-  handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    const item = getDragItem(event)
+  handleDragEnd = () => {
+    clearDragItem()
+  }
+
+  handleDrop = () => {
+    const item = getDragItem()
     const position = this.state.position ?? OVER
     const folder = this.props.folder as NodeRef
 
@@ -67,7 +72,7 @@ class DnDFolder extends React.Component<Props, State> {
   }
 
   handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    const item = getDragItem(event)
+    const item = getDragItem()
     if (item && this.props.allowDrop(item, this.props.folder as NodeRef)) {
       this.setState({ position: draggablePosition(event, 0.2) })
       event.preventDefault()

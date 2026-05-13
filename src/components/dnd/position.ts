@@ -9,14 +9,22 @@ export const HOVER_CLASSES: Record<PositionType, string> = {
   [AFTER]: "isHoveringAfter",
 }
 
-export function getDragItem(event: DragEvent<Element>): NodeRef | undefined {
-  const json = event.dataTransfer.getData("application/brook")
+// Chrome blocks dataTransfer reads during dragover, so we track the active item
+// in module state set at dragstart and cleared at dragend.
+//
+// Thanks Chrome.
+let activeDragItem: NodeRef | undefined
 
-  if (json) {
-    return JSON.parse(json) as NodeRef
-  }
+export function setDragItem(item: NodeRef): void {
+  activeDragItem = item
+}
 
-  return undefined
+export function clearDragItem(): void {
+  activeDragItem = undefined
+}
+
+export function getDragItem(): NodeRef | undefined {
+  return activeDragItem
 }
 
 export function draggablePosition(event: DragEvent<Element>, inset = 0.2): PositionType {
