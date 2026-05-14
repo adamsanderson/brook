@@ -14,10 +14,9 @@
     "lint": "eslint src test",
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "test": "vitest",
-    "package": "yarn clean && yarn package:firefox && yarn package:chrome",
+    "package": "cat ./docs/publishing.md; yarn clean; yarn package:firefox & yarn package:chrome & wait",
     "package:firefox": "yarn build:firefox && web-ext build -s dist/firefox/ -a dist/ -n=\"{name}-firefox-{version}.zip\" && git archive --format=zip -o dist/brook-src.zip HEAD",
-    "package:chrome": "yarn build:chrome && web-ext build -s dist/chrome/ -a dist/ -n=\"{name}-chrome-{version}.zip\"",
-    "postpackage": "cat ./docs/publishing.md"
+    "package:chrome": "yarn build:chrome && web-ext build -s dist/chrome/ -a dist/ -n=\"{name}-chrome-{version}.zip\""
   },
   "author": "Adam Sanderson",
   "license": "MPL-2.0",
