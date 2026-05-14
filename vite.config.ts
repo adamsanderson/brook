@@ -9,11 +9,14 @@ const isChrome = target === "chrome"
 export default defineConfig(({ mode: _mode }) => {
 
   return ({
+    build: {
+      outDir: `dist/${target}`
+    },
     plugins: [
       // React plugin appears to conflict with `webExtension`
       // react(),
       webExtension({
-        manifest: isChrome ? "src/manifest.chrome.json" : "src/manifest.firefox.json",
+        manifest: `src/manifest.${target}.json`,
         browser: target,
         additionalInputs: [
           "src/Import/index.html",
