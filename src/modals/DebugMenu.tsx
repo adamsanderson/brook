@@ -22,10 +22,6 @@ class DebugMenu extends React.Component<OwnProps & ConnectedProps<typeof connect
     return (
       <PopupLayout position={position} onClose={closeModal}>
         <h4>Debug Menu</h4>
-        <div>
-          <a href="#">Open in Browser</a>
-        </div>
-        <hr/>
         <div className="isWarning">
           <a onClick={ this.handleReset }>Reset Data</a>
         </div>

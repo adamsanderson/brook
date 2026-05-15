@@ -458,13 +458,13 @@ a.isActive:visited {
   color: var(--color-danger);
 }
 
-.isWarning .isWarning a,
+.isWarning, 
+.isWarning a,
 .isWarning a:visited {
   color: var(--color-danger);
 }
 
-.hasError a,
-.isWarning a {
+.hasError a {
   text-decoration: underline;
 }
 
