@@ -10,6 +10,7 @@ import type { WorkersState } from './modules/workers'
 import type { PopupState } from './modules/popup'
 import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk'
+import { FeedFormatType } from '@/constants'
 
 export type Thunk<T = void> = ThunkAction<T, RootState, unknown, Action>
 
@@ -23,7 +24,7 @@ export type FeedItem = {
 export type Feed = {
   id: string
   type: typeof FEED
-  format?: string
+  format?: FeedFormatType
   isLoading: boolean
   url: string
   title: string

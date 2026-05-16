@@ -2,8 +2,11 @@ import React from 'react'
 import { connect, ConnectedProps } from 'react-redux'
 
 import { resetData } from '../redux/reset'
+import { addFeed } from '../redux/modules/feeds'
 
 import PopupLayout from "./layouts/PopupLayout"
+import { WATCH_PAGE } from '@/constants'
+import Browser from 'webextension-polyfill'
 
 type OwnProps = {
   position: React.CSSProperties
@@ -12,6 +15,7 @@ type OwnProps = {
 
 const connector = connect(null, {
   resetData,
+  addFeed
 })
 
 class DebugMenu extends React.Component<OwnProps & ConnectedProps<typeof connector>> {
@@ -22,6 +26,10 @@ class DebugMenu extends React.Component<OwnProps & ConnectedProps<typeof connect
     return (
       <PopupLayout position={position} onClose={closeModal}>
         <h4>Debug Menu</h4>
+        <div>
+          <a onClick={ () => void this.handleWatchPage() }>Watch Page</a>
+        </div>
+        <hr />
         <div className="isWarning">
           <a onClick={ this.handleReset }>Reset Data</a>
         </div>
@@ -32,6 +40,17 @@ class DebugMenu extends React.Component<OwnProps & ConnectedProps<typeof connect
 
   handleReset = () => {
     this.props.resetData()
+  }
+
+  handleWatchPage = async () => {
+    const tab = (await Browser.tabs.query({active: true, currentWindow: true}))[0]
+    if (!tab.url) return
+
+    this.props.addFeed({
+      url: tab.url,
+      title: tab.title,
+      format: WATCH_PAGE,
+    })
   }
 }
 

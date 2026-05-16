@@ -11,8 +11,9 @@ import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
 import ENV from '../../util/env'
 import decodeHtmlEntities from '../../util/decodeHtmlEntities'
-import { WP_API } from '../../constants'
+import { WATCH_PAGE, WP_API } from '../../constants'
 import type { Feed, FeedItem, Thunk } from '../types'
+import { digest } from '@/util/digest'
 
 // Raw feed data from parser
 type RawFeedData = {
@@ -110,6 +111,8 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
 
       if (feed.format === WP_API) {
         return handleWordpressApi(feed, res, dispatch)
+      } else if (feed.format === WATCH_PAGE) {
+        return handleWatchPage(feed, res, dispatch)
       } else {
         return handleFeed(feed, res, dispatch)
       }
@@ -198,6 +201,40 @@ function handleFeed(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise
 
     return { feed }
   })
+}
+
+async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
+  const now = Date.now()
+  const attributes: FeedUpdate = {
+    etag: res.headers.get("etag") || undefined,
+    lastFetched: now,
+  }
+
+  if (!attributes.etag) {
+    const body = await res.text()
+    attributes.etag = await digest(body)
+  }
+
+  if (res.redirected) {
+    attributes.url = res.url
+  }
+
+  if (attributes.etag !== feed.etag) {
+    attributes.updatedAt = now
+    attributes.items = [
+      {
+        id: attributes.etag,
+        title: new Date(now).toLocaleString(),
+        url: feed.url,
+        createdAt: +now,
+      }
+    ]
+  }
+
+  dispatch(updateFeed(feed, attributes))
+
+  return { feed }
+
 }
 
 function handleWordpressApi(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
