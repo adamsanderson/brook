@@ -54,7 +54,9 @@
   },
   "dependencies": {
     "@sentry/browser": "^4.5.1",
+    "defuddle": "^0.18.1",
     "feedme": "^2.0.2",
+    "linkedom": "^0.18.12",
     "lodash": "^4.17.5",
     "prop-types": "^15.6.0",
     "react": "^19.1.1",

@@ -2,10 +2,15 @@ import { alias } from 'webext-redux'
 import FeedMe from 'feedme'
 import uniqBy from 'lodash/uniqBy'
 import type { Dispatch, UnknownAction } from 'redux'
+import Defuddle from 'defuddle'
+import { parseHTML } from 'linkedom/worker'
+
 
 import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
-import { resolveUrl, findUrls } from '../../util/url'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
+import views from '../modules/views'
+import ui from '../modules/ui'
+import { resolveUrl, findUrls } from '../../util/url'
 import { FeedParseError, NetworkError, DeadFeedError as InvalidContentError } from '../../util/errors'
 import { reportError } from '../../util/errorHandler'
 import { discoverFeedsFromString } from '../../discoveryStrategies'
@@ -57,14 +62,20 @@ const aliases = {
   [FETCH_ALL]: (_action: FetchAllAction): Thunk => {
     return (dispatch, getState) => {
       const state = getState()
-      const allFeeds = [...feeds.selectors.allFeeds(state)]
-
       if (workers.selectors.hasFeedWorkers(state)) return
 
-      // TODO: Make WORKER_COUNT configurable
+      const allFeeds = [...feeds.selectors.allFeeds(state)]
+      const currentFeedId = ui.selectors.currentFeed(state)?.id
+
+      // Only fetch feeds that either appear read OR are currently selected.
+      // We want to know when the read feeds have new feed items, and we always recheck the current feed.
+      const staleFeeds = allFeeds.filter((feed) => {
+        return feed.id === currentFeedId || !views.selectors.isFeedUnread(state, feed)
+      })
+
       for (let i = 0; i < WORKER_COUNT; i++) {
         dispatch(startedFeedWorker())
-        fetchFromQueue(allFeeds, dispatch)
+        fetchFromQueue(staleFeeds, dispatch)
       }
     }
   },
@@ -209,21 +220,34 @@ async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatc
     etag: res.headers.get("etag") || undefined,
     lastFetched: now,
   }
-
-  if (!attributes.etag) {
-    const body = await res.text()
-    attributes.etag = await digest(body)
-  }
-
+  
   if (res.redirected) {
     attributes.url = res.url
   }
 
-  if (attributes.etag !== feed.etag) {
+  // etag was present and didn't change, skip any further checks.
+  if (attributes.etag && attributes.etag === feed.etag) {
+    dispatch(updateFeed(feed, attributes))
+    return { feed }
+  }
+
+  // Simplify the content using linkedom and Defuddle to avoid extraneous content from triggering updates.
+  // This may be overkill, but conceptually I want to avoid pages appearing unread when something minor changes.
+  const text = await res.text()
+  const { document } = parseHTML(text)
+  const simplified = new Defuddle(document, {
+    removeImages: true,
+  }).parse()
+
+  // Store the digest as the content hash, this is used to detect changes
+  attributes.contentHash = await digest(simplified.content)
+
+  // If the content hashes differ, then consider this an update
+  if (attributes.contentHash !== feed.contentHash) {
     attributes.updatedAt = now
     attributes.items = [
       {
-        id: attributes.etag,
+        id: attributes.contentHash,
         title: new Date(now).toLocaleString(),
         url: feed.url,
         createdAt: +now,

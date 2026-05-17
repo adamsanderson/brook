@@ -34,6 +34,7 @@ export type Feed = {
   updatedAt: number
   // Network metadata
   etag?: string
+  contentHash?: string
   lastFetched?: number
   error?: string
   linkUrl?: string

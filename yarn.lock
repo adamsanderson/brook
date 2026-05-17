@@ -1800,6 +1800,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mixmark-io/domino@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@mixmark-io/domino@npm:2.2.0"
+  checksum: 10c0/aa468a15f9217d425220fe6a4b3f9416cbe8e566ee14efc191c6d5cc04fe39338b16a90bbac190f28d44e69465db5f2cf95f479c621ce38060ca6b2a3d346e9d
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -2753,6 +2760,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xmldom/xmldom@npm:^0.8.10":
+  version: 0.8.13
+  resolution: "@xmldom/xmldom@npm:0.8.13"
+  checksum: 10c0/06405ee6fffba631abf715a305ace338420ebcea8baf1317f19f2752f5c505952b7df45159908e7be8451a42faa54326b780616ab4d08242b20477b2973da24b
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^3.0.0":
   version: 3.0.1
   resolution: "abbrev@npm:3.0.1"
@@ -3292,6 +3306,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^5.0.2"
     "@vitest/ui": "npm:^3.2.4"
     babel-core: "npm:^7.0.0-0"
+    defuddle: "npm:^0.18.1"
     eslint: "npm:^9.35.0"
     eslint-import-resolver-typescript: "npm:^4.4.4"
     eslint-plugin-import: "npm:^2.8.0"
@@ -3300,6 +3315,7 @@ __metadata:
     feedme: "npm:^2.0.2"
     globals: "npm:^17.5.0"
     jsdom: "npm:^26.1.0"
+    linkedom: "npm:^0.18.12"
     lodash: "npm:^4.17.5"
     prop-types: "npm:^15.6.0"
     react: "npm:^19.1.1"
@@ -3725,6 +3741,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^12.1.0":
+  version: 12.1.0
+  resolution: "commander@npm:12.1.0"
+  checksum: 10c0/6e1996680c083b3b897bfc1cfe1c58dfbcd9842fd43e1aaf8a795fbc237f65efcc860a3ef457b318e73f29a4f4a28f6403c3d653d021d960e4632dd45bde54a9
+  languageName: node
+  linkType: hard
+
 "commander@npm:^9.1.0":
   version: 9.5.0
   resolution: "commander@npm:9.5.0"
@@ -4135,6 +4158,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"defuddle@npm:^0.18.1":
+  version: 0.18.1
+  resolution: "defuddle@npm:0.18.1"
+  dependencies:
+    commander: "npm:^12.1.0"
+    linkedom: "npm:^0.18.12"
+    mathml-to-latex: "npm:^1.5.0"
+    temml: "npm:^0.13.1"
+    turndown: "npm:^7.2.0"
+  dependenciesMeta:
+    linkedom:
+      optional: true
+    mathml-to-latex:
+      optional: true
+    temml:
+      optional: true
+    turndown:
+      optional: true
+  bin:
+    defuddle: dist/cli.js
+  checksum: 10c0/a140dbfeb904a96e2a4bcc239f3cb58ffec6e3faada3ed9230ac7090806f87db2bf7839164fc2994c749242c6d0a3df57adeaac6504393ca9df03eea1c5d3ba1
+  languageName: node
+  linkType: hard
+
 "des.js@npm:^1.0.0":
   version: 1.1.0
   resolution: "des.js@npm:1.1.0"
@@ -4208,7 +4255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domutils@npm:^3.0.1":
+"domutils@npm:^3.0.1, domutils@npm:^3.2.2":
   version: 3.2.2
   resolution: "domutils@npm:3.2.2"
   dependencies:
@@ -4309,6 +4356,13 @@ __metadata:
   version: 6.0.1
   resolution: "entities@npm:6.0.1"
   checksum: 10c0/ed836ddac5acb34341094eb495185d527bd70e8632b6c0d59548cbfa23defdbae70b96f9a405c82904efa421230b5b3fd2283752447d737beffd3f3e6ee74414
+  languageName: node
+  linkType: hard
+
+"entities@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "entities@npm:7.0.1"
+  checksum: 10c0/b4fb9937bb47ecb00aaaceb9db9cdd1cc0b0fb649c0e843d05cf5dbbd2e9d2df8f98721d8b1b286445689c72af7b54a7242fc2d63ef7c9739037a8c73363e7ca
   languageName: node
   linkType: hard
 
@@ -5653,6 +5707,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"htmlparser2@npm:^10.0.0":
+  version: 10.1.0
+  resolution: "htmlparser2@npm:10.1.0"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.3"
+    domutils: "npm:^3.2.2"
+    entities: "npm:^7.0.1"
+  checksum: 10c0/36394e29b80cfcc5e78e0fa4d3aa21fdaac3e6778d23e5c933e625c290987cd9a724a2eb0753ab60ed0c69dfaba0ab115f0ee50fb112fd8f0c4d522e7e0089a2
+  languageName: node
+  linkType: hard
+
 "htmlparser2@npm:^8.0.1":
   version: 8.0.2
   resolution: "htmlparser2@npm:8.0.2"
@@ -6567,6 +6633,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linkedom@npm:^0.18.12":
+  version: 0.18.12
+  resolution: "linkedom@npm:0.18.12"
+  dependencies:
+    css-select: "npm:^5.1.0"
+    cssom: "npm:^0.5.0"
+    html-escaper: "npm:^3.0.3"
+    htmlparser2: "npm:^10.0.0"
+    uhyphen: "npm:^0.2.0"
+  peerDependencies:
+    canvas: ">= 2"
+  peerDependenciesMeta:
+    canvas:
+      optional: true
+  checksum: 10c0/d7e4f9f40e02da81effa4d462a1ea9e23c0ed2d478aa2f0a96279cf2b51b77e3e637d074c9d5d92877816ab9f4c098bcf5151c8ceb82855b60e9dbba2f91b143
+  languageName: node
+  linkType: hard
+
 "locate-path@npm:^6.0.0":
   version: 6.0.0
   resolution: "locate-path@npm:6.0.0"
@@ -6705,6 +6789,15 @@ __metadata:
   version: 1.1.0
   resolution: "math-intrinsics@npm:1.1.0"
   checksum: 10c0/7579ff94e899e2f76ab64491d76cf606274c874d8f2af4a442c016bd85688927fcfca157ba6bf74b08e9439dc010b248ce05b96cc7c126a354c3bae7fcb48b7f
+  languageName: node
+  linkType: hard
+
+"mathml-to-latex@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "mathml-to-latex@npm:1.5.0"
+  dependencies:
+    "@xmldom/xmldom": "npm:^0.8.10"
+  checksum: 10c0/3034bc34eba6fe3b21970c34edfd7b354119740df8a7294672cb769dc83125564d515ddff38d879277b70462d7a3458f7b92643785c7e938ab93d19e2c1d3eb7
   languageName: node
   linkType: hard
 
@@ -8753,6 +8846,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"temml@npm:^0.13.1":
+  version: 0.13.3
+  resolution: "temml@npm:0.13.3"
+  checksum: 10c0/32e5af4f8ec036a90c6535fcb3309a19e6b322ac0244264f3bc53501f79673e435358c557b1a4a20af2e51c8213a8ab73483ec33f30398715a19469966b1efec
+  languageName: node
+  linkType: hard
+
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -8960,6 +9060,15 @@ __metadata:
   version: 0.0.1
   resolution: "tty-browserify@npm:0.0.1"
   checksum: 10c0/5e34883388eb5f556234dae75b08e069b9e62de12bd6d87687f7817f5569430a6dfef550b51dbc961715ae0cd0eb5a059e6e3fc34dc127ea164aa0f9b5bb033d
+  languageName: node
+  linkType: hard
+
+"turndown@npm:^7.2.0":
+  version: 7.2.4
+  resolution: "turndown@npm:7.2.4"
+  dependencies:
+    "@mixmark-io/domino": "npm:^2.2.0"
+  checksum: 10c0/8e66e24bc9d9cdcf720f0ee2655a61d9b9e60ebe2763e97a7a8c3f689e9154717bbea7ed48cc5e355651f34182da698c6bc5fef3028e5600c1cadb7e117376d5
   languageName: node
   linkType: hard
 
