@@ -6,14 +6,15 @@ const name = "activeTab" as const
 
 type ActiveTabState = {
   activeTabId: number | undefined
+  activeUrl: string | undefined
 }
 
 export type { ActiveTabState }
 
-export function changeTab(tabId: number) {
+export function changeTab(payload: {tabId: number, url?: string}) {
   return {
     type: CHANGE_TAB,
-    payload: { tabId }
+    payload,
   } as const
 }
 
@@ -23,7 +24,8 @@ type ChangeTabAction = ReturnType<typeof changeTab>
 export type ActiveTabAction = ChangeTabAction
 
 const initialState: ActiveTabState = {
-  activeTabId: undefined
+  activeTabId: undefined,
+  activeUrl: undefined,
 }
 
 const reducer = (state = initialState, action: ActiveTabAction): ActiveTabState => {
@@ -31,7 +33,8 @@ const reducer = (state = initialState, action: ActiveTabAction): ActiveTabState 
     case CHANGE_TAB:
       return {
         ...state,
-        activeTabId: action.payload.tabId
+        activeTabId: action.payload.tabId,
+        activeUrl: action.payload.url
       }
     default:
       return state
@@ -41,6 +44,9 @@ const reducer = (state = initialState, action: ActiveTabAction): ActiveTabState 
 const selectors = {
   getActiveTabId: (state: RootState): number | undefined => {
     return state[name].activeTabId
+  },
+  getActiveUrl: (state: RootState): string | undefined => {
+    return state[name].activeUrl
   }
 }
 

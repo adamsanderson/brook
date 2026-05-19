@@ -239,6 +239,8 @@ async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatc
     removeImages: true,
   }).parse()
 
+  attributes.title = document.title
+
   // Store the digest as the content hash, this is used to detect changes
   attributes.contentHash = await digest(simplified.content)
 

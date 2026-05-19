@@ -206,6 +206,9 @@ const selectors = {
 
     return feedsByUrl
   },
+  getFeedByUrl: (state: RootState, url: string): Feed | undefined => {
+    return selectors.allFeeds(state).find(feed => feed.url === url)
+  },
   getFeedById: (state: RootState, id: string): Feed | undefined => {
     return state[name][id]
   },

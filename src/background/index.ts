@@ -38,11 +38,25 @@ async function handleActionClick(tabInfo: browser.Tabs.Tab) {
 }
 
 // These can wake the page, so they must be registered before any async work.
-browser.tabs.onActivated.addListener(tabInfo =>
-  void storeReady.then(() => store.dispatch(changeTab(tabInfo.tabId)))
-)
-browser.tabs.onUpdated.addListener(tabId =>
-  void storeReady.then(() => store.dispatch(changeTab(tabId)))
+browser.tabs.onActivated.addListener((tabInfo) => {
+  void storeReady
+    .then(() => browser.tabs.get(tabInfo.tabId))
+    .then((tab) => {
+      store.dispatch(changeTab({
+        tabId: tabInfo.tabId,
+        url: tab.url
+      }))
+    })
+})
+
+browser.tabs.onUpdated.addListener((tabId, _changes, tab) =>
+  void storeReady
+    .then(() => {
+      store.dispatch(changeTab({
+        tabId,
+        url: tab.url
+      }))
+    })
 )
 browser.tabs.onRemoved.addListener(tabId =>
   void storeReady.then(() => store.dispatch(forgetFeeds(tabId)))
