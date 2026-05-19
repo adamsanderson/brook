@@ -87,6 +87,7 @@ hr {
 
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 a[href] {
@@ -263,7 +264,7 @@ a[href]:hover {
   color: var(--color-text);
 }
 
-.Menu a:hover {
+.Menu a:not(.disabled):hover {
   text-decoration: none;
   color: var(--color-active);
 }
@@ -472,9 +473,13 @@ a.isActive:visited {
   color: #ffbfca;
 }
 
-.isActionable:hover {
+.isActionable:not(.disabled):hover {
   color: var(--color-active);
   cursor: pointer;
+}
+
+a.disabled {
+  color: var(--color-grey);
 }
 
 /* 
