@@ -1,5 +1,5 @@
 import { Feed, FeedItem, Folder } from '../types'
-import feeds, { REMOVE_FEED, FEED, FETCH_FEED } from './feeds'
+import feeds, { REMOVE_FEED, FEED, fetchFeed } from './feeds'
 import folders, { REMOVE_FOLDER, FOLDER, FoldersState } from './folders'
 import views from './views'
 import type { RootState, Thunk } from '../types'
@@ -59,8 +59,8 @@ type TreeNode = {
 }
 
 export function selectFeed(feed: Feed): Thunk {
-  return (dispatch, _getState) => {
-    dispatch({type: FETCH_FEED, payload: { feed }})
+  return (dispatch) => {
+    dispatch(fetchFeed(feed))
     dispatch({type: SELECT_FEED, payload: { feed }})
   }
 }

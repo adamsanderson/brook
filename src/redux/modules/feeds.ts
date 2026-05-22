@@ -6,6 +6,7 @@ export const REMOVE_FEED = "REMOVE_FEED" as const
 export const RENAME_FEED = "RENAME_FEED" as const
 export const FETCH_FEED = "FETCH_FEED" as const
 export const FETCH_ALL = "FETCH_ALL" as const
+export const LOAD_FEED = "LOAD_FEED" as const
 export const EDIT_FEED = "EDIT_FEED" as const
 export const UPDATE_FEED = "UPDATE_FEED" as const
 
@@ -77,6 +78,9 @@ export function renameFeed(feed: Feed, title: string) {
   } as const
 }
 
+/**
+ * Triggers a side effect in backgroundActions to fetch the feed.
+ */
 export function fetchFeed(feed: Feed) {
   return {
     type: FETCH_FEED,
@@ -98,6 +102,13 @@ export function editFeed(feed: Feed) {
   } as const
 }
 
+export function loadFeed(feed: Feed) {
+  return {
+    type: LOAD_FEED,
+    payload: { feed }
+  } as const
+}
+
 export function updateFeed(feed: Feed, attributes: Partial<Feed>) {
   return {
     type: UPDATE_FEED,
@@ -108,8 +119,9 @@ export function updateFeed(feed: Feed, attributes: Partial<Feed>) {
 // Action types derived from action creators
 export type RemoveFeedAction = ReturnType<typeof removeFeed>
 type RenameFeedAction = ReturnType<typeof renameFeed>
-export type FetchFeedAction = ReturnType<typeof fetchFeed> & { ready?: boolean }
+type FetchFeedAction = ReturnType<typeof fetchFeed>
 type FetchAllAction = ReturnType<typeof fetchAll>
+type StartFetchAction = ReturnType<typeof loadFeed>
 type EditFeedAction = ReturnType<typeof editFeed>
 type UpdateFeedAction = ReturnType<typeof updateFeed>
 
@@ -125,6 +137,7 @@ type FeedAction =
   | RenameFeedAction
   | FetchFeedAction
   | FetchAllAction
+  | StartFetchAction
   | EditFeedAction
   | UpdateFeedAction
 export type { FeedAction }
@@ -149,11 +162,11 @@ const reducer = (state = initialState, action: FeedAction): FeedsState => {
     case EDIT_FEED:
       return reduceEditFeed(state, feed)
 
-    case UPDATE_FEED:
-      return reduceFeedUpdate(state, feed, action.payload.attributes)
+    case LOAD_FEED:
+      return reduceFeedUpdate(state, feed, { isLoading: true })
 
-    case FETCH_FEED:
-      return reduceFeedUpdate(state, feed, { isLoading: !action.ready })
+    case UPDATE_FEED:
+      return reduceFeedUpdate(state, feed, { ...action.payload.attributes, isLoading: false })
 
     default:
       return state

@@ -36,7 +36,6 @@ import {connectStore as connectStoreToDispatchChannel} from './dispatchChannel'
 import backgroundActions from './middleware/backgroundActions'
 import { persistedReducer, connectStoreToStorage } from './storage'
 import logger from './middleware/logger'
-import promise from './middleware/promise'
 import timeoutScheduler from './middleware/timeoutScheduler'
 import notifications from './middleware/notifications'
 
@@ -57,7 +56,7 @@ export const initialState: Partial<RootState> = {}
 export const reducers: {
   [K in keyof RootState]?: Reducer<RootState[K], AnyAction>
 } = {}
-export const sharedMiddleware = [thunk, promise, timeoutScheduler]
+export const sharedMiddleware = [thunk, timeoutScheduler]
 export const middleware: Middleware[] = [notifications, backgroundActions, ...sharedMiddleware]
 export const enhancers: StoreEnhancer[] = []
 const serializePaths: (keyof RootState)[] = []

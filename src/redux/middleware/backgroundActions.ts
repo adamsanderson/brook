@@ -6,7 +6,7 @@ import Defuddle from 'defuddle'
 import { parseHTML } from 'linkedom/worker'
 
 
-import feeds, { FETCH_FEED, FETCH_ALL, updateFeed } from '../modules/feeds'
+import feeds, { FETCH_FEED, FETCH_ALL, loadFeed, updateFeed } from '../modules/feeds'
 import workers, { finishedFeedWorker, startedFeedWorker } from '../modules/workers'
 import views from '../modules/views'
 import ui from '../modules/ui'
@@ -50,8 +50,7 @@ type WordPressPost = {
 
 // Action types
 type FetchAllAction = { type: typeof FETCH_ALL }
-type FetchFeedResult = { feed: Feed } | void
-type FetchFeedAction = { type: typeof FETCH_FEED; payload: { feed: Feed }; promise?: Promise<FetchFeedResult> }
+type FetchFeedAction = { type: typeof FETCH_FEED; payload: { feed: Feed } }
 type FeedUpdate = Partial<Feed>
 type ReduxDispatch = Dispatch<UnknownAction>
 
@@ -80,16 +79,13 @@ const aliases = {
     }
   },
 
-  [FETCH_FEED]: (action: FetchFeedAction): FetchFeedAction | Thunk<Promise<FetchFeedResult>> => {
-    // If there's a promise, the action has already been kicked off by the background.
-    if (action.promise) return action
-
-    const feed = action.payload.feed
-    return (dispatch) => fetchFeed(feed, dispatch)
+  [FETCH_FEED]: (action: FetchFeedAction): Thunk => (dispatch) => {
+    dispatch(loadFeed(action.payload.feed))
+    void handleFetch(action.payload.feed, dispatch)
   },
 }
 
-function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult> {
+function handleFetch(feed: Feed, dispatch: ReduxDispatch): Promise<void> {
   const cache = feed.error ? "reload" : "default"
   const headers: Record<string, string> = {}
 
@@ -108,7 +104,7 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
     }
   }
 
-  const promise = Promise.race<Response>([
+  return Promise.race<Response>([
     // Fetch feed…
     fetch(feed.url, { cache, headers }),
     // …with a timeout.
@@ -117,7 +113,7 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
     )
   ])
     .then(res => {
-      if (res.status === 304) return { feed }
+      if (res.status === 304) return void dispatch(updateFeed(feed, {}))
       if (!res.ok) throw new NetworkError(`HTTP ${res.status}: Could not access ${feed.url}`, feed.url)
 
       if (feed.format === WP_API) {
@@ -134,14 +130,6 @@ function fetchFeed(feed: Feed, dispatch: ReduxDispatch): Promise<FetchFeedResult
       // For now, always warn in the console.
       reportError(error)
     })
-
-  dispatch({
-    type: FETCH_FEED,
-    payload: { feed },
-    promise
-  })
-
-  return promise
 }
 
 function fetchFromQueue(feedQueue: Feed[], dispatch: ReduxDispatch): void {
@@ -154,17 +142,15 @@ function fetchFromQueue(feedQueue: Feed[], dispatch: ReduxDispatch): void {
 
     const next = () => fetchFromQueue(feedQueue, dispatch)
 
-    fetchFeed(feed, dispatch).catch((error) => {
+    dispatch(loadFeed(feed))
+    handleFetch(feed, dispatch).catch((error) => {
       console.warn("Could not fetch feed", feed?.url, error)
     }).finally(next)
   })
 }
 
-function handleFeed(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
+function handleFeed(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<void> {
   return res.text().then(body => {
-    const parser = new FeedMe(true)
-    let failed = false
-
     const attributes: FeedUpdate = {
       etag: res.headers.get("etag") || undefined,
       lastFetched: Date.now(),
@@ -174,47 +160,55 @@ function handleFeed(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise
       attributes.url = res.url
     }
 
-    parser.on('finish', function () {
-      if (failed) return
+    return new Promise<void>((resolve, reject) => {
+      const parser = new FeedMe(true)
+      let settled = false
 
-      const feedData = parser.done() || {} as RawFeedData
-      const feedAttributes = translateFeedData(feedData, feed.url)
+      parser.on('finish', function () {
+        if (settled) return
+        settled = true
 
-      dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
-    })
+        const feedData = parser.done() || {} as RawFeedData
+        const feedAttributes = translateFeedData(feedData, feed.url)
 
-    parser.on('error', function () {
-      failed = true
-      const contentType = res.headers.get("content-type") || ""
-      const url = alternateUrl(feed, body, contentType)
+        dispatch(updateFeed(feed, { ...attributes, ...feedAttributes }))
+        resolve()
+      })
 
-      if (url && url !== feed.url) {
-        dispatch(updateFeed(feed, { ...attributes, alternate: { url }, error: "Could not parse feed" }))
-      } else {
-        if (ENV.development) {
-          // In development mode, log any invalid content for debugging.
-          // eslint-disable-next-line no-console
-          console.info(body)
-        }
-        if (contentType.indexOf('text/html') === 0) {
-          // Eventually feeds die, that's just how the internet it.  In that 
-          // case the server may be rendering an html landing page.
-          throw new InvalidContentError("Invalid content", feed.url)
+      parser.on('error', function () {
+        if (settled) return
+        settled = true
+
+        const contentType = res.headers.get("content-type") || ""
+        const url = alternateUrl(feed, body, contentType)
+
+        if (url && url !== feed.url) {
+          dispatch(updateFeed(feed, { ...attributes, alternate: { url }, error: "Could not parse feed" }))
+          resolve()
         } else {
-          // The feed is malformed in some way, or we are handling it wrong.
-          throw new FeedParseError("Could not parse feed", feed.url)
+          if (ENV.development) {
+            // In development mode, log any invalid content for debugging.
+            // eslint-disable-next-line no-console
+            console.info(body)
+          }
+          if (contentType.indexOf('text/html') === 0) {
+            // Eventually feeds die, that's just how the internet it.  In that
+            // case the server may be rendering an html landing page.
+            reject(new InvalidContentError("Invalid content", feed.url))
+          } else {
+            // The feed is malformed in some way, or we are handling it wrong.
+            reject(new FeedParseError("Could not parse feed", feed.url))
+          }
         }
-      }
+      })
+
+      parser.write(body)
+      parser.end()
     })
-
-    parser.write(body)
-    parser.end()
-
-    return { feed }
   })
 }
 
-async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
+async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<void> {
   const now = Date.now()
   const attributes: FeedUpdate = {
     etag: res.headers.get("etag") || undefined,
@@ -228,7 +222,7 @@ async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatc
   // etag was present and didn't change, skip any further checks.
   if (attributes.etag && attributes.etag === feed.etag) {
     dispatch(updateFeed(feed, attributes))
-    return { feed }
+    return
   }
 
   // Simplify the content using linkedom and Defuddle to avoid extraneous content from triggering updates.
@@ -258,12 +252,9 @@ async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatc
   }
 
   dispatch(updateFeed(feed, attributes))
-
-  return { feed }
-
 }
 
-function handleWordpressApi(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<{ feed: Feed }> {
+function handleWordpressApi(feed: Feed, res: Response, dispatch: ReduxDispatch): Promise<void> {
   return res.json().then((json: WordPressPost[]) => {
     try {
       const attributes: FeedUpdate = {
@@ -281,8 +272,6 @@ function handleWordpressApi(feed: Feed, res: Response, dispatch: ReduxDispatch):
     } catch (_error) {
       throw new FeedParseError("Could not parse feed", feed.url)
     }
-
-    return { feed }
   })
 }
 
