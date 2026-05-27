@@ -12,7 +12,7 @@
     "build:chrome": "NODE_ENV=production TARGET=chrome vite build",
     "clean": "rm -rf ./dist",
     "lint": "eslint src test",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "typecheck": "tsc --build --noEmit",
     "test": "vitest",
     "package": "cat ./docs/publishing.md; yarn clean; yarn package:firefox & yarn package:chrome & wait",
     "package:firefox": "yarn build:firefox && web-ext build -s dist/firefox/ -a dist/ -n=\"{name}-firefox-{version}.zip\" && git archive --format=zip -o dist/brook-src.zip HEAD",
