@@ -244,7 +244,7 @@ async function handleWatchPage(feed: Feed, res: Response, dispatch: ReduxDispatc
     attributes.items = [
       {
         id: attributes.contentHash,
-        title: new Date(now).toLocaleString(),
+        title: "Last updated: " + new Date(now).toLocaleString(),
         url: feed.url,
         createdAt: +now,
       }
