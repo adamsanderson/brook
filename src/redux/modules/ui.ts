@@ -42,13 +42,11 @@ export const VIEWS: Record<string, ViewConfig> = {
 
 const name = "ui" as const
 
-type UIState = {
+export type UIState = {
   selectedId?: string
   selectedType?: typeof FEED | typeof FOLDER
   currentViewId: string
 }
-
-export type { UIState }
 
 type TreeNode = {
   depth: number
@@ -101,7 +99,7 @@ type ChangeViewAction = ReturnType<typeof changeView>
 // External actions and manual actions
 export type SelectFeedAction = { type: typeof SELECT_FEED; payload: { feed: Feed } }
 
-type UIAction =
+export type UIAction =
   | SelectFeedAction
   | SelectFolderAction
   | ClearSelectionAction
@@ -109,7 +107,6 @@ type UIAction =
   | ChangeViewAction
   | RemoveFeedAction
   | RemoveFolderAction
-export type { UIAction }
 
 const initialState: UIState = {
   selectedId: undefined,

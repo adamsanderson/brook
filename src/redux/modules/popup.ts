@@ -6,12 +6,10 @@ export const CLOSE_POPUP = "CLOSE_POPUP" as const
 
 const name = "popup" as const
 
-type PopupState = {
+export type PopupState = {
   openedAt: number
   isOpen: boolean
 }
-
-export type { PopupState }
 
 export function openPopup() {
   return {

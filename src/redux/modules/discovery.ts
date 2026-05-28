@@ -6,11 +6,9 @@ export const FORGET_FEEDS = "FORGET_FEEDS" as const
 
 const name = "discovery" as const
 
-type DiscoveryState = {
+export type DiscoveryState = {
   feeds: Record<number, FeedInput[]>
 }
-
-export type { DiscoveryState }
 
 export function foundFeeds(feeds: FeedInput[]) {
   return {

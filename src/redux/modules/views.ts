@@ -18,14 +18,12 @@ const FEED_RECENT_VIEW_LIMIT = 30 * MINUTE
 
 const name = "views" as const
 
-type ViewsState = {
+export type ViewsState = {
   feedsViewedAt: Record<string, number>
   itemsViewedAt: Record<string, number>
   feedLastViewedAt: number
   itemLastViewedAt: number
 }
-
-export type { ViewsState }
 
 export function markAllItemsViewed(feed: Feed) {
   return {
@@ -40,12 +38,11 @@ export function markAllItemsViewed(feed: Feed) {
 // Action types derived from action creators
 type MarkAllItemsViewedAction = ReturnType<typeof markAllItemsViewed>
 
-type ViewsAction =
+export type ViewsAction =
   | MarkAllItemsViewedAction
   | SelectFeedAction
   | SelectItemAction
   | RemoveFeedAction
-export type { ViewsAction }
 
 const initialState: ViewsState = {
   feedsViewedAt: {},

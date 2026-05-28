@@ -14,9 +14,7 @@ export const FEED = "FEED" as const
 
 const name = "feeds" as const
 
-type FeedsState = Record<string, Feed>
-
-export type { FeedsState }
+export type FeedsState = Record<string, Feed>
 
 export function addFeed(
   feed: FeedInput,
@@ -131,7 +129,7 @@ export type AddFeedAction = {
   payload: { feed: Feed; parentId?: string }
 }
 
-type FeedAction =
+export type FeedAction =
   | AddFeedAction
   | RemoveFeedAction
   | RenameFeedAction
@@ -140,7 +138,6 @@ type FeedAction =
   | StartFetchAction
   | EditFeedAction
   | UpdateFeedAction
-export type { FeedAction }
 
 const initialState: FeedsState = {}
 

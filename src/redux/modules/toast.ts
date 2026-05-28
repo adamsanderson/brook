@@ -20,12 +20,10 @@ type ToastPayload = {
   props: object
 } | typeof NONE
 
-type ToastState = {
+export type ToastState = {
   isHeld: boolean
   toast: ToastPayload
 }
-
-export type { ToastState }
 
 export function hideToast(delay: number = DEFAULT_DURATION) {
   return {
@@ -92,14 +90,13 @@ type DelayedAction = {
   }
 }
 
-type ToastAction =
+export type ToastAction =
   | ShowToastAction
   | HideToastAction
   | HideToastNowAction
   | HoldToastAction
   | ReleaseToastAction
   | DelayedAction
-export type { ToastAction }
 
 type ToastThunk<T = void> = ThunkAction<T, RootState, unknown, ToastAction>
 

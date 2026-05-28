@@ -16,14 +16,12 @@ type Position = {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type EmptyObject = {}
 
-type ModalState = {
+export type ModalState = {
   type?: string
   props?: Record<string, object> & {
     position?: Position
   }
 } | EmptyObject
-
-export type { ModalState }
 
 export function closeModal() {
   return {
@@ -62,12 +60,11 @@ type OpenModalAction = ReturnType<typeof openModal>
 type OpenModalRightAlignedBelowAction = ReturnType<typeof openModalRightAlignedBelow>
 type OpenModalLeftAlignedBelowAction = ReturnType<typeof openModalLeftAlignedBelow>
 
-type ModalAction =
+export type ModalAction =
   | CloseModalAction
   | OpenModalAction
   | OpenModalRightAlignedBelowAction
   | OpenModalLeftAlignedBelowAction
-export type { ModalAction }
 
 const initialState: ModalState = {}
 

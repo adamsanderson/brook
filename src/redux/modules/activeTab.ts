@@ -4,12 +4,10 @@ export const CHANGE_TAB = "CHANGE_TAB" as const
 
 const name = "activeTab" as const
 
-type ActiveTabState = {
+export type ActiveTabState = {
   activeTabId: number | undefined
   activeUrl: string | undefined
 }
-
-export type { ActiveTabState }
 
 export function changeTab(payload: {tabId: number, url?: string}) {
   return {

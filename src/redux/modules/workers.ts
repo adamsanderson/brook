@@ -5,11 +5,9 @@ export const FINISH_FEED_WORKER = "FINISH_FEED_WORKER" as const
 
 const name = "workers" as const
 
-type WorkersState = {
+export type WorkersState = {
   feedWorkers: number
 }
-
-export type { WorkersState }
 
 export function startedFeedWorker() {
   return {

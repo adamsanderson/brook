@@ -22,9 +22,7 @@ const name = "folders" as const
 export const ROOT = "ROOT" as const
 export const FOLDER = "FOLDER" as const
 
-type FoldersState = Record<string, Folder>
-
-export type { FoldersState }
+export type FoldersState = Record<string, Folder>
 
 export function addFolder(folder: FolderInput, { parentId }: { parentId?: string } = {}) {
   return {
@@ -89,7 +87,7 @@ export type RemoveFolderAction = ReturnType<typeof removeFolder>
 type EditFolderAction = ReturnType<typeof editFolder>
 type RenameFolderAction = ReturnType<typeof renameFolder>
 
-type FolderAction =
+export type FolderAction =
   | AddFolderAction
   | MoveFeedAction
   | MoveFolderAction
@@ -99,7 +97,6 @@ type FolderAction =
   | SelectFolderAction
   | AddFeedAction
   | RemoveFeedAction
-export type { FolderAction }
 
 const initialState: FoldersState = {
   [ROOT]: {
