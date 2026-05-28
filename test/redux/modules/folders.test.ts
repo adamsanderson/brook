@@ -3,6 +3,7 @@ import { dispatchEach, TestState } from "../../helpers.ts"
 import { buildFeed, buildFolder } from "../../../src/redux/factories.ts"
 import { OVER, BEFORE, AFTER } from "../../../src/constants.ts"
 import folders, {
+  FolderAction,
   ROOT,
   addFolder,
   moveNode,
@@ -17,14 +18,14 @@ import { Folder } from "../../../src/redux/types.ts"
 const reducer = folders.reducer
 
 // Fixtures
-const feed   = Object.freeze(buildFeed({url: "http://example.com"}))
-const feed1  = Object.freeze(buildFeed({url: "http://example.com/1"}))
-const feed2  = Object.freeze(buildFeed({url: "http://example.com/2"}))
-const folder = Object.freeze(buildFolder())
+const feed   = buildFeed({url: "http://example.com"})
+const feed1  = buildFeed({url: "http://example.com/1"})
+const feed2  = buildFeed({url: "http://example.com/2"})
+const folder = buildFolder()
 
 describe('folder reducer', () => {
   it('should contain the ROOT in its initial state', () => {
-    const state = reducer(undefined, {})
+    const state = reducer(undefined, ({} as FolderAction))
     expect(state).toHaveProperty(ROOT)
   })
 

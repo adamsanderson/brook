@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware, type Reducer, type UnknownAction } from 'redux'
 import { rootReducer, sharedMiddleware } from "../src/redux/store.ts"
-import { RootState } from '../src/redux/types.ts'
+import type { RootState, Thunk } from '../src/redux/types.ts'
 
 export type TestState = Partial<RootState>
+export type Dispatchable = UnknownAction | Thunk
 
 /**
  * Applies a redux reducer to a series of actions, returning the final state.
@@ -30,7 +31,7 @@ export function reduceEach<S extends TestState>(reducer: Reducer<S, UnknownActio
 export function createTestStore<S extends TestState>(initialState: S) {
   return createStore(
     rootReducer,
-    initialState,
+    initialState as RootState,
     applyMiddleware(...sharedMiddleware)
   )
 }
@@ -44,12 +45,13 @@ export function createTestStore<S extends TestState>(initialState: S) {
  * 
  * @returns {Object}
  */
-export function dispatchEach<S extends TestState>(actions: UnknownAction | UnknownAction[], initialState: S): S {
+export function dispatchEach<S extends TestState>(actions: Dispatchable | Dispatchable[], initialState: S): S {
   const store = createTestStore(initialState)
+  const dispatch = store.dispatch as (action: Dispatchable) => unknown
   if (Array.isArray(actions)) {
-    actions.forEach(a => store.dispatch(a))
+    actions.forEach(a => dispatch(a))
   } else {
-    store.dispatch(actions)
+    dispatch(actions)
   }
 
   return store.getState() as S
